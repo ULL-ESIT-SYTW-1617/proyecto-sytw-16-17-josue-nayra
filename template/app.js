@@ -4,8 +4,6 @@ var Strategy = require('passport-github').Strategy;
 var github = require('octonode');
 var path = require('path');
 
-app.set('port', process.env.PORT || 8080);
-
 passport.use(new Strategy({
     clientID: "5d9625eef57af8831c0f",
     clientSecret: "0d8a8cbd349a68a4c804efb2e38c6275e667e98d",
@@ -101,9 +99,6 @@ app.get('/logout',function(req,res){
 });
 
 
-
-app.listen(app.get('port'), function() {
-  console.log('Puerto utilizado:'+app.get('port'));
-});
+app.listen(process.env.PORT || 8080);
 
 module.exports = app;
