@@ -22,7 +22,7 @@ $ npm install -g gitbook-start-josue-nayra
 $ gitbook-start -d <directorio> --autor <autor> --name <nombre_libro> --url <url_repo>
 ```
     
-    Opciones disponibles para la creación del libro:
+Opciones disponibles para la creación del libro:
         
         -d o --directorio <directorio en el que se desplegará el libro>
         
@@ -119,7 +119,7 @@ $ gulp push --mensaje <mensaje del commit>
 Tarea que permite al usuario instalar plugins y dependencias necesarias para su gitbook.
 
 ```bash
-& gulp instalar_recursos
+$ gulp instalar_recursos
 ```
 
 * **build**
