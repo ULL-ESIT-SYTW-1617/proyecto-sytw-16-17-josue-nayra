@@ -52,6 +52,25 @@ var initialize = (() => {
     fs.copy(path.join(__dirname,'template','app.js'), path.join(basePath, 'app.js'));
     fs.copy(path.join(__dirname,'template','Procfile'), path.join(basePath, 'Procfile'));
 
+    fs.mkdir(path.join(__dirname,'views'), (err) =>
+    {
+      if(err) throw err;
+      
+      fs.copy(path.join(__dirname,'template','views','home.ejs'), path.join(basePath,'views','home.ejs'), (err) =>
+      {
+          if(err) throw err;
+      });
+      
+      fs.copy(path.join(__dirname,'template','views','login.ejs'), path.join(basePath,'views','login.ejs'), (err) =>
+      {
+          if(err) throw err;
+      });
+      fs.copy(path.join(__dirname,'template','views','profile.ejs'), path.join(basePath,'views','profile.ejs'), (err) =>
+      {
+          if(err) throw err;
+      });
+    });
+    
     
     //Creamos aplicacion
     exec('heroku auth:token', ((error, stdout, stderr) =>

@@ -44,6 +44,7 @@
     "gulp-shell": "^0.5.2",
     "heroku-client": "^3.0.0-beta3",
     "minimist": "^1.2.0",
+    "octonode": "^0.7.6",
     "path": "^0.12.7",
     "simple-git": "^1.59.0"
   }

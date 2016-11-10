@@ -1,28 +1,14 @@
-# Práctica 5. Sistemas y Tecnologías Web
+# Práctica 7. Sistemas y Tecnologías Web
 
-## Plugin: gitbook-start-heroku-josue-nayra
+## Plugin: Autenticación OAuth con Passport
 
-El objetivo de esta práctica es extender el package NodeJS publicado en npm en una práctica anterior con un nuevo plugin que permita realizar el despliegue en Heroku con un simple gulp deploy-heroku.
-
-El paquete gitbook-start-heroku-josue-nayra exporta dos módulos:
-
-**Método deploy()** : Actualiza los cambios desplegando en la rama master de Heroku nuestro Gitbook. Es llamado desde la tarea del gulpfile
-                        con el nombre "deploy-heroku".
-
-**Método initialize()**: Este método realiza las siguientes tareas:
-            
-1.- En primer lugar, escribe en el fichero gulpfile.js una tarea "gulp deploy-heroku" que posteriormente será usada por el usuario  
-    para desplegar la aplicación. En el caso de que ya exista la tarea, no se añade una nueva.
-
-2.- En segundo lugar, se añaden dos ficheros desde el directorio template/ necesarios para el despliegue en Heroku: Procfile y app.js
-
-3.- En tercer lugar, se genera un token para la autenticación con Heroku.
-
-4.- Finalmente, una vez autenticados se hace un post a Heroku creando la aplicación y añadimos el repositorio de Heroku remoto correspondiente.
-    
+El servidor proveído por el plugin (sea iaas o heroku) deberá autenticar que el lector del libro pertenece a una organización dada de GitHub (por ejemplo ULL-ESIT-SYTW-1617). 
+Si es el caso que pertenece podrá seguir leyendo el libro, sino será redirigido a la ruta de autenticación.
 
 
-### Pasos a seguir para la utilización del plugin
+
+
+### Pasos a seguir para la utilización de los plugins
 
 1- Descargar el paquete inicial: *gitbook-start-josue-nayra*
     
