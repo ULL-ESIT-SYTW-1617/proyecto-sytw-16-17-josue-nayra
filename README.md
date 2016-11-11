@@ -6,6 +6,7 @@ El servidor proveído por el plugin (sea iaas o heroku) deberá autenticar que e
 Si es el caso que pertenece podrá seguir leyendo el libro, sino será redirigido a la ruta de autenticación.
 
 
+[Plugin: gitbook-start-heroku-josue-nayra](https://github.com/ULL-ESIT-SYTW-1617/gitbook-start-heroku-josue-nayra)
 
 
 ### Pasos a seguir para la utilización de los plugins
@@ -50,7 +51,7 @@ $ cd <directorio en el que se ha desplegado el libro>
 $ npm install 
 ```
 
-5- Instalar el plugin requerido como dependendecia con la opción --save, como por ejemplo: **gitbook-start-heroku-ull-es-josue-nayra** para el despliegue en iaas.
+5- Instalar el plugin requerido como dependendecia con la opción --save, como por ejemplo: **gitbook-start-heroku-ull-es-josue-nayra** para el despliegue en Heroku.
     
 ```bash
 $ npm install --save gitbook-start-heroku-josue-nayra
