@@ -8,7 +8,7 @@ const pkj = require(path.join(basePath, 'package.json'));
 const git = require('simple-git');
 const Heroku = require('heroku-client');
 
-
+//-------------------------------------------------------------------------------------------------
 var respuesta = ((error, stdout, stderr) =>
 {
     if (error)
@@ -17,37 +17,37 @@ var respuesta = ((error, stdout, stderr) =>
     console.log("Stdout:"+stdout);
 });
 
-var deploy = (() => {
-    console.log("Deploy to Heroku");
-    exec('git add .; git commit -m "Deploy to Heroku"; git push heroku master', respuesta); 
-});
+//-------------------------------------------------------------------------------------------------
 
-
-var initialize = (() => {
-    console.log("Método initialize del plugin deploy-heroku");
-
-    var tarea_gulp = `\n\ngulp.task("deploy-heroku", function(){`+
+var escribir_gulpfile = (() => {
+  
+  var tarea_gulp = `\n\ngulp.task("deploy-heroku", function(){`+
              `\n       require("gitbook-start-heroku-josue-nayra").deploy();`+
              `\n});`;
 
-    fs.readFile('gulpfile.js', "utf8", function(err, data) {
-        if (err) throw err;
-        // console.log(data);
-        if(data.search("deploy-heroku") != -1)
-        {
-          console.log("Ya existe una tarea de deploy-heroku");    
-        }
-        else
-        {
-          // console.log("No existe una tarea de deploy-iaas-ull-es");
-          fs.appendFile(path.join(basePath,'gulpfile.js'), `${tarea_gulp}`, (err) => {
-            if (err) throw err;
-              console.log("Escribiendo tarea en gulpfile para próximos despliegues");
-          });
-        }
-    });
-    
-    
+  fs.readFile('gulpfile.js', "utf8", function(err, data) {
+      if (err) throw err;
+      // console.log(data);
+      if(data.search("deploy-heroku") != -1)
+      {
+        console.log("Ya existe una tarea de deploy-heroku");    
+      }
+      else
+      {
+        // console.log("No existe una tarea de deploy-iaas-ull-es");
+        fs.appendFile(path.join(basePath,'gulpfile.js'), `${tarea_gulp}`, (err) => {
+          if (err) throw err;
+            console.log("Escribiendo tarea en gulpfile para próximos despliegues");
+        });
+      }
+  });
+  
+});
+
+//-------------------------------------------------------------------------------------------------
+
+var crear_app = (() => {
+  return new Promise((resolve,reject) => {
     console.log("Creando app.js y Procfile");
     fs.copy(path.join(__dirname,'template','app.js'), path.join(basePath, 'app.js'));
     fs.copy(path.join(__dirname,'template','Procfile'), path.join(basePath, 'Procfile'));
@@ -69,8 +69,8 @@ var initialize = (() => {
       {
           if(err) throw err;
       });
+      
     });
-    
     
     //Creamos aplicacion
     exec('heroku auth:token', ((error, stdout, stderr) =>
@@ -96,7 +96,30 @@ var initialize = (() => {
               .addRemote('heroku', git_url);
       });
     }));
+    
+  }); 
 });
+
+//-------------------------------------------------------------------------------------------------
+
+var deploy = (() => {
+    console.log("Deploy to Heroku");
+    exec('git add .; git commit -m "Deploy to Heroku"; git push heroku master', respuesta); 
+});
+
+//-------------------------------------------------------------------------------------------------
+
+var initialize = (() => {
+  console.log("Método initialize del plugin deploy-heroku");
+  
+  crear_app().then((resolve,reject) => {
+    console.log("Creando aplicación...");
+    escribir_gulpfile();
+  });
+    
+});
+
+//-------------------------------------------------------------------------------------------------
 
 exports.initialize = initialize;
 exports.deploy = deploy;

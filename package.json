@@ -55,6 +55,7 @@
     "passport": "^0.3.2",
     "passport-github": "^1.1.0",
     "path": "^0.12.7",
-    "simple-git": "^1.59.0"
+    "prompt": "^1.0.0",
+    "simple-git": "^1.62.0"
   }
 }
