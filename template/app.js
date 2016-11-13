@@ -3,25 +3,34 @@ var passport = require('passport');
 var Strategy = require('passport-github').Strategy;
 var github = require('octonode');
 var path = require('path');
+var basePath = process.cwd();
+var config = require(path.join(basePath,'.secret.json'));
+var datos_config = JSON.parse(JSON.stringify(config));
+var logout = require('express-passport-logout');
 
 passport.use(new Strategy({
-    clientID: "5d9625eef57af8831c0f",
-    clientSecret: "0d8a8cbd349a68a4c804efb2e38c6275e667e98d",
+    clientID: datos_config.clientID,
+    clientSecret: datos_config.clientSecret,
     callbackURL: 'http://localhost:8080/login/github/return'
   },
   function(accessToken, refreshToken, profile, cb) {
 
-    // var ghorg = client.org('ULL-ESIT-SYTW-1617');
-    //
-    // ghorg.member(profile.username, (err,result) =>
-    // {
-    //    if(result == true)
-    //       return cb(null, profile);
-    //    else {
-    //       return cb(null,null);
-    //    }
-    // });
-    return cb(null, profile);
+      var token = datos_config.token;
+      var client = github.client(token);
+
+      var ghorg = client.org('ULL-ESIT-SYTW-1617');
+
+      ghorg.member(profile.username, (err,result) =>
+      {
+          if(err) console.log(err);
+          console.log("Result:"+result);
+          if(result == true)
+            return cb(null, profile);
+          else {
+            return cb(null,null);
+          }
+      });
+    // return cb(null, profile);
 }));
 
 passport.serializeUser(function(user, cb) {
@@ -57,15 +66,8 @@ app.use(passport.session());
 // Define routes.
 app.get('/',
   function(req, res) {
-    console.log("Usuario:"+req.user);
-    if(req.user)
-    {
-      res.sendFile(path.join(__dirname,'gh-pages','intro_gitbook.html'));
-    }
-    else
-    {
-      res.render('home', { user: req.user });
-    }
+    // console.log("Usuario:"+req.user);
+    res.render('home', {user: req.user});
 });
 
 app.get('/login',
@@ -79,8 +81,13 @@ app.get('/login/github',
 app.get('/login/github/return',
   passport.authenticate('github', { failureRedirect: '/error' }),
   function(req, res) {
-    res.redirect('/');
+    res.redirect('/inicio_gitbook');
   });
+
+app.get('/inicio_gitbook', function(req,res)
+{
+    res.sendFile(path.join(__dirname,'gh-pages','introduccion.html'));
+});
 
 app.get('/error', function(req, res)
 {
@@ -94,7 +101,7 @@ app.get('/profile',
   });
 
 app.get('/logout',function(req,res){
-  req.logout();
+  logout();
   res.redirect('/');
 });
 
@@ -102,3 +109,4 @@ app.get('/logout',function(req,res){
 app.listen(process.env.PORT || 8080);
 
 module.exports = app;
+
