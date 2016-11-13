@@ -7,8 +7,10 @@ var exec = require('child_process').exec;
 const pkj = require(path.join(basePath, 'package.json'));
 const git = require('simple-git');
 const Heroku = require('heroku-client');
+const inquirer = require('inquirer');
 
 //-------------------------------------------------------------------------------------------------
+
 var respuesta = ((error, stdout, stderr) =>
 {
     if (error)
@@ -42,6 +44,51 @@ var escribir_gulpfile = (() => {
       }
   });
   
+});
+
+//-------------------------------------------------------------------------------------------------
+
+var obtener_variables = (() =>
+{
+    return new Promise((result,reject) =>
+    {
+            get_token().then((resolve,reject) =>
+            {
+                var schema = [
+                  {
+                    name: 'clientID',
+                    message: "Enter clientID for your application:"
+                  },
+                  {
+                    name: 'clientSecret',
+                    message: "Enter clientSecret for your application"
+                  }
+                ];
+
+                inquirer.prompt(schema).then((respuestas) =>
+                {
+                    console.log("Respuestas:"+JSON.stringify(respuestas));
+                    result({ token: resolve, clientID: respuestas.clientID, clientSecret: respuestas.clientSecret});
+                });
+            });
+    });
+});
+
+//-------------------------------------------------------------------------------------------------
+
+var generar_fileSecret = ((datos) =>
+{
+    return new Promise((resolve, reject) =>
+    {
+        var configuracion =
+        `{ "token": "${datos.token}", "clientID": "${datos.clientID}", "clientSecret": "${datos.clientSecret}" }`;
+
+        fs.writeFile(path.join(basePath,'.secret.json'), configuracion, (err) =>
+        {
+          if(err) throw err;
+        });
+        resolve(configuracion);
+    });
 });
 
 //-------------------------------------------------------------------------------------------------
@@ -83,7 +130,8 @@ var crear_app = (() => {
       const heroku = new Heroku({ token: stdout });
     
     
-      heroku.post('/apps', {body: {name: pkj.Heroku.nombre_app}}).then(app => {
+      heroku.post('/apps', {body: {name: pkj.Heroku.nombre_app}}).then((app) => {
+
             var respuesta = JSON.stringify(app);
             // console.log("App:"+respuesta);
             var respuesta1 = JSON.parse(respuesta);
@@ -110,13 +158,21 @@ var deploy = (() => {
 //-------------------------------------------------------------------------------------------------
 
 var initialize = (() => {
-  console.log("Método initialize del plugin deploy-heroku");
-  
-  crear_app().then((resolve,reject) => {
-    console.log("Creando aplicación...");
-    escribir_gulpfile();
-  });
-    
+    console.log("Método initialize del plugin deploy-heroku");
+
+    obtener_variables().then((resolve,reject) =>
+    {
+        console.log("Obtener_variables:"+JSON.stringify(resolve));
+        generar_fileSecret(resolve).then((resolve,reject) =>
+        {
+            console.log("generar_fileSecret");
+            crear_app().then((resolve,reject) =>
+            {
+                  console.log("crear_app");
+                  // escribir_gulpfile();
+            });
+        });
+    });
 });
 
 //-------------------------------------------------------------------------------------------------
