@@ -11,16 +11,16 @@ passport.use(new Strategy({
   },
   function(accessToken, refreshToken, profile, cb) {
 
-    // var ghorg = client.org('ULL-ESIT-SYTW-1617');
-    //
-    // ghorg.member(profile.username, (err,result) =>
-    // {
-    //    if(result == true)
-    //       return cb(null, profile);
-    //    else {
-    //       return cb(null,null);
-    //    }
-    // });
+    var ghorg = client.org('ULL-ESIT-SYTW-1617');
+    
+    ghorg.member(profile.username, (err,result) =>
+    {
+        if(result == true)
+          return cb(null, profile);
+        else {
+          return cb(null,null);
+        }
+    });
     return cb(null, profile);
 }));
 
