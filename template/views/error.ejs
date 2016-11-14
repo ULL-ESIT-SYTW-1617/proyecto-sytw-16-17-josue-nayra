@@ -1,7 +1,19 @@
 <% if(error){ %>
-  <p>Lo siento! <%= error %></p>
-  <p> No ha podido acceder al GitBook.</p>
-  <p>¡Advertencia! Ha iniciado sesión en Github.<a href='http://github.com/' target="blank">Ir a Github.com</a></p>
-  <a href="/logout">Volver</a>
+  <div class="container">
+    <div class="row">
+      <div class="col s12">
+        <div class="card blue-grey darken-1">
+          <div class="card-content white-text">
+            <span class="card-title">Lo siento</span>
+            <p><%= error %></p>
+            <p>¡Advertencia! No ha podido acceder al gitbook pero sí ha iniciado sesión en Github.</p>
+          </div>
+          <div class="card-action center">
+              <a href="/logout">Volver al home</a>
+              <a href="http://github.com/" target="blank">Ir a Github.com</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 <% } %>
-
