@@ -75,6 +75,21 @@ var obtener_variables = (() =>
 });
 
 //-------------------------------------------------------------------------------------------------
+// Funcion para cambiar el nombre del index.html y evitar ambiguedades.
+
+var preparar_despliegue = (() => {
+  return new Promise((resolve, reject) => {
+      fs.rename(path.join(basePath,'gh-pages','index.htlm'), path.join(basePath,'gh-pages','introduccion.html'), (err) => {
+        if (err) {
+          console.err(err);
+          throw err;
+        }
+        resolve(fs.existsSync(path.join(basePath,'gh-pages','introduccion.html')));
+      });
+  });
+});
+
+//-------------------------------------------------------------------------------------------------
 
 var generar_fileSecret = ((datos) =>
 {
@@ -166,11 +181,15 @@ var initialize = (() => {
         generar_fileSecret(resolve).then((resolve,reject) =>
         {
             console.log("generar_fileSecret");
-            crear_app().then((resolve,reject) =>
+            preparar_despliegue().then((resolve, reject) => 
             {
-                  console.log("crear_app");
-                  // escribir_gulpfile();
-            });
+              crear_app().then((resolve,reject) =>
+              {
+                    console.log("crear_app");
+                    // escribir_gulpfile();
+              });  
+            }
+            
         });
     });
 });
