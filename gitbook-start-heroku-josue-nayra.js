@@ -156,6 +156,16 @@ var crear_app = (() => {
           throw err;
         }
     });
+
+    //Copiamos ficheros necesarios para el uso de materialize
+    fs.copy(path.join(__dirname,'template','public'), path.join(basePath, 'public'), (err) =>
+    {
+        if(err)
+        {
+          console.log("Error:"+err);
+          throw err;
+        }
+    });
     
     //Creamos aplicacion
     exec('heroku auth:token', ((error, stdout, stderr) =>
