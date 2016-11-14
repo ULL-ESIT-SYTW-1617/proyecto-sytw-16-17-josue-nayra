@@ -67,7 +67,14 @@ app.use(passport.session());
 app.get('/',
   function(req, res) {
     // console.log("Usuario:"+req.user);
-    res.render('home', {user: req.user});
+    if(datos_config.authentication == 'Yes')
+    {
+      res.render('home', {user: req.user});
+    }
+    else
+    {
+      res.redirect('/inicio_gitbook');
+    }
 });
 
 app.get('/login',
@@ -91,14 +98,9 @@ app.get('/inicio_gitbook', function(req,res)
 
 app.get('/error', function(req, res)
 {
-    res.render('error', { error: "No pertenece a la organizacion"});
+    console.log("Info del usuario:"+req.user);
+    res.render('error', { error: "Su usuario no pertenece a la organizacion"});
 });
-
-app.get('/profile',
-  require('connect-ensure-login').ensureLoggedIn(),
-  function(req, res){
-    res.render('profile', { user: req.user });
-  });
 
 app.get('/logout',function(req,res){
   logout();
@@ -109,3 +111,4 @@ app.get('/logout',function(req,res){
 app.listen(process.env.PORT || 8080);
 
 module.exports = app;
+
