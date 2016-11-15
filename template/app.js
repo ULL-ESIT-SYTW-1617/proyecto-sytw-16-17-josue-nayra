@@ -7,6 +7,8 @@ var basePath = process.cwd();
 var config = require(path.join(basePath,'.secret.json'));
 var datos_config = JSON.parse(JSON.stringify(config));
 var logout = require('express-passport-logout');
+var expressLayouts = require('express-ejs-layouts');
+
 
 passport.use(new Strategy({
     clientID: datos_config.clientID,
@@ -45,11 +47,11 @@ passport.deserializeUser(function(obj, cb) {
 var app = express();
 
 // Configure view engine to render EJS templates.
-// app.set('views', __dirname + '/views');
 app.use(express.static(path.join(__dirname,'gh-pages/')));
+app.use(express.static(path.join(__dirname,'public/')));
 app.set("views", __dirname+'/views');
-
 app.set('view engine', 'ejs');
+app.use(expressLayouts);
 
 // Use application-level middleware for common functionality, including
 // logging, parsing, and session handling.
@@ -76,11 +78,6 @@ app.get('/',
       res.redirect('/inicio_gitbook');
     }
 });
-
-app.get('/login',
-  function(req, res){
-    res.render('login');
-  });
 
 app.get('/login/github',
   passport.authenticate('github'));

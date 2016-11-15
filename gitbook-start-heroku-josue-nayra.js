@@ -100,7 +100,7 @@ var obtener_variables = (() =>
 
                 inquirer.prompt(schema).then((respuestas) =>
                 {
-                    console.log("Respuestas:"+JSON.stringify(respuestas));
+                    // console.log("Respuestas:"+JSON.stringify(respuestas));
                     result({ token: resolve, clientID: respuestas.clientID, clientSecret: respuestas.clientSecret, authentication: respuestas.authentication});
                 });
             });
@@ -190,6 +190,8 @@ var crear_app = (() => {
               .add('./*')
               .commit("Deploy to Heroku")
               .addRemote('heroku', git_url);
+            
+            resolve(respuesta1.git_url);
       });
     }));
     
@@ -213,8 +215,7 @@ var initialize = (() => {
             {
               crear_app().then((resolve,reject) =>
               {
-                    console.log("crear_app");
-                    // escribir_gulpfile();
+                    escribir_gulpfile();
               });  
             });
             
