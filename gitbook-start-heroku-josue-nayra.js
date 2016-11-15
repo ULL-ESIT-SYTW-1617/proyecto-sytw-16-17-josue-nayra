@@ -131,7 +131,7 @@ var preparar_despliegue = (() => {
   return new Promise((resolve, reject) => {
       fs.rename(path.join(basePath,'gh-pages','index.html'), path.join(basePath,'gh-pages','introduccion.html'), (err) => {
         if (err) {
-          console.err(err);
+          console.log(err);
           throw err;
         }
         resolve(fs.existsSync(path.join(basePath,'gh-pages','introduccion.html')));
