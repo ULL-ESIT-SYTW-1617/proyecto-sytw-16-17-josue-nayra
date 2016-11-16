@@ -1,39 +1,43 @@
 var express = require('express');
 var passport = require('passport');
-var Strategy = require('passport-github').Strategy;
-var github = require('octonode');
+var LocalStrategy = require('passport-local').Strategy;
+
 var path = require('path');
 var basePath = process.cwd();
-var config = require(path.join(basePath,'.secret.json'));
-var datos_config = JSON.parse(JSON.stringify(config));
+// var config = require(path.join(basePath,'.secret.json'));
+// var datos_config = JSON.parse(JSON.stringify(config));
 var logout = require('express-passport-logout');
 var expressLayouts = require('express-ejs-layouts');
 
 
-passport.use(new Strategy({
-    clientID: datos_config.clientID,
-    clientSecret: datos_config.clientSecret,
-    callbackURL: 'http://localhost:8080/login/github/return'
-  },
-  function(accessToken, refreshToken, profile, cb) {
+var user = require(path.join(basePath,'bd','users.js')); //En fase de pruebas
 
-      var token = datos_config.token;
-      var client = github.client(token);
+passport.use(new LocalStrategy(
+  function(username, password, cb) {
+        // console.log(user);
+        // console.log("Username:"+username);
+        // console.log("Password:"+password);
 
-      var ghorg = client.org('ULL-ESIT-SYTW-1617');
+        user.findByUsername(username,(err,usuario) =>
+        {
+            if(err) return cb(err);
+            if(!usuario){
+              console.log("El usuario no se encuentra en la base de datos");
+              return cb(null,false);
+            }
 
-      ghorg.member(profile.username, (err,result) =>
-      {
-          if(err) console.log(err);
-          console.log("Result:"+result);
-          if(result == true)
-            return cb(null, profile);
-          else {
-            return cb(null,null);
-          }
-      });
-    // return cb(null, profile);
-}));
+            if(usuario.password != password)
+            {
+              console.log("Password incorrecto");
+              return cb(null,false);
+            }
+
+            console.log("Usuario encontrado:"+JSON.stringify(usuario));
+            return cb(null,usuario);
+        });
+        // return cb(null, username);
+  }
+));
 
 passport.serializeUser(function(user, cb) {
   cb(null, user);
@@ -48,7 +52,7 @@ var app = express();
 
 // Configure view engine to render EJS templates.
 app.use(express.static(path.join(__dirname,'gh-pages/')));
-app.use(express.static(path.join(__dirname,'public/')));
+// app.use(express.static(path.join(__dirname,'public/')));
 app.set("views", __dirname+'/views');
 app.set('view engine', 'ejs');
 app.use(expressLayouts);
@@ -108,4 +112,3 @@ app.get('/logout',function(req,res){
 app.listen(process.env.PORT || 8080);
 
 module.exports = app;
-
