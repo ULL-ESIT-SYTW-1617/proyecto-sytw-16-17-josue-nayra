@@ -40,11 +40,15 @@ passport.use(new LocalStrategy(
 ));
 
 passport.serializeUser(function(user, cb) {
-  cb(null, user);
+  cb(null, user.id);
 });
 
-passport.deserializeUser(function(obj, cb) {
-  cb(null, obj);
+passport.deserializeUser(function(id, cb) {
+  user.findById(id, (err,user) => {
+    if(err)
+      return cb(err);
+    cb(null,user);
+  });
 });
 
 // Create a new Express application.
@@ -72,8 +76,8 @@ app.use(passport.session());
 // Define routes.
 app.get('/',
   function(req, res) {
-    // console.log("Usuario:"+req.user);
-    if(datos_config.authentication == 'Yes')
+    console.log("Usuario:"+req.user);
+    if(req.user == null)
     {
       res.render('home', {user: req.user});
     }
@@ -83,18 +87,21 @@ app.get('/',
     }
 });
 
-app.get('/login/github',
-  passport.authenticate('github'));
-
-app.get('/login/github/return',
-  passport.authenticate('github', { failureRedirect: '/error' }),
-  function(req, res) {
+app.get('/login',
+  passport.authenticate('local', {failureRedirect: '/error'}),
+  function(req,res) {
     res.redirect('/inicio_gitbook');
   });
 
+
 app.get('/inicio_gitbook', function(req,res)
 {
+  if(req.user){
     res.sendFile(path.join(__dirname,'gh-pages','introduccion.html'));
+  }
+  else{
+    res.redirect('/');  
+  }
 });
 
 app.get('/error', function(req, res)

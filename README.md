@@ -1,6 +1,6 @@
-# Práctica 7. Sistemas y Tecnologías Web
+# Práctica 8. Sistemas y Tecnologías Web
 
-## Plugin: Autenticación OAuth con Passport
+## Passport-y-localstrategy-josue-nayra 
 
 El servidor proveído por el plugin (sea iaas o heroku) deberá autenticar que el lector del libro pertenece a una organización dada de GitHub (por ejemplo ULL-ESIT-SYTW-1617). 
 Si es el caso que pertenece podrá seguir leyendo el libro, sino será redirigido a la ruta de autenticación.
@@ -17,33 +17,22 @@ Si es el caso que pertenece podrá seguir leyendo el libro, sino será redirigid
 $ npm install -g gitbook-start-josue-nayra 
 ```
 
+
 2- Crear el libro mediante el comando:
     
 ```bash
 $ gitbook-start -d <directorio> --autor <autor> --name <nombre_libro> --url <url_repo>
 ```
-    
-Opciones disponibles para la creación del libro:
-        
-        -d o --directorio <directorio en el que se desplegará el libro>
-        
-        --autor <autor del libro>
-        
-        --name  <nombre del libro>
-        
-        --url <url del repositorio en github>
-    
-        --help 
-        
-        --version
 
 Se construye así la estructura inicial por **gitbook-start**, es decir, la jerarquía de directorios conteniendo los scripts y ficheros markdown para el libro.
+
 
 3- Colocarse en la carpeta que contiene el libro.
 
 ```bash
 $ cd <directorio en el que se ha desplegado el libro>
 ```
+
 
 4- Instalar las dependencias necesarias mediante el comando:
     
