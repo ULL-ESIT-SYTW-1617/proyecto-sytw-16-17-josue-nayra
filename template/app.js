@@ -89,9 +89,9 @@ app.use(passport.session());
 app.get('/',
   function(req, res) {
     console.log("Usuario:"+req.user);
-    if(req.user == null)
+    if(datos_config.authentication == 'Yes')
     {
-      res.render('home', {user: req.user});
+      res.render('home');
     }
     else
     {
@@ -115,6 +115,7 @@ app.get('/change/password/return', function(req,res)
     var new_password = req.query.new_pass;
     var hash = bcrypt.hashSync(new_password);
     var new_password_encripted = bcrypt.compareSync(new_password, hash);
+    
     console.log("hash:"+hash);
     //ACTUALIZAMOS CONTENIDO DE USERS
     for(var i=0,len = users.length; i < len; i++)
@@ -128,16 +129,11 @@ app.get('/change/password/return', function(req,res)
        }
     }
     //SUBIMOS FICHERO A DROPBOX
-}
+});
 
 app.get('/inicio_gitbook', function(req,res)
 {
-  if(req.user){
     res.sendFile(path.join(__dirname,'gh-pages','introduccion.html'));
-  }
-  else{
-    res.redirect('/');  
-  }
 });
 
 app.get('/error', function(req, res)
