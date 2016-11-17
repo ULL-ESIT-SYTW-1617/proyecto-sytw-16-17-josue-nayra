@@ -4,51 +4,62 @@ var LocalStrategy = require('passport-local').Strategy;
 
 var path = require('path');
 var basePath = process.cwd();
-// var config = require(path.join(basePath,'.secret.json'));
-// var datos_config = JSON.parse(JSON.stringify(config));
+var config = require(path.join(basePath,'.secret.json'));
+var datos_config = JSON.parse(JSON.stringify(config));
 var logout = require('express-passport-logout');
 var expressLayouts = require('express-ejs-layouts');
 
+var dropbox = require('node-dropbox');
+var api = dropbox.api(datos_config.token_dropbox);
+var users;
 
-var user = require(path.join(basePath,'bd','users.js')); //En fase de pruebas
+// var user = require(path.join(basePath,'bd','users.js')); //En fase de pruebas
 
 passport.use(new LocalStrategy(
   function(username, password, cb) {
-        // console.log(user);
-        // console.log("Username:"+username);
-        // console.log("Password:"+password);
+        
+        api.getFile(datos_config.path_bd, (err,response,body) => {
+          if(err){
+            console.log(err);
+            throw err;
+          }
+          
+          console.log("Body: "+JSON.parse(JSON.stringify(body)));
+          var datos = JSON.parse(JSON.stringify(body));
+          users = datos.users;
+          console.log(datos.users);
+          
+          var queries_bd = require(path.join(basePath,'public','js','queries.js'));
+          
+          queries_bd.findByUsername(datos.users,username, function(err, usuario)
+          {
+              if(err) return cb(err);
+              // console.log("ENTREEE");
+              if(!usuario){
+                console.log("El usuario no se encuentra en la base de datos");
+                return cb(null,false);
+              }
 
-        user.findByUsername(username,(err,usuario) =>
-        {
-            if(err) return cb(err);
-            if(!usuario){
-              console.log("El usuario no se encuentra en la base de datos");
-              return cb(null,false);
-            }
+              if(usuario.password != password)
+              {
+                console.log("Password incorrecto");
+                return cb(null,false);
+              }
 
-            if(usuario.password != password)
-            {
-              console.log("Password incorrecto");
-              return cb(null,false);
-            }
-
-            console.log("Usuario encontrado:"+JSON.stringify(usuario));
-            return cb(null,usuario);
+              console.log("Usuario encontrado:"+JSON.stringify(usuario));
+              return cb(null,usuario);
+          });
+          
         });
-        // return cb(null, username);
   }
 ));
 
 passport.serializeUser(function(user, cb) {
-  cb(null, user.id);
+  cb(null, user);
 });
 
-passport.deserializeUser(function(id, cb) {
-  user.findById(id, (err,user) => {
-    if(err)
-      return cb(err);
-    cb(null,user);
-  });
+passport.deserializeUser(function(obj, cb) {
+    cb(null,obj);
 });
 
 // Create a new Express application.
