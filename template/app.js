@@ -13,7 +13,7 @@ var bcrypt = require("bcrypt-nodejs");
 var dropbox = require('node-dropbox');
 var api = dropbox.api(datos_config.token_dropbox);
 var users;
-
+var datos;
 // var user = require(path.join(basePath,'bd','users.js')); //En fase de pruebas
 
 passport.use(new LocalStrategy(
@@ -26,7 +26,7 @@ passport.use(new LocalStrategy(
           }
           
           console.log("Body: "+JSON.parse(JSON.stringify(body)));
-          var datos = JSON.parse(JSON.stringify(body));
+          datos = JSON.parse(JSON.stringify(body));
           users = datos.users;
           console.log(datos.users);
           
@@ -89,7 +89,7 @@ app.use(passport.session());
 app.get('/',
   function(req, res) {
     console.log("Usuario:"+req.user);
-    if(datos_config.authentication == 'Yes')
+    if(datos_config.authentication == 'Yes' && req.user == null)
     {
       res.render('home');
     }
@@ -129,6 +129,17 @@ app.get('/change/password/return', function(req,res)
        }
     }
     //SUBIMOS FICHERO A DROPBOX
+    console.log("----------------------------------------------------------");
+    console.log("USERS:"+JSON.stringify(users));
+    console.log("Longitud1:"+users.length);
+    api.createFile(datos_config.path_bd, JSON.stringify(datos,null,' '), function(err, response, body)
+    {
+      console.log("ERROR:"+err);
+      console.log("Response:"+JSON.stringify(response));
+      console.log("BODY:"+JSON.stringify(body));
+      res.redirect('/');
+    });
+    console.log("------------------------------------------------------");
 });
 
 app.get('/inicio_gitbook', function(req,res)
