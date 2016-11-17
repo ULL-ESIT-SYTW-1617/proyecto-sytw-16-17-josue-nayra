@@ -9,6 +9,7 @@ var datos_config = JSON.parse(JSON.stringify(config));
 var logout = require('express-passport-logout');
 var expressLayouts = require('express-ejs-layouts');
 
+var bcrypt = require("bcrypt-nodejs");
 var dropbox = require('node-dropbox');
 var api = dropbox.api(datos_config.token_dropbox);
 var users;
@@ -101,9 +102,33 @@ app.get('/',
 app.get('/login',
   passport.authenticate('local', {failureRedirect: '/error'}),
   function(req,res) {
-    res.redirect('/inicio_gitbook');
-  });
+	res.render('login', {user: req.user});
+});
 
+app.get('/change/password', function(req,res)
+{
+    res.render('changing_password',{user: req.user});
+});
+
+app.get('/change/password/return', function(req,res)
+{
+    var new_password = req.query.new_pass;
+    var hash = bcrypt.hashSync(new_password);
+    var new_password_encripted = bcrypt.compareSync(new_password, hash);
+    console.log("hash:"+hash);
+    //ACTUALIZAMOS CONTENIDO DE USERS
+    for(var i=0,len = users.length; i < len; i++)
+    {
+       console.log("i:"+i, "Name:"+users[i].username);
+       if(users[i].username == req.user.username)
+       {
+         console.log("ENCONTRADO");
+         users[i].password = hash;
+         break;
+       }
+    }
+    //SUBIMOS FICHERO A DROPBOX
+}
 
 app.get('/inicio_gitbook', function(req,res)
 {
