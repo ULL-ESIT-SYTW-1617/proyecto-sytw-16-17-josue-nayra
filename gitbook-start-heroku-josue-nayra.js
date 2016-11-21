@@ -10,7 +10,7 @@ const Heroku = require('heroku-client');
 const inquirer = require('inquirer');
 var Dropbox = require('dropbox');
 var dbx;
-
+const jsonfile = require('jsonfile');
 
 //-------------------------------------------------------------------------------------------------
 
@@ -142,7 +142,7 @@ var subir_bd = ((datos) =>
 
           console.log("DATAAAAA:"+data);
 
-	  var dbx = new Dropbox({ accessToken: resolve.token_dropbox });
+	  dbx = new Dropbox({ accessToken: resolve.token_dropbox });
 
 	  dbx.filesUpload({path: '/'+resolve.link_bd, contents: data})
 		.then(function(response)
@@ -203,7 +203,7 @@ var generar_fileSecret = ((datos) =>
     return new Promise((resolve, reject) =>
     {
         var configuracion =
-        `{ "token": "${datos.token}", "clientID": "${datos.clientID}", "clientSecret": "${datos.clientSecret}", "authentication": "${datos.authentication}" }`;
+        `{ "token_dropbox": "${datos.token_dropbox}", "authentication": "${datos.authentication}", "link_bd": "${datos.link_bd}" }`;
 
         fs.writeFile(path.join(basePath,'.secret.json'), configuracion, (err) =>
         {
@@ -248,6 +248,82 @@ var preparar_despliegue = (() => {
 
 //-------------------------------------------------------------------------------------------------
 
+var build_tokenHeroku = (() =>
+{
+  return new Promise((resolve,reject)=>
+  {
+    exec('heroku auth:token', ((error, stdout, stderr) =>
+    {
+      if (error)
+      {
+        console.error("Error:"+JSON.stringify(error));
+        throw error;
+      }
+
+      // console.log("Token heroku:"+stdout);
+      
+      var aux = stdout.replace("\n","");
+      var datos = { token_heroku : aux };
+
+      // console.log("Datos:"+datos);
+
+      jsonfile.spaces = 10;
+      jsonfile.writeFileSync(path.join(process.env.HOME,'.heroku','heroku.json'),datos,{spaces: 10});
+      resolve(stdout);
+    }));
+  });
+});
+
+
+//-------------------------------------------------------------------------------------------------
+
+var get_tokenHeroku = (() =>
+{
+    return new Promise((result,reject)=>
+    {
+      if(fs.existsSync(path.join(process.env.HOME,'.heroku')))
+      {
+          if(fs.existsSync(path.join(process.env.HOME,'.heroku','heroku.json')))
+          {
+            fs.readFile(path.join(process.env.HOME,'.heroku','heroku.json'), (err,data) =>
+            {
+                if(err)
+                {
+                  throw err;
+                }
+
+                var datos = JSON.parse(data);
+                result(datos.token_heroku);
+            });
+          }
+          else
+          {
+              build_tokenHeroku().then((resolve,reject) =>
+              {
+                 //Construyo el heroku.json
+                 result(resolve);
+              });
+          }
+      }
+      else
+      {
+          fs.mkdirp(path.join(process.env.HOME,'.heroku'), (err) =>
+          {
+              if(err)
+                throw err;
+
+              build_tokenHeroku().then((resolve,reject) =>
+              {
+                  //Construyo heroku.json
+                  result(resolve);
+              });
+          });
+      }
+    });
+});
+
+//-------------------------------------------------------------------------------------------------
+
 var crear_app = (() => {
   return new Promise((resolve,reject) => {
     console.log("Creando app.js y Procfile");
@@ -273,15 +349,9 @@ var crear_app = (() => {
         }
     });
 
-    //Creamos aplicacion
-    exec('heroku auth:token', ((error, stdout, stderr) =>
+    get_tokenHeroku().then((resolve, reject) =>
     {
-      if (error)
-          console.error("Error:"+JSON.stringify(error));
-      // console.log("Stderr:"+stderr);
-      // console.log("Stdout(token):"+stdout);
-      // console.log("Aplication:\n"+JSON.stringify(pkj.Heroku));
-      const heroku = new Heroku({ token: stdout });
+      const heroku = new Heroku({ token: resolve });
 
 
       heroku.post('/apps', {body: {name: pkj.Heroku.nombre_app}}).then((app) => {
@@ -299,7 +369,8 @@ var crear_app = (() => {
 
             resolve(respuesta1.git_url);
       });
-    }));
+    });
+      
 
   });
 });
