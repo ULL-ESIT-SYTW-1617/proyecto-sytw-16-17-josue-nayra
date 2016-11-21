@@ -365,6 +365,30 @@ var get_AppName = (() =>
 });
 
 //-------------------------------------------------------------------------------------------------
+
+var get_AppsHeroku = ((Appname)=>
+{
+    return new Promise((resolve,reject)=>
+    {
+      var res = true;
+      heroku.get('/apps').then(apps => {
+          for(var d in apps)
+          {
+            //console.log("Nombre app:"+apps[d].name);
+            //console.log("Appname:"+Appname);
+            if(Appname == apps[d].name)
+            {
+              // console.log("Ya existe la aplicacion");
+              res = false;
+            }
+          }
+          resolve(res);
+      });
+    });
+});
+
+//-------------------------------------------------------------------------------------------------
+
 var crear_app = (() => {
   return new Promise((result,reject) => {
 
@@ -374,52 +398,62 @@ var crear_app = (() => {
 	
       get_AppName().then((resolve1,reject1) =>
       {
-	 try
-	 {
-     	      heroku.post('/apps', {body: {name: resolve1}}).then((app) => {
-
-		    var respuesta = JSON.stringify(app);
-		    // console.log("App:"+respuesta);
-		    var respuesta1 = JSON.parse(respuesta);
-		    var git_url = respuesta1.git_url;
-		    console.log("Git url:"+respuesta1.git_url);
-		    git()
-		      .init()
-		      .add('./*')
-		      .commit("Deploy to Heroku")
-		      .addRemote('heroku', git_url);
-
-		    console.log("Creando app.js y Procfile");
-		    fs.copy(path.join(__dirname,'template','app.js'), path.join(basePath, 'app.js'));
-		    fs.copy(path.join(__dirname,'template','Procfile'), path.join(basePath, 'Procfile'));
-
-		    fs.copy(path.join(__dirname,'template','views'), path.join(basePath,'views'), (err) =>
-		    {
-			if(err)
-			{
-			  console.log(err);
-			  throw err;
-			}
-		    });
-
-		    //Copiamos ficheros necesarios para el uso de materialize
-		    fs.copy(path.join(__dirname,'template','public'), path.join(basePath, 'public'), (err) =>
-		    {
-			if(err)
-			{
-			  console.log("Error:"+err);
-			  throw err;
-			}
-		    });
-
-		    result(respuesta1.git_url);
-	      });
- 
-  	 }
-	 catch(e)
-	 {
-		throw e;	
-         }
+        get_AppsHeroku(resolve1).then((resolve2,reject2) =>
+        {
+          if(resolve2 != false){
+              try
+                {
+             	    heroku.post('/apps', {body: {name: resolve1}}).then((app) => {
+        
+                    var respuesta = JSON.stringify(app);
+                    // console.log("App:"+respuesta);
+                    var respuesta1 = JSON.parse(respuesta);
+                    var git_url = respuesta1.git_url;
+                    console.log("Git url:"+respuesta1.git_url);
+                    git()
+                      .init()
+                      .add('./*')
+                      .commit("Deploy to Heroku")
+                      .addRemote('heroku', git_url);
+                    
+                    console.log("Creando app.js y Procfile");
+                    fs.copy(path.join(__dirname,'template','app.js'), path.join(basePath, 'app.js'));
+                    fs.copy(path.join(__dirname,'template','Procfile'), path.join(basePath, 'Procfile'));
+                    
+                    fs.copy(path.join(__dirname,'template','views'), path.join(basePath,'views'), (err) =>
+                    {
+                    	if(err)
+                    	{
+                    	  console.log(err);
+                    	  throw err;
+                    	}
+                    });
+                    
+                    //Copiamos ficheros necesarios para el uso de materialize
+                    fs.copy(path.join(__dirname,'template','public'), path.join(basePath, 'public'), (err) =>
+                    {
+                    	if(err)
+                    	{
+                    	  console.log("Error:"+err);
+                    	  throw err;
+                    	}
+                    });
+                    
+                    result(respuesta1.git_url);
+        	        });
+         
+                }
+        	      catch(e)
+        	      {
+        		      throw e;	
+                }  
+          }
+          else {
+            console.log("Nombre de aplicación no disponible...");
+          }
+           
+        });
+        
       });
     });
   });
