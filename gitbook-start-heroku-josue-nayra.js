@@ -23,13 +23,13 @@ var respuesta = ((error, stdout, stderr) =>
 
 var deploy = (() => {
     console.log("Deploy to Heroku");
-    exec('git add .; git commit -m "Deploy to Heroku"; git push heroku master', respuesta); 
+    exec('git add .; git commit -m "Deploy to Heroku"; git push heroku master', respuesta);
 });
 
 //-------------------------------------------------------------------------------------------------
 
 var escribir_gulpfile = (() => {
-  
+
   return new Promise((resolve,reject) => {
     var tarea_gulp = `\n\ngulp.task("deploy-heroku", function(){`+
              `\n       require("gitbook-start-heroku-josue-nayra").deploy();`+
@@ -40,7 +40,7 @@ var escribir_gulpfile = (() => {
         // console.log(data);
         if(data.search("deploy-heroku") != -1)
         {
-          console.log("Ya existe una tarea de deploy-heroku");    
+          console.log("Ya existe una tarea de deploy-heroku");
         }
         else
         {
@@ -51,9 +51,9 @@ var escribir_gulpfile = (() => {
           });
         }
     });
-  
-  }); 
-    
+
+  });
+
 });
 
 //-------------------------------------------------------------------------------------------------
@@ -166,7 +166,7 @@ var crear_app = (() => {
           throw err;
         }
     });
-    
+
     //Creamos aplicacion
     exec('heroku auth:token', ((error, stdout, stderr) =>
     {
@@ -176,8 +176,8 @@ var crear_app = (() => {
       // console.log("Stdout(token):"+stdout);
       // console.log("Aplication:\n"+JSON.stringify(pkj.Heroku));
       const heroku = new Heroku({ token: stdout });
-    
-    
+
+
       heroku.post('/apps', {body: {name: pkj.Heroku.nombre_app}}).then((app) => {
 
             var respuesta = JSON.stringify(app);
@@ -190,12 +190,12 @@ var crear_app = (() => {
               .add('./*')
               .commit("Deploy to Heroku")
               .addRemote('heroku', git_url);
-            
+
             resolve(respuesta1.git_url);
       });
     }));
-    
-  }); 
+
+  });
 });
 
 
@@ -211,14 +211,14 @@ var initialize = (() => {
         generar_fileSecret(resolve).then((resolve,reject) =>
         {
             console.log("generar_fileSecret");
-            preparar_despliegue().then((resolve, reject) => 
+            preparar_despliegue().then((resolve, reject) =>
             {
               crear_app().then((resolve,reject) =>
               {
                     escribir_gulpfile();
-              });  
+              });
             });
-            
+
         });
     });
 });
