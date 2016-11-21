@@ -10,6 +10,7 @@ const Heroku = require('heroku-client');
 const inquirer = require('inquirer');
 var Dropbox = require('dropbox');
 var dbx;
+var heroku;
 const jsonfile = require('jsonfile');
 
 //-------------------------------------------------------------------------------------------------
@@ -324,54 +325,103 @@ var get_tokenHeroku = (() =>
 
 //-------------------------------------------------------------------------------------------------
 
+var get_AppName = (() =>
+{
+    return new Promise((resolve,reject) =>
+    {
+        if((pkj.Heroku.nombre_app).match(/\S/g))
+        {
+            resolve(pkj.Heroku.nombre_app);
+        }
+        else
+        {
+            var schema = [
+              {
+                name: 'nombre_app',
+                message: "Enter HerokuApp Name:"
+              }
+            ];
+
+            inquirer.prompt(schema).then((respuestas) =>
+            {
+                //Escribir en el package.json
+                fs.readFile(path.join(basePath,'package.json'),(err,data) =>
+                {
+                    if(err)
+                      throw err;
+
+                    var datos = JSON.parse(data);
+
+                    datos.Heroku.nombre_app = respuestas.nombre_app;
+
+                    jsonfile.spaces = 10;
+                    jsonfile.writeFileSync(path.join(basePath,'package.json'),datos,{spaces: 10});
+                });
+
+                resolve(respuestas.nombre_app);
+            });
+        }
+    });
+});
+
+//-------------------------------------------------------------------------------------------------
 var crear_app = (() => {
-  return new Promise((resolve,reject) => {
-    console.log("Creando app.js y Procfile");
-    fs.copy(path.join(__dirname,'template','app.js'), path.join(basePath, 'app.js'));
-    fs.copy(path.join(__dirname,'template','Procfile'), path.join(basePath, 'Procfile'));
-
-    fs.copy(path.join(__dirname,'template','views'), path.join(basePath,'views'), (err) =>
-    {
-        if(err)
-        {
-          console.log(err);
-          throw err;
-        }
-    });
-
-    //Copiamos ficheros necesarios para el uso de materialize
-    fs.copy(path.join(__dirname,'template','public'), path.join(basePath, 'public'), (err) =>
-    {
-        if(err)
-        {
-          console.log("Error:"+err);
-          throw err;
-        }
-    });
+  return new Promise((result,reject) => {
 
     get_tokenHeroku().then((resolve, reject) =>
     {
-      const heroku = new Heroku({ token: resolve });
+      heroku = new Heroku({ token: resolve });
+	
+      get_AppName().then((resolve1,reject1) =>
+      {
+	 try
+	 {
+     	      heroku.post('/apps', {body: {name: resolve1}}).then((app) => {
 
+		    var respuesta = JSON.stringify(app);
+		    // console.log("App:"+respuesta);
+		    var respuesta1 = JSON.parse(respuesta);
+		    var git_url = respuesta1.git_url;
+		    console.log("Git url:"+respuesta1.git_url);
+		    git()
+		      .init()
+		      .add('./*')
+		      .commit("Deploy to Heroku")
+		      .addRemote('heroku', git_url);
 
-      heroku.post('/apps', {body: {name: pkj.Heroku.nombre_app}}).then((app) => {
+		    console.log("Creando app.js y Procfile");
+		    fs.copy(path.join(__dirname,'template','app.js'), path.join(basePath, 'app.js'));
+		    fs.copy(path.join(__dirname,'template','Procfile'), path.join(basePath, 'Procfile'));
 
-            var respuesta = JSON.stringify(app);
-            // console.log("App:"+respuesta);
-            var respuesta1 = JSON.parse(respuesta);
-            var git_url = respuesta1.git_url;
-            console.log("Git url:"+respuesta1.git_url);
-            git()
-              .init()
-              .add('./*')
-              .commit("Deploy to Heroku")
-              .addRemote('heroku', git_url);
+		    fs.copy(path.join(__dirname,'template','views'), path.join(basePath,'views'), (err) =>
+		    {
+			if(err)
+			{
+			  console.log(err);
+			  throw err;
+			}
+		    });
 
-            resolve(respuesta1.git_url);
+		    //Copiamos ficheros necesarios para el uso de materialize
+		    fs.copy(path.join(__dirname,'template','public'), path.join(basePath, 'public'), (err) =>
+		    {
+			if(err)
+			{
+			  console.log("Error:"+err);
+			  throw err;
+			}
+		    });
+
+		    result(respuesta1.git_url);
+	      });
+ 
+  	 }
+	 catch(e)
+	 {
+		throw e;	
+         }
       });
     });
-      
-
   });
 });
 
