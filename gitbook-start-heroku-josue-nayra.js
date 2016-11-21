@@ -9,7 +9,8 @@ const git = require('simple-git');
 const Heroku = require('heroku-client');
 const inquirer = require('inquirer');
 var Dropbox = require('dropbox');
-// var dbx = new Dropbox({ accessToken: datos_config.token_dropbox });
+var dbx;
+
 
 //-------------------------------------------------------------------------------------------------
 
@@ -129,6 +130,41 @@ var get_token = ((dispone_bd) =>
 });
 
 //-------------------------------------------------------------------------------------------------
+var subir_bd = ((datos) =>
+{
+    return new Promise((resolve, reject) =>
+    {
+      if(fs.existsSync(path.join(basePath,'users_bd.json'))) //plantilla
+      {
+        fs.readFile(path.join(basePath,'users_bd.json'), (err, data) =>
+        {
+          if(err) throw err;
+
+          console.log("DATAAAAA:"+data);
+
+	  var dbx = new Dropbox({ accessToken: resolve.token_dropbox });
+
+	  dbx.filesUpload({path: '/'+resolve.link_bd, contents: data})
+		.then(function(response)
+		{
+			resolve(response);
+		})
+		.catch(function(err)
+		{
+			console.log("No se ha subido correctamente la bd al dropbox. Error:"+err);
+			throw err;
+		});
+        });
+      }
+      else
+      {
+          console.log("No ha rellenado la plantilla... Rellenala porfavor.");  
+
+      }
+    });
+});
+
+//-------------------------------------------------------------------------------------------------
 
 var obtener_variables = (() =>
 {
@@ -139,9 +175,9 @@ var obtener_variables = (() =>
         bd_existsDropbox().then((resolve,reject) =>
         {
             dispone_bd = resolve;
-            get_token(dispone_bd).then((resolve,reject) =>
+            get_token(dispone_bd).then((resolve1,reject1) =>
             {
-                  var respuesta = resolve;
+                  var respuesta = resolve1;
                   if(dispone_bd == 'Si')
                   {
                       //Pregunto donde esta el fichero
@@ -150,7 +186,10 @@ var obtener_variables = (() =>
                   else
                   {
                       // //No existe fichero en Dropbox
-                      
+                      subir_bd(resolve1).then((resolve2,reject2) =>
+                      {
+                          result(respuesta);
+                      });
                   }
             });
         });
@@ -179,13 +218,30 @@ var generar_fileSecret = ((datos) =>
 
 var preparar_despliegue = (() => {
   return new Promise((resolve, reject) => {
-      fs.rename(path.join(basePath,'gh-pages','index.html'), path.join(basePath,'gh-pages','introduccion.html'), (err) => {
-        if (err) {
-          console.log(err);
-          throw err;
-        }
-        resolve(fs.existsSync(path.join(basePath,'gh-pages','introduccion.html')));
-      });
+      if(fs.existsSync(path.join(basePath,'gh-pages','index.html')))
+      {
+        fs.rename(path.join(basePath,'gh-pages','index.html'), path.join(basePath,'gh-pages','introduccion.html'), (err) => {
+          if (err) {
+            console.log(err);
+            throw err;
+          }
+
+          resolve(fs.existsSync(path.join(basePath,'gh-pages','introduccion.html')));
+        });
+      }
+      else
+      {
+
+          if(fs.existsSync(path.join(basePath,'gh-pages','introduccion.html')))
+          {
+
+            resolve(fs.existsSync(path.join(basePath,'gh-pages','introduccion.html')));
+          }
+          else
+          {
+            console.log("No existe gh-pages... Debe ejecutar gulp build para construir el libro");
+          }
+      }
   });
 });
 
