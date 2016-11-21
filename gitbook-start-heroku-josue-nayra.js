@@ -8,6 +8,8 @@ const pkj = require(path.join(basePath, 'package.json'));
 const git = require('simple-git');
 const Heroku = require('heroku-client');
 const inquirer = require('inquirer');
+var Dropbox = require('dropbox');
+// var dbx = new Dropbox({ accessToken: datos_config.token_dropbox });
 
 //-------------------------------------------------------------------------------------------------
 
@@ -56,18 +58,72 @@ var escribir_gulpfile = (() => {
     
 });
 
+
 //-------------------------------------------------------------------------------------------------
 
-var get_token = (() =>
+var bd_existsDropbox = (() =>
+{
+    return new Promise((resolve,reject) =>
+    {
+        var schema = [
+          {
+            name: "dispone_bd",
+            message: "Dispone de base de datos en Dropbox?",
+            type: 'list',
+            default: 'Si',
+            choices: ['Si', 'No']
+          }
+        ];
+
+        inquirer.prompt(schema).then((respuestas) =>
+        {
+            console.log("Disposición de BD:"+respuestas.dispone_bd);
+            resolve(respuestas.dispone_bd);
+        });
+    });
+});
+
+//-------------------------------------------------------------------------------------------------
+
+var get_token = ((dispone_bd) =>
 {
   return new Promise((resolve,reject) =>
   {
-
-      fs.readFile(path.join(process.env.HOME, '.gitbook-start','config.json'), (err,data) =>
+      var mensaje;
+      console.log("Dispone de base de datos en get_token:"+dispone_bd);
+      if(dispone_bd == 'Si')
       {
-        if(err) throw err;
-        var datos = JSON.parse(data);
-        resolve(datos.token);
+        mensaje = "Link to the BD:";
+      }
+      else
+      {
+        mensaje = "Path in Dropbox for building BD:";
+      }
+
+      var schema =
+      [
+          {
+            name: "token_dropbox",
+            message: "Enter your Dropbox Token:"
+          },
+          {
+            name: "link_bd",
+            message: mensaje
+          },
+          {
+            name: "authentication",
+            message: "Do you want to authentication?",
+            type: 'list',
+            default: 'Yes',
+            choices: ['Yes', 'No']
+          }
+      ];
+
+      inquirer.prompt(schema).then((respuestas) =>
+      {
+          console.log("token_dropbox:"+respuestas.token_dropbox);
+          console.log("Path BD:"+respuestas.path_bd);
+          resolve({"token_dropbox": respuestas.token_dropbox, "link_bd": respuestas.link_bd, "authentication": respuestas.authentication});
       });
   });
 });
@@ -78,35 +134,29 @@ var obtener_variables = (() =>
 {
     return new Promise((result,reject) =>
     {
-            get_token().then((resolve,reject) =>
-            {
-                var schema = [
-                  {
-                    name: 'clientID',
-                    message: "Enter clientID for your application:"
-                  },
-                  {
-                    name: 'clientSecret',
-                    message: "Enter clientSecret for your application"
-                  },
-                  {
-                    name: 'authentication',
-                    message: "Do you want authentication?",
-                    type: 'list',
-                    default: 'Yes',
-                    choices: ['Yes', 'No']
-                  }
-                ];
+        var dispone_bd;
 
-                inquirer.prompt(schema).then((respuestas) =>
-                {
-                    // console.log("Respuestas:"+JSON.stringify(respuestas));
-                    result({ token: resolve, clientID: respuestas.clientID, clientSecret: respuestas.clientSecret, authentication: respuestas.authentication});
-                });
+        bd_existsDropbox().then((resolve,reject) =>
+        {
+            dispone_bd = resolve;
+            get_token(dispone_bd).then((resolve,reject) =>
+            {
+                  var respuesta = resolve;
+                  if(dispone_bd == 'Si')
+                  {
+                      //Pregunto donde esta el fichero
+                      result(respuesta);
+                  }
+                  else
+                  {
+                      // //No existe fichero en Dropbox
+                      
+                  }
             });
+        });
+
     });
 });
-
 //-------------------------------------------------------------------------------------------------
 
 var generar_fileSecret = ((datos) =>
