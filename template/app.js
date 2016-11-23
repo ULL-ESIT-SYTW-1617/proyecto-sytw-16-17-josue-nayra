@@ -9,49 +9,99 @@ var datos_config = JSON.parse(JSON.stringify(config));
 var logout = require('express-passport-logout');
 var expressLayouts = require('express-ejs-layouts');
 
+var Dropbox = require('dropbox');
+var dbx = new Dropbox({accessToken: datos_config.token_dropbox});
 var bcrypt = require("bcrypt-nodejs");
-var dropbox = require('node-dropbox');
-var api = dropbox.api(datos_config.token_dropbox);
 var users;
 var datos;
-// var user = require(path.join(basePath,'bd','users.js')); //En fase de pruebas
+var nombre_bd;
 
 passport.use(new LocalStrategy(
   function(username, password, cb) {
-        
-        api.getFile(datos_config.path_bd, (err,response,body) => {
-          if(err){
-            console.log(err);
-            throw err;
-          }
-          
-          console.log("Body: "+JSON.parse(JSON.stringify(body)));
-          datos = JSON.parse(JSON.stringify(body));
-          users = datos.users;
-          console.log(datos.users);
-          
-          var queries_bd = require(path.join(basePath,'public','js','queries.js'));
-          
-          queries_bd.findByUsername(datos.users,username, function(err, usuario)
+      dbx.sharingGetSharedLinkFile({ url: datos_config.link_bd})
+          .then(function(data)
           {
-              if(err) return cb(err);
-              // console.log("ENTREEE");
-              if(!usuario){
-                console.log("El usuario no se encuentra en la base de datos");
-                return cb(null,false);
-              }
+              // console.log("BODY:"+JSON.stringify(data));
+              nombre_bd = data.name;
+              console.log("NAME:"+nombre_bd);
+              // console.log("Users:"+JSON.stringify(data.fileBinary));
+              datos = JSON.parse(data.fileBinary);
+              console.log("Datos:"+datos);
 
-              if(usuario.password != password)
+              users = datos.users;
+
+              console.log("USERS:"+users);
+
+              var queries_bd = require(path.join(basePath,'public','js','queries.js'));
+
+              queries_bd.findByUsername(datos.users,username, function(err, usuario)
               {
-                console.log("Password incorrecto");
-                return cb(null,false);
-              }
+                console.log("USUARIO:"+usuario.username+",passs:"+usuario.password);
+                console.log("password:"+password);
+                if(err)
+                {
+                  console.log("1");
+                  throw err;
+                  return cb(err);
+                }
+                if(!usuario){
+                  console.log("El usuario no se encuentra en la base de datos");
+                  return cb(null,false);
+                }
+                console.log("Usuario encontrado:"+JSON.stringify(usuario));
 
-              console.log("Usuario encontrado:"+JSON.stringify(usuario));
-              return cb(null,usuario);
+                try {
+                  if(bcrypt.compareSync(password, usuario.password) == false)
+                  {
+                    console.log("Password incorrecto");
+                    return cb(null,false);
+                  }
+                  else
+                  {
+                      console.log("TODO OK");
+                      return cb(null,usuario);
+                  }
+                } catch (e) {
+                  console.log("error:"+e);
+                  if(password == usuario.password)
+                  {
+                    //No está encriptada
+                      console.log("EAAA");
+                      var new_password = password;
+                      var hash = bcrypt.hashSync(new_password);
+
+                      for(var i=0,len = users.length; i < len; i++)
+                      {
+                         console.log("i:"+i, "Name:"+users[i].username);
+                         if(users[i].username == username)
+                         {
+                           console.log("ENCONTRADO");
+                           users[i].password = hash;
+                           break;
+                         }
+                      }
+
+                      dbx.filesUpload({path: '/'+nombre_bd, contents: JSON.stringify(datos), mode: "overwrite"})
+                        .then(function(response)
+                        {
+                          console.log("Response:"+JSON.stringify(response));
+                        })
+                        .catch(function(err)
+                        {
+                          console.error(err);
+                        });
+
+                        return cb(null,usuario);
+                  }
+                  return cb(null,false);
+                }
+                return cb(null,usuario);
+              });
+          })
+          .catch(function(err)
+          {
+              console.error(err);
           });
-          
-        });
   }
 ));
 

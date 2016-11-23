@@ -123,8 +123,6 @@ var get_token = ((dispone_bd) =>
 
       inquirer.prompt(schema).then((respuestas) =>
       {
-          console.log("token_dropbox:"+respuestas.token_dropbox);
-          console.log("Path BD:"+respuestas.path_bd);
           resolve({"token_dropbox": respuestas.token_dropbox, "link_bd": respuestas.link_bd, "authentication": respuestas.authentication});
       });
   });
@@ -468,10 +466,10 @@ var initialize = (() => {
 
     obtener_variables().then((resolve,reject) =>
     {
-        console.log("Obtener_variables:"+JSON.stringify(resolve));
+        // console.log("Obtener_variables:"+JSON.stringify(resolve));
         generar_fileSecret(resolve).then((resolve,reject) =>
         {
-            console.log("generar_fileSecret");
+            // console.log("generar_fileSecret");
             preparar_despliegue().then((resolve, reject) =>
             {
               crear_app().then((resolve,reject) =>
