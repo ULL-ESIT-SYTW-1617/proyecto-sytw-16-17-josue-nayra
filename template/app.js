@@ -155,12 +155,12 @@ app.get('/login',
 	res.render('login', {user: req.user});
 });
 
-app.get('/change/password', function(req,res)
+app.get('/change_password', function(req,res)
 {
     res.render('changing_password',{user: req.user});
 });
 
-app.get('/change/password/return', function(req,res)
+app.get('/change_password/return', function(req,res)
 {
     var new_password = req.query.new_pass;
     var hash = bcrypt.hashSync(new_password);
@@ -170,26 +170,23 @@ app.get('/change/password/return', function(req,res)
     //ACTUALIZAMOS CONTENIDO DE USERS
     for(var i=0,len = users.length; i < len; i++)
     {
-       console.log("i:"+i, "Name:"+users[i].username);
        if(users[i].username == req.user.username)
        {
-         console.log("ENCONTRADO");
          users[i].password = hash;
          break;
        }
     }
     //SUBIMOS FICHERO A DROPBOX
-    console.log("----------------------------------------------------------");
-    console.log("USERS:"+JSON.stringify(users));
-    console.log("Longitud1:"+users.length);
-    api.createFile(datos_config.path_bd, JSON.stringify(datos,null,' '), function(err, response, body)
-    {
-      console.log("ERROR:"+err);
-      console.log("Response:"+JSON.stringify(response));
-      console.log("BODY:"+JSON.stringify(body));
-      res.redirect('/');
-    });
-    console.log("------------------------------------------------------");
+    dbx.filesUpload({path: '/'+nombre_bd, contents: JSON.stringify(datos), mode: "overwrite"})
+	.then(function(response)
+	{
+		res.redirect('/');
+	})
+	.catch(function(err)
+	{
+		console.log(err);
+	});
+	return false;
 });
 
 app.get('/inicio_gitbook', function(req,res)
@@ -200,11 +197,12 @@ app.get('/inicio_gitbook', function(req,res)
 app.get('/error', function(req, res)
 {
     console.log("Info del usuario:"+req.user);
-    res.render('error', { error: "Su usuario no pertenece a la organizacion"});
+    res.render('error', { error: "Imposible el acceso. No se encuentra el usuario."});
 });
 
 app.get('/logout',function(req,res){
-  logout();
+  req.logout();
+  req.session.destroy();
   res.redirect('/');
 });
 

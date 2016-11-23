@@ -1,9 +1,23 @@
 <% if(user){ %>
-Bienvenido <%= user.displayName %>! Acceda al <a href="/inicio_gitbook">Gitbook</a>
-<br>
-<a href="/change/password">¿Quieres cambiar el password?</a>
-<br>
-<a href="/getFile">GetFile</a>
-
+  <div class="container">
+    <center>
+        <div class="row">
+          <div class="col s12">
+            <div class="card">
+              <div class="card-image">
+                <img src="http://itkpi.pp.ua/images/2016/01/1453229201_c538744e3a764b3eaae872adba48666e.png">
+                <span class="card-title"></span>
+              </div>
+              <div class="card-content">
+                <p>Bienvenid@ <%= user.username %>!!! Se ha logueado correctamente.</p>
+              </div>
+              <div class="card-action">
+                <a href="/inicio_gitbook" style="color: #52BE80;">Ir a Gitbook</a>
+                <a href="/change_password" style="color: #52BE80;">Cambiar mi password</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </center>
+  </div>
 <% } %>
-
