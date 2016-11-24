@@ -16,7 +16,7 @@ var funciones_db = require(path.join(basePath,'public','js','queries.js'));
 
 // Database initialization
 db.serialize(function(){
-  db.run("CREATE TABLE IF NOT EXISTS USUARIOS ( userID int, username varchar(255), password varchar(255),displayName varchar(255) );", function(err)
+  db.run("CREATE TABLE IF NOT EXISTS USUARIOS ( userID INTEGER PRIMARY KEY AUTOINCREMENT, username varchar(255), password varchar(255),displayName varchar(255) );", function(err)
   {
     if(err)
     {
@@ -59,7 +59,7 @@ var app = express();
 
 // Configure view engine to render EJS templates.
 app.use(express.static(path.join(__dirname,'gh-pages/')));
-// app.use(express.static(path.join(__dirname,'public/')));
+app.use(express.static(path.join(__dirname,'public/')));
 app.set("views", __dirname+'/views');
 app.set('view engine', 'ejs');
 app.use(expressLayouts);
@@ -80,7 +80,7 @@ app.use(passport.session());
 app.get('/',
   function(req, res) {
     console.log("Usuario:"+req.user);
-    if(datos_config.authentication == 'Yes' && req.user == null)
+    if(datos_config.authentication == 'Si' && req.user == null)
     {
       res.render('home');
     }
@@ -126,6 +126,39 @@ app.get('/error', function(req, res)
 {
     console.log("Info del usuario:"+req.user);
     res.render('error', { error: "Imposible el acceso. No se encuentra el usuario."});
+});
+
+app.get('/registro', function(req,res)
+{
+    res.render('registro.ejs');
+});
+
+app.get('/registro_return', function(req, res)
+{
+    funciones_db.create_user(db, req.query.username, req.query.password, req.query.displayName, function(err, usuario)
+    {
+      if(err)
+      {
+        console.log("Err:"+err);
+        throw err;
+      }
+      console.log("Usuarioeaaa:"+usuario.username)
+      res.render('login', {user: usuario});
+    });
+});
+
+app.get('/borrar_cuenta', function(req, res)
+{
+  console.log("USUARIOEA:"+JSON.stringify(req.user[0]));
+  funciones_db.borrar_cuenta(db, req.user[0].username, req.user[0].password, req.user[0].displayName, function(err)
+  {
+      if(err)
+      {
+        console.log(err);
+        throw err;
+      }
+      res.redirect('/logout');
+  });
 });
 
 app.get('/logout',function(req,res){

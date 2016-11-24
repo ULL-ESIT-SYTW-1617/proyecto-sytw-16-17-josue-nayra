@@ -76,6 +76,45 @@ var change_password = ((db, username, password, cb) =>
 	});
 });
 
+var create_user = ((db, username, password, displayName, cb) =>
+{
+	db.run(`INSERT INTO 'USUARIOS'(userID,username, password, displayName) VALUES(NULL,'${username}','${password}','${displayName}')`, function(err)
+	{
+		 if(err)
+		 {
+			 console.log("ERROR INSERTANDO:"+err);
+			 throw err;
+		 }
+		 console.log("Inserción realizada con éxito");
+		 findByUsername(db,username, password,(err,usuario)=>
+	 	 {
+					if(err)
+					{
+						console.log("ERROR:"+err);
+						throw err;
+					}
+					return cb(null, usuario[0]);
+		 });
+	});
+});
+
+var borrar_cuenta = ((db, username, password,displayName, cb) =>
+{
+	// DELETE
+	db.run(`DELETE FROM 'USUARIOS' WHERE username='${username}' AND password = '${password}' AND displayName='${displayName}'`, function(err)
+	{
+	  if(err)
+	  {
+	    console.log("ERROR HACIENDO EL DELETE:"+err);
+			return cb(err);
+	  }
+	  console.log("Delete realizado con éxito");
+		return cb(null);
+	});
+});
+
+exports.borrar_cuenta = borrar_cuenta;
+exports.create_user = create_user;
 exports.change_password = change_password;
 exports.findByUsername = findByUsername;
 exports.findById = findById;
