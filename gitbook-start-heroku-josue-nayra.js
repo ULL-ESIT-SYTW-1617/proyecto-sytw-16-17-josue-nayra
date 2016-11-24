@@ -6,7 +6,7 @@ const path = require('path');
 var exec = require('child_process').exec;
 const inquirer = require('inquirer');
 
-var heroku = require('./lib/config_heroku.js');
+var heroku = require(path.join(__dirname,'lib','config_heroku.js'));
 
 //-------------------------------------------------------------------------------------------------
 
@@ -118,7 +118,7 @@ var obtener_variables = (() =>
 {
     return new Promise((result,reject) =>
     {
-	switch(tipo_bd)
+	      switch(tipo_bd)
         {
           case 'Sqlite3':
             var schema = [
@@ -227,23 +227,19 @@ var initialize = (() => {
 	    tipo_bd = resolve;
 	    obtener_variables(tipo_bd).then((resolve1,reject1) =>
 	    {
-		console.log("Obtener_variables:"+JSON.stringify(resolve));
+		        console.log("Obtener_variables:"+JSON.stringify(resolve));
           	generar_fileSecret(tipo_bd,resolve1).then((resolve2,reject2) =>
-
-		{
+		        {
 	              console.log("Datos de .secret.json:"+JSON.stringify(resolve2));
-
-		    preparar_despliegue().then((resolve3, reject3) =>
-		    {
-                	console.log("Fichero gh-pages/index.html renombrado por gh-pages/introduccion.html");
-
-		      heroku.crear_app().then((resolve4,reject4) =>
-		      {
-		            escribir_gulpfile();
-		      });
-		    });
-
-		});
+        		    preparar_despliegue().then((resolve3, reject3) =>
+        		    {
+                  console.log("Fichero gh-pages/index.html renombrado por gh-pages/introduccion.html");
+        		      heroku.crear_app().then((resolve4,reject4) =>
+        		      {
+        		            escribir_gulpfile();
+        		      });
+        		    });
+		        });
 	    });
     });
 });
