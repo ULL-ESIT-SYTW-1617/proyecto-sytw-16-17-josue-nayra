@@ -52,6 +52,7 @@
     "gulp-shell": "^0.5.2",
     "heroku-client": "^3.0.0-beta3",
     "inquirer": "^1.2.3",
+    "jsonfile": "^2.4.0",
     "minimist": "^1.2.0",
     "morgan": "^1.7.0",
     "octonode": "^0.7.6",

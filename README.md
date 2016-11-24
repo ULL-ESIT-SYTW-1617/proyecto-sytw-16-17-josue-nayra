@@ -1,9 +1,14 @@
-# Práctica 8. Sistemas y Tecnologías Web
+# Práctica 9. Sistemas y Tecnologías Web
 
-## Passport-y-localstrategy-josue-nayra 
+## LocalStrategy y Base de Datos
 
-El servidor proveído por el plugin (sea iaas o heroku) deberá autenticar que el lector del libro pertenece a una organización dada de GitHub (por ejemplo ULL-ESIT-SYTW-1617). 
-Si es el caso que pertenece podrá seguir leyendo el libro, sino será redirigido a la ruta de autenticación.
+
+### Objetivo:
+
+El servidor proveído por el plugin (heroku) deberá autenticar al lector del libro usando LocalStrategy y una base de datos en la que se guarda la información acerca de los usuarios.
+
+Para la Base de datos se ha utilizado una base de datos y un módulo node que la soporte, por ejemplo Sqlite y sqlite-node
+
 
 
 [Plugin: gitbook-start-heroku-josue-nayra](https://github.com/ULL-ESIT-SYTW-1617/gitbook-start-heroku-josue-nayra)
@@ -162,6 +167,8 @@ $ gulp deploy-heroku
 
 
 ### Referencias
+
+- [Sqlite](https://crguezl.github.io/ull-esit-1617/apuntes/db/sqlite/)
 
 - [Tutorial para publicar paquetes nodejs](https://casianorodriguezleon.gitbooks.io/ull-esit-1617/content/apuntes/nodejspackages.html)
 
