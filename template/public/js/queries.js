@@ -16,21 +16,66 @@ var findById = ((users,id,cb) =>
 
 var findByUsername = ((users,username,cb)=>
 {
-		// process.nextTick(() =>
-		// {
-			console.log("USUARIOS EN FBU:"+users);
-			for(var i=0,len = users.length; i < len; i++)
+	console.log("findByUsername");
+	console.log("TODOS LOS USUARIOS:");
+	db.all('SELECT * FROM USUARIOS', function(err,rows)
+	{
+			if(err)
 			{
-				var record = users[i];
-				console.log("RECORD:"+record);
-				if(record.username === username)
-				{
-					return cb(null, record);
-				}
+				console.log("ESE ERROR MAMIII");
+				throw err;
 			}
-			return cb(null,null);
-		// });
+			console.log("ROWSSSS BABY:"+JSON.stringify(rows));
+	});
+
+	var query = `SELECT * FROM USUARIOS WHERE username = '${username}' AND password='${password}'`;
+	console.log("Query:"+query);
+	try {
+		db.all(query, function(err, row)
+		{
+			console.log("BUSCANDOOOOOOO");
+			console.log("ROWS:"+JSON.stringify(row));
+			console.log("ROWS length:"+row.length);
+			if(err)
+			{
+				console.log("Err:"+err);
+				return cb(null,false);
+			}
+
+			if(row.length > 0)
+			{
+				console.log("EA EA EA MACARENA");
+				console.log("ID:"+row[0].userID+",Username:"+row[0].username+",password:"+row[0].password+",displayname:"+row[0].displayName);
+				return cb(null, row);
+			}
+			else
+			{
+				console.log("No se ha encontrado el usuario");
+				return cb(null, false);
+			}
+		});
+	} catch(e) {
+		console.log("Exception ocurred."+e);
+	};
 });
 
+var change_password = ((db, username, password, cb) =>
+{
+	console.log("estoy en change_password");
+	var query = `UPDATE USUARIOS SET password = '${password}' WHERE Username = '${username}'`
+	console.log("QUERY:"+query);
+	db.run(query, function(err)
+	{
+		if(err)
+		{
+			console.log("ERROR MODIFICANDO: "+err);
+			throw err;
+		}
+		console.log("Modificación de contraseña realizada.");
+		cb(null);
+	});
+});
+
+exports.change_password = change_password;
 exports.findByUsername = findByUsername;
 exports.findById = findById;
