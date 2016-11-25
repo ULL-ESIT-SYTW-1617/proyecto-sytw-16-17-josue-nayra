@@ -31,7 +31,7 @@ var escribir_gulpfile = (() => {
 
   return new Promise((resolve,reject) => {
     var tarea_gulp = `\n\ngulp.task("deploy-heroku", function(){`+
-             `\n       require("gitbook-start-heroku-josue-nayra").deploy();`+
+             `\n       require("gitbook-start-heroku-P9-josue-nayra").deploy();`+
              `\n});`;
 
     fs.readFile('gulpfile.js', "utf8", function(err, data) {
@@ -114,7 +114,7 @@ var get_token = ((dispone_bd) =>
 
 //-------------------------------------------------------------------------------------------------
 
-var obtener_variables = (() =>
+var obtener_variables = ((tipo_bd) =>
 {
     return new Promise((result,reject) =>
     {
@@ -155,7 +155,7 @@ var obtener_variables = (() =>
 });
 //-------------------------------------------------------------------------------------------------
 
-var generar_fileSecret = ((datos) =>
+var generar_fileSecret = ((tipo_bd,datos) =>
 {
     return new Promise((resolve, reject) =>
     {
@@ -227,7 +227,7 @@ var initialize = (() => {
 	    tipo_bd = resolve;
 	    obtener_variables(tipo_bd).then((resolve1,reject1) =>
 	    {
-		        console.log("Obtener_variables:"+JSON.stringify(resolve));
+		        console.log("Obtener_variables:"+JSON.stringify(resolve1));
           	generar_fileSecret(tipo_bd,resolve1).then((resolve2,reject2) =>
 		        {
 	              console.log("Datos de .secret.json:"+JSON.stringify(resolve2));

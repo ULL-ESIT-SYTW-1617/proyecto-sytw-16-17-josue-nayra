@@ -11,7 +11,7 @@ var expressLayouts = require('express-ejs-layouts');
 
 var bcrypt = require("bcrypt-nodejs");
 var sqlite3 = require('sqlite3').verbose();
-var db = new sqlite3.Database('P9.db');
+var db = new sqlite3.Database(datos_config.nombre_bd+'.db');
 var funciones_db = require(path.join(basePath,'public','js','queries.js'));
 
 // Database initialization
@@ -98,7 +98,7 @@ app.get('/login',
 
 app.get('/change_password', function(req,res)
 {
-    res.render('changing_password',{user: req.user});
+    res.render('changing_password',{user: req.user[0]});
 });
 
 app.get('/change_password_return', function(req,res)

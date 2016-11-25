@@ -14,7 +14,7 @@ var findById = ((users,id,cb) =>
 		// });
 });
 
-var findByUsername = ((users,username,cb)=>
+var findByUsername = ((db,username,password,cb)=>
 {
 	console.log("findByUsername");
 	console.log("TODOS LOS USUARIOS:");
