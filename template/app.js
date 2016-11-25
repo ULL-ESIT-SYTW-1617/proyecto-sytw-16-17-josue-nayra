@@ -6,12 +6,10 @@ var path = require('path');
 var basePath = process.cwd();
 var config = require(path.join(basePath,'.secret.json'));
 var datos_config = JSON.parse(JSON.stringify(config));
-var logout = require('express-passport-logout');
 var expressLayouts = require('express-ejs-layouts');
 
-var bcrypt = require("bcrypt-nodejs");
 var sqlite3 = require('sqlite3').verbose();
-var db = new sqlite3.Database(datos_config.nombre_bd+'.db');
+var db = new sqlite3.Database(datos_config.nombre_bd);
 var funciones_db = require(path.join(basePath,'public','js','queries.js'));
 
 // Database initialization
@@ -33,7 +31,7 @@ passport.use(new LocalStrategy(
     console.log("User:"+username);
     console.log("Password:"+password);
 
-    //SELECTTTTTT
+    //SELECT
     funciones_db.findByUsername(db,username,password, (err,usuario) =>
     {
         if(err)

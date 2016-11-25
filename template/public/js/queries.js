@@ -1,5 +1,7 @@
 "use strict";
 
+var bcrypt = require("bcrypt-nodejs");
+
 var findById = ((users,id,cb) =>
 {
 		// process.nextTick(() =>
@@ -14,26 +16,15 @@ var findById = ((users,id,cb) =>
 		// });
 });
 
+//-------------------------------------------------------------------------------------------------
+
 var findByUsername = ((db,username,password,cb)=>
 {
-	console.log("findByUsername");
-	console.log("TODOS LOS USUARIOS:");
-	db.all('SELECT * FROM USUARIOS', function(err,rows)
-	{
-			if(err)
-			{
-				console.log("ESE ERROR MAMIII");
-				throw err;
-			}
-			console.log("ROWSSSS BABY:"+JSON.stringify(rows));
-	});
-
 	var query = `SELECT * FROM USUARIOS WHERE username = '${username}' AND password='${password}'`;
 	console.log("Query:"+query);
 	try {
 		db.all(query, function(err, row)
 		{
-			console.log("BUSCANDOOOOOOO");
 			console.log("ROWS:"+JSON.stringify(row));
 			console.log("ROWS length:"+row.length);
 			if(err)
@@ -44,9 +35,18 @@ var findByUsername = ((db,username,password,cb)=>
 
 			if(row.length > 0)
 			{
-				console.log("EA EA EA MACARENA");
 				console.log("ID:"+row[0].userID+",Username:"+row[0].username+",password:"+row[0].password+",displayname:"+row[0].displayName);
-				return cb(null, row);
+				
+				if(bcrypt.compareSync(password,row[0].password))
+				{
+					console.log("Password correcto.");
+					return cb(null,row);
+				}
+				else
+				{
+					console.log("Password incorrecto.");
+					return cb(null,false);
+				}
 			}
 			else
 			{
@@ -59,9 +59,10 @@ var findByUsername = ((db,username,password,cb)=>
 	};
 });
 
+//-------------------------------------------------------------------------------------------------
+
 var change_password = ((db, username, password, cb) =>
 {
-	console.log("estoy en change_password");
 	var query = `UPDATE USUARIOS SET password = '${password}' WHERE Username = '${username}'`
 	console.log("QUERY:"+query);
 	db.run(query, function(err)
@@ -76,27 +77,26 @@ var change_password = ((db, username, password, cb) =>
 	});
 });
 
+//-------------------------------------------------------------------------------------------------
+
 var create_user = ((db, username, password, displayName, cb) =>
 {
+	var password_encripted = bcrypt.hashSync(password);
+	console.log("Creando usuario --> Password: "+password_encripted);
+	
 	db.run(`INSERT INTO 'USUARIOS'(userID,username, password, displayName) VALUES(NULL,'${username}','${password}','${displayName}')`, function(err)
 	{
 		 if(err)
 		 {
 			 console.log("ERROR INSERTANDO:"+err);
-			 throw err;
+			 return cb(err);
 		 }
 		 console.log("Inserción realizada con éxito");
-		 findByUsername(db,username, password,(err,usuario)=>
-	 	 {
-					if(err)
-					{
-						console.log("ERROR:"+err);
-						throw err;
-					}
-					return cb(null, usuario[0]);
-		 });
+		 return cb(null);
 	});
 });
+
+//-------------------------------------------------------------------------------------------------
 
 var borrar_cuenta = ((db, username, password,displayName, cb) =>
 {
@@ -112,6 +112,8 @@ var borrar_cuenta = ((db, username, password,displayName, cb) =>
 		return cb(null);
 	});
 });
+
+//-------------------------------------------------------------------------------------------------
 
 exports.borrar_cuenta = borrar_cuenta;
 exports.create_user = create_user;
