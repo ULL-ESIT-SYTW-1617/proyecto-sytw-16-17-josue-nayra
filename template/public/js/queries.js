@@ -100,17 +100,28 @@ var create_user = ((db, username, password, displayName, cb) =>
 
 var borrar_cuenta = ((db, username, password,displayName, cb) =>
 {
-	// DELETE
-	db.run(`DELETE FROM 'USUARIOS' WHERE username='${username}' AND password = '${password}' AND displayName='${displayName}'`, function(err)
+	db.all(`SELECT * FROM USUARIOS WHERE username = '${username}' AND password = '${password}' AND displayName = '${displayName}'`, (err,row) =>
 	{
-	  if(err)
-	  {
-	    console.log("ERROR HACIENDO EL DELETE:"+err);
+		if(err){
+			console.log(err);
 			return cb(err);
-	  }
-	  console.log("Delete realizado con éxito");
-		return cb(null);
+		}	
+		
+		if(row.length > 0){
+			// DELETE
+			db.run(`DELETE FROM 'USUARIOS' WHERE username='${username}' AND password = '${password}' AND displayName='${displayName}'`, function(err)
+			{
+				if(err)
+				{
+					console.log("ERROR HACIENDO EL DELETE:"+err);
+					return cb(err);
+				}
+				console.log("Delete realizado con éxito");
+				return cb(null);
+			});
+		}
 	});
+	
 });
 
 //-------------------------------------------------------------------------------------------------
