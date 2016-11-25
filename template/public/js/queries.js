@@ -2,20 +2,6 @@
 
 var bcrypt = require("bcrypt-nodejs");
 
-var findById = ((users,id,cb) =>
-{
-		// process.nextTick(() =>
-		// {
-				var idx = id-1;
-				if(users[idx])
-				{
-					cb(null,users[idx]);
-				}else {
-					cb(new Error('User '+id+' does not exist'));
-				}
-		// });
-});
-
 //-------------------------------------------------------------------------------------------------
 
 var findByUsername = ((db,username,password,cb)=>
@@ -25,8 +11,6 @@ var findByUsername = ((db,username,password,cb)=>
 	try {
 		db.all(query, function(err, row)
 		{
-			console.log("ROWS:"+JSON.stringify(row));
-			console.log("ROWS length:"+row.length);
 			if(err)
 			{
 				console.log("Err:"+err);
@@ -35,7 +19,7 @@ var findByUsername = ((db,username,password,cb)=>
 
 			if(row.length > 0)
 			{
-				console.log("ID:"+row[0].userID+",Username:"+row[0].username+",password:"+row[0].password+",displayname:"+row[0].displayName);
+				// console.log("ID:"+row[0].userID+",Username:"+row[0].username+",password:"+row[0].password+",displayname:"+row[0].displayName);
 				
 				if(bcrypt.compareSync(password,row[0].password))
 				{
@@ -82,9 +66,9 @@ var change_password = ((db, username, password, cb) =>
 var create_user = ((db, username, password, displayName, cb) =>
 {
 	var password_encripted = bcrypt.hashSync(password);
-	console.log("Creando usuario --> Password: "+password_encripted);
+	// console.log("Creando usuario --> Password: "+password_encripted);
 	
-	db.run(`INSERT INTO 'USUARIOS'(userID,username, password, displayName) VALUES(NULL,'${username}','${password}','${displayName}')`, function(err)
+	db.run(`INSERT INTO 'USUARIOS'(userID,username, password, displayName) VALUES(NULL,'${username}','${password_encripted}','${displayName}')`, function(err)
 	{
 		 if(err)
 		 {
@@ -130,4 +114,3 @@ exports.borrar_cuenta = borrar_cuenta;
 exports.create_user = create_user;
 exports.change_password = change_password;
 exports.findByUsername = findByUsername;
-exports.findById = findById;

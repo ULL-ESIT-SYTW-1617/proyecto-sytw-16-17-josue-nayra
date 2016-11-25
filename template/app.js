@@ -101,8 +101,6 @@ app.get('/change_password', function(req,res)
 
 app.get('/change_password_return', function(req,res)
 {
-  // console.log("PASSWORD:"+req.query.new_pass);
-  // console.log("ROWWWWW BABY:"+JSON.stringify(req.user[0]));
   // ACTUALIZANDO
   funciones_db.change_password(db,req.user[0].username,req.query.new_pass,(err) =>
   {
@@ -140,14 +138,12 @@ app.get('/registro_return', function(req, res)
         console.log("Err:"+err);
         throw err;
       }
-      //console.log("Usuarioeaaa:"+usuario.username)
        res.render('home');
     });
 });
 
 app.get('/borrar_cuenta', function(req, res)
 {
-  //console.log("USUARIOEA:"+JSON.stringify(req.user[0]));
   funciones_db.borrar_cuenta(db, req.user[0].username, req.user[0].password, req.user[0].displayName, function(err)
   {
       if(err)
