@@ -1,8 +1,15 @@
+var Sequelize = require('sequelize');
 
 module.exports = function(sequelize, DataTypes) {
     var User = sequelize.define(
         'User', 
         { 
+            id: {
+                type: Sequelize.INTEGER,
+                autoIncrement: true,
+                unique: true,
+                primaryKey: true
+            },
             username: {
                 type: DataTypes.STRING,
                 unique: true,
@@ -35,7 +42,10 @@ module.exports = function(sequelize, DataTypes) {
                 //     }
                 //     this.setDataValue('password', encripted);
                 // }
-            }   
+            },
+            displayName: {
+                type: DataTypes.STRING
+            }
         }
     );
 
