@@ -89,15 +89,15 @@ app.get('/change_password', function(req,res)
 app.get('/change_password_return', function(req,res)
 {
   // ACTUALIZANDO
-  // funciones_db.change_password(db,req.user[0].username,req.query.new_pass,(err) =>
-  // {
-  //   if(err)
-  //   {
-  //     console.log("ERROR:"+err);
-  //     throw err;
-  //   }
-  //   res.render('login',{user: req.user[0]});
-  // });
+  controlador_usuario.change_password(req.user.username,req.user.password,req.query.new_pass,(err) =>
+  {
+    if(err)
+    {
+      console.log("ERROR:"+err);
+      throw err;
+    }
+    res.render('login',{user: req.user});
+  });
 });
 
 app.get('/inicio_gitbook', function(req,res)

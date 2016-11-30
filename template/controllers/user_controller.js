@@ -58,19 +58,15 @@ var create_user = ((username_, password_, displayName_, cb) =>
 var borrar_cuenta = ((username_, password_, displayName_, cb) =>
 {
     models.User.destroy({
-      where:
-      {
+      where: {
         username: username_,
         password: password_,
         displayName: displayName_
       }
-    })
-    .then(()=>
+    }).then(()=>
     {
-        //Buscar al usuario y comprobar que no existe
-        return cb(null);
-    })
-    .catch((error)=>
+      return cb(null);
+    }).catch((error) =>
     {
       return cb(error);
     });
