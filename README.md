@@ -2,7 +2,6 @@
 
 ## LocalStrategy y Base de Datos
 
-
 ### Objetivo:
 
 El servidor proveído por el plugin (heroku) deberá autenticar al lector del libro usando LocalStrategy y una base de datos en la que se guarda la información acerca de los usuarios.
