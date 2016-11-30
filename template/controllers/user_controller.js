@@ -24,7 +24,17 @@ var findByUsername = ((username_, password_, cb) => {
 var change_password = ((username_,password_actual,new_password, cb) =>
 {
   models.User.findAll({where:{username: username_,password: password_actual}})
-             .update({ password: new_password,}, { where: { username: username_, password: password_actual }});
+             .then((datos)=>
+              {
+                  console.log("Cambiando password yeah to yeah");
+                  models.User.update({ password: new_password,}, { where: { username: datos[0].username, password: datos[0].password }});
+                  return cb(null);
+              })
+              .catch((err)=>
+              {
+                 console.log("ERROR cambiando password:"+err);
+                 return cb(err);
+              });
 });
 
 var create_user = ((username_, password_, displayName_, cb) =>
@@ -34,6 +44,7 @@ var create_user = ((username_, password_, displayName_, cb) =>
         username: username_,
         password: password_,
         displayName: displayName_
+
     }).then(()=> {
         models.User.findAll({where: {
           username: username_,

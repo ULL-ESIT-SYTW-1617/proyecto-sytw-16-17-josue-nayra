@@ -4,13 +4,9 @@ var LocalStrategy = require('passport-local').Strategy;
 
 var path = require('path');
 var basePath = process.cwd();
-// var config = require(path.join(basePath,'.secret.json'));
-// var datos_config = JSON.parse(JSON.stringify(config));
+var config = require(path.join(basePath,'.secret.json'));
+var datos_config = JSON.parse(JSON.stringify(config));
 var expressLayouts = require('express-ejs-layouts');
-
-// var sqlite3 = require('sqlite3').verbose();
-// var db = new sqlite3.Database(datos_config.nombre_bd);
-
 var controlador_usuario = require('./controllers/user_controller.js');
 
 passport.use(new LocalStrategy(
@@ -21,8 +17,7 @@ passport.use(new LocalStrategy(
 
     controlador_usuario.findByUsername(username,password,(error,usuario) => {
       if(error){
-        console.log("petoo la cosa josueeeeee..");
-        throw error;
+        return cb(null,false);
       }
       console.log("User: "+JSON.stringify(usuario));
       return cb(null,usuario);
@@ -64,26 +59,25 @@ app.use(passport.session());
 app.get('/',
   function(req, res) {
     console.log("Usuario:"+req.user);
-    // if(datos_config.authentication == 'Si' && req.user == null)
-    // {
-    //   res.render('home');
-    // }
-    // else
-    // {
-    //   res.redirect('/inicio_gitbook');
-    // }
-    res.render('home');
+    if(req.user == null)
+    {
+      res.render('home');
+    }
+    else
+    {
+      res.redirect('/inicio_gitbook');
+    }
 });
 
 app.get('/login',
   passport.authenticate('local', {failureRedirect: '/error'}),
   function(req,res) {
-	res.render('login', {user: req.user[0]});
+	res.render('login', {user: req.user});
 });
 
 app.get('/change_password', function(req,res)
 {
-    res.render('changing_password',{user: req.user[0]});
+    res.render('changing_password',{user: req.user});
 });
 
 app.get('/change_password_return', function(req,res)
@@ -118,28 +112,28 @@ app.get('/registro', function(req,res)
 
 app.get('/registro_return', function(req, res)
 {
-    // funciones_db.create_user(db, req.query.username, req.query.password, req.query.displayName, function(err, usuario)
-    // {
-    //   if(err)
-    //   {
-    //     console.log("Err:"+err);
-    //     throw err;
-    //   }
-    //   res.render('home');
-    // });
+  controlador_usuario.create_user(req.query.username, req.query.password, req.query.displayName, function(err, usuario)
+  {
+    if(err)
+    {
+      console.log("Err:"+err);
+      throw err;
+    }
+    res.render('home');
+  });
 });
 
 app.get('/borrar_cuenta', function(req, res)
 {
-  // funciones_db.borrar_cuenta(db, req.user[0].username, req.user[0].password, req.user[0].displayName, function(err)
-  // {
-  //     if(err)
-  //     {
-  //       console.log(err);
-  //       throw err;
-  //     }
-  //     res.redirect('/logout');
-  // });
+  controlador_usuario.borrar_cuenta(req.user.username, req.user.password, req.user.displayName, function(err)
+  {
+      if(err)
+      {
+        console.log(err);
+        throw err;
+      }
+      res.redirect('/logout');
+  });
 });
 
 app.get('/logout',function(req,res){
