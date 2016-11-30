@@ -1,0 +1,82 @@
+var bcrypt = require('bcrypt-nodejs');
+var models = require('../models/models.js');
+console.log("User:"+models.User);
+var findByUsername = ((username_, password_, cb) => {
+    models.User.findAll({where: {
+        username: username_
+    }}).then((datos) => {
+        console.log(JSON.stringify(datos));
+        if(datos.length > 0) {
+            // if(bcrypt.compareSync(password_, datos[0].password)){
+            //     console.log("Usuario encontradado...");
+            //     return cb(null,datos[0]);
+            // }
+            if(password_, datos[0].password)
+            {
+              return cb(null,datos[0]);
+            }
+            return cb(null,false);
+        }
+        return cb(null,false);
+    });
+});
+
+var change_password = ((username_,password_actual,new_password, cb) =>
+{
+  models.User.findAll({where:{username: username_,password: password_actual}})
+             .update({ password: new_password,}, { where: { username: username_, password: password_actual }});
+});
+
+var create_user = ((username_, password_, displayName_, cb) =>
+{
+    models.User.create(
+    {
+        username: username_,
+        password: password_,
+        displayName: displayName_
+    }).then(()=>
+      {
+        models.User.findAll({where {
+          username: username_,
+          password: password_,
+          displayName: displayName_
+        }}).then((datos)=>
+        {
+          return cb(null);
+        })
+        .catch((err)=>
+        {
+          return cb(err);
+        });
+      })
+      .catch((err)=>
+      {
+        return cb(err);
+      });
+});
+
+var borrar_cuenta = ((username_, password_, displayName_, cb) =>
+{
+    models.User.destroy({
+      where:
+      {
+        username: username_,
+        password: password_,
+        displayName: displayName_
+      }
+    })
+    .then(()=>
+    {
+        //Buscar al usuario y comprobar que no existe
+        return cb(null);
+    })
+    .catch((error)=>
+    {
+      return cb(error);
+    });
+});
+
+exports.findByUsername = findByUsername;
+exports.change_password = change_password;
+exports.create_user = create_user;
+exports.borrar_cuenta = borrar_cuenta;
