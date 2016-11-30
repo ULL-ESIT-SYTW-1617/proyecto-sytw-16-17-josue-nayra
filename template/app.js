@@ -4,26 +4,14 @@ var LocalStrategy = require('passport-local').Strategy;
 
 var path = require('path');
 var basePath = process.cwd();
-var config = require(path.join(basePath,'.secret.json'));
-var datos_config = JSON.parse(JSON.stringify(config));
+// var config = require(path.join(basePath,'.secret.json'));
+// var datos_config = JSON.parse(JSON.stringify(config));
 var expressLayouts = require('express-ejs-layouts');
 
-var sqlite3 = require('sqlite3').verbose();
-var db = new sqlite3.Database(datos_config.nombre_bd);
-var funciones_db = require(path.join(basePath,'public','js','queries.js'));
+// var sqlite3 = require('sqlite3').verbose();
+// var db = new sqlite3.Database(datos_config.nombre_bd);
 
-// Database initialization
-db.serialize(function(){
-  db.run("CREATE TABLE IF NOT EXISTS USUARIOS ( userID INTEGER PRIMARY KEY AUTOINCREMENT, username varchar(255), password varchar(255),displayName varchar(255) );", function(err)
-  {
-    if(err)
-    {
-      console.log("ERROR CREANDO TABLA:"+err);
-      throw err;
-    }
-    console.log("SQL Table 'USUARIOS' initialized");
-  });
-});
+var controlador_usuario = require('./controllers/user_controller.js');
 
 passport.use(new LocalStrategy(
   function(username, password, cb) {
@@ -31,15 +19,13 @@ passport.use(new LocalStrategy(
     console.log("User:"+username);
     console.log("Password:"+password);
 
-    //SELECT
-    funciones_db.findByUsername(db,username,password, (err,usuario) =>
-    {
-        if(err)
-        {
-          console.log("Err:"+err);
-          throw err;
-        }
-        return cb(null,usuario);
+    controlador_usuario.findByUsername(username,password,(error,usuario) => {
+      if(error){
+        console.log("petoo la cosa josueeeeee..");
+        throw error;
+      }
+      console.log("User: "+JSON.stringify(usuario));
+      return cb(null,usuario);
     });
   }
 ));
@@ -78,14 +64,15 @@ app.use(passport.session());
 app.get('/',
   function(req, res) {
     console.log("Usuario:"+req.user);
-    if(datos_config.authentication == 'Si' && req.user == null)
-    {
-      res.render('home');
-    }
-    else
-    {
-      res.redirect('/inicio_gitbook');
-    }
+    // if(datos_config.authentication == 'Si' && req.user == null)
+    // {
+    //   res.render('home');
+    // }
+    // else
+    // {
+    //   res.redirect('/inicio_gitbook');
+    // }
+    res.render('home');
 });
 
 app.get('/login',
@@ -102,15 +89,15 @@ app.get('/change_password', function(req,res)
 app.get('/change_password_return', function(req,res)
 {
   // ACTUALIZANDO
-  funciones_db.change_password(db,req.user[0].username,req.query.new_pass,(err) =>
-  {
-    if(err)
-    {
-      console.log("ERROR:"+err);
-      throw err;
-    }
-    res.render('login',{user: req.user[0]});
-  });
+  // funciones_db.change_password(db,req.user[0].username,req.query.new_pass,(err) =>
+  // {
+  //   if(err)
+  //   {
+  //     console.log("ERROR:"+err);
+  //     throw err;
+  //   }
+  //   res.render('login',{user: req.user[0]});
+  // });
 });
 
 app.get('/inicio_gitbook', function(req,res)
@@ -131,28 +118,28 @@ app.get('/registro', function(req,res)
 
 app.get('/registro_return', function(req, res)
 {
-    funciones_db.create_user(db, req.query.username, req.query.password, req.query.displayName, function(err, usuario)
-    {
-      if(err)
-      {
-        console.log("Err:"+err);
-        throw err;
-      }
-       res.render('home');
-    });
+    // funciones_db.create_user(db, req.query.username, req.query.password, req.query.displayName, function(err, usuario)
+    // {
+    //   if(err)
+    //   {
+    //     console.log("Err:"+err);
+    //     throw err;
+    //   }
+    //   res.render('home');
+    // });
 });
 
 app.get('/borrar_cuenta', function(req, res)
 {
-  funciones_db.borrar_cuenta(db, req.user[0].username, req.user[0].password, req.user[0].displayName, function(err)
-  {
-      if(err)
-      {
-        console.log(err);
-        throw err;
-      }
-      res.redirect('/logout');
-  });
+  // funciones_db.borrar_cuenta(db, req.user[0].username, req.user[0].password, req.user[0].displayName, function(err)
+  // {
+  //     if(err)
+  //     {
+  //       console.log(err);
+  //       throw err;
+  //     }
+  //     res.redirect('/logout');
+  // });
 });
 
 app.get('/logout',function(req,res){
