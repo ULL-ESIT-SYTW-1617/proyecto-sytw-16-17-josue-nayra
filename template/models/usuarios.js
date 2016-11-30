@@ -1,4 +1,5 @@
 var Sequelize = require('sequelize');
+var bcrypt = require("bcrypt-nodejs");
 
 module.exports = function(sequelize, DataTypes) {
     var User = sequelize.define(
@@ -34,14 +35,15 @@ module.exports = function(sequelize, DataTypes) {
             password: {
                 type: DataTypes.STRING,
                 validate: { notEmpty: {msg: "-> Falta password"}},
-                // set: function (password) {
-                //     // var encripted = crypto.createHmac('sha1', key).update(password).digest('hex');
-                //     // Evita passwords vacíos
-                //     if (password === '') {
-                //         encripted = '';
-                //     }
-                //     this.setDataValue('password', encripted);
-                // }
+                set: function (password) {
+                    var hash = bcrypt.hashSync(password);
+                    // var encripted = crypto.createHmac('sha1', key).update(password).digest('hex');
+                    // Evita passwords vacíos
+                    // if (password === '') {
+                    //     encripted = '';
+                    // }
+                    this.setDataValue('password', hash);
+                }
             },
             displayName: {
                 type: DataTypes.STRING

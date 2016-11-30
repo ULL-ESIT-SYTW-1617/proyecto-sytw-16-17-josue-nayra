@@ -34,9 +34,8 @@ var create_user = ((username_, password_, displayName_, cb) =>
         username: username_,
         password: password_,
         displayName: displayName_
-    }).then(()=>
-      {
-        models.User.findAll({where {
+    }).then(()=> {
+        models.User.findAll({where: {
           username: username_,
           password: password_,
           displayName: displayName_
