@@ -16,6 +16,7 @@ var respuesta = ((error, stdout, stderr) =>
         console.error("Error:"+error);
     console.log("Stderr:"+stderr);
     console.log("Stdout:"+stdout);
+    
 });
 
 //-------------------------------------------------------------------------------------------------
@@ -50,65 +51,6 @@ var escribir_gulpfile = (() => {
           });
         }
     });
-
-  });
-
-});
-
-
-//----------------------------------------------------------------------
-
-var select_bd = (() =>
-{
-    return new Promise((resolve,reject) =>
-    {
-        var schema = [
-          {
-            name: "tipo_bd",
-            message: "Seleccione tipo de base de datos",
-            type: 'list',
-            default: 'Sqlite3',
-            choices: ['Sqlite3', 'Dropbox']
-          }
-        ];
-
-        inquirer.prompt(schema).then((respuestas) =>
-        {
-            // console.log("Disposición de BD:"+respuestas.dispone_bd);
-            resolve(respuestas.tipo_bd);
-        });
-    });
-});
-
-//-------------------------------------------------------------------------------------------------
-
-var get_token = ((dispone_bd) =>
-{
-  return new Promise((resolve,reject) =>
-  {
-      var schema =
-      [
-          {
-            name: "token_dropbox",
-            message: "Enter your Dropbox Token:"
-          },
-          {
-            name: "link_bd",
-            message: mensaje
-          },
-          {
-            name: "authentication",
-            message: "Do you want to authentication?",
-            type: 'list',
-            default: 'Yes',
-            choices: ['Yes', 'No']
-          }
-      ];
-
-      inquirer.prompt(schema).then((respuestas) =>
-      {
-          resolve({"token_dropbox": respuestas.token_dropbox, "link_bd": respuestas.link_bd, "authentication": respuestas.authentication});
-      });
   });
 });
 
@@ -118,60 +60,32 @@ var obtener_variables = ((tipo_bd) =>
 {
     return new Promise((result,reject) =>
     {
-	      switch(tipo_bd)
+      var schema = [
         {
-          case 'Sqlite3':
-            var schema = [
-              {
-                name: "nombre_bd",
-                message: "Nombre de su base de datos sqlite3:"
-              },
-              {
-                name: "authentication",
-                message: "¿Quiere autenticacion?:",
-                type: 'list',
-                default: 'Si',
-                choices: ['Si','No']
-              }
-            ];
-
-            inquirer.prompt(schema).then((respuestas) =>
-            {
-                // console.log("Disposición de BD:"+respuestas.dispone_bd);
-                result({ nombre_bd: respuestas.nombre_bd , authentication: respuestas.authentication });
-            });
-          break;
-          case 'Dropbox':
-            get_token().then((resolve,reject) =>
-            {
-                  result(respuesta);
-            });
-          break;
-          default:
-            console.log("OPCIÓN NO VÁLIDA");
+          name: "authentication",
+          message: "¿Quiere autenticacion?:",
+          type: 'list',
+          default: 'Si',
+          choices: ['Si','No']
         }
+      ];
+
+      inquirer.prompt(schema).then((respuestas) =>
+      {
+          // console.log("Disposición de BD:"+respuestas.dispone_bd);
+          result({authentication: respuestas.authentication });
+      });
 
     });
 });
 //-------------------------------------------------------------------------------------------------
 
-var generar_fileSecret = ((tipo_bd,datos) =>
+var generar_fileSecret = ((datos) =>
 {
     return new Promise((resolve, reject) =>
     {
         var configuracion;
-        switch(tipo_bd)
-        {
-          case 'Sqlite3':
-          configuracion = `{ "nombre_bd": "${datos.nombre_bd}.db", "authentication":"${datos.authentication}"}`;
-          break;
-
-          case 'Dropbox':
-          configuracion = `{ "token_dropbox": "${datos.token_dropbox}", "authentication": "${datos.authentication}", "link_bd": "${datos.link_bd}" }`;
-          break;
-            default:
-              console.log("OPCIÓN NO VÁLIDA");
-        }
+        configuracion = `{ "nombre_bd": "database.sqlite", "authentication":"${datos.authentication}"}`;
 
         fs.writeFile(path.join(basePath,'.secret.json'), configuracion, (err) =>
         {
@@ -200,16 +114,15 @@ var preparar_despliegue = (() => {
       }
       else
       {
+        if(fs.existsSync(path.join(basePath,'gh-pages','introduccion.html')))
+        {
 
-          if(fs.existsSync(path.join(basePath,'gh-pages','introduccion.html')))
-          {
-
-            resolve(fs.existsSync(path.join(basePath,'gh-pages','introduccion.html')));
-          }
-          else
-          {
-            console.log("No existe gh-pages... Debe ejecutar gulp build para construir el libro");
-          }
+          resolve(fs.existsSync(path.join(basePath,'gh-pages','introduccion.html')));
+        }
+        else
+        {
+          console.log("No existe gh-pages... Debe ejecutar gulp build para construir el libro");
+        }
       }
   });
 });
@@ -218,29 +131,22 @@ var preparar_despliegue = (() => {
 
 var initialize = (() => {
     console.log("Método initialize del plugin deploy-heroku");
-    var tipo_bd;
-    var variables;
 
-    select_bd().then().then((resolve,reject)=>
+    obtener_variables().then((resolve1,reject1) =>
     {
-	    console.log("Tipo de BD:"+resolve);
-	    tipo_bd = resolve;
-	    obtener_variables(tipo_bd).then((resolve1,reject1) =>
-	    {
-		        console.log("Obtener_variables:"+JSON.stringify(resolve1));
-          	generar_fileSecret(tipo_bd,resolve1).then((resolve2,reject2) =>
-		        {
-	              console.log("Datos de .secret.json:"+JSON.stringify(resolve2));
-        		    preparar_despliegue().then((resolve3, reject3) =>
-        		    {
-                  console.log("Fichero gh-pages/index.html renombrado por gh-pages/introduccion.html");
-        		      heroku.crear_app().then((resolve4,reject4) =>
-        		      {
-        		            escribir_gulpfile();
-        		      });
-        		    });
-		        });
-	    });
+	        console.log("Obtener_variables:"+JSON.stringify(resolve1));
+        	generar_fileSecret(resolve1).then((resolve2,reject2) =>
+	        {
+              console.log("Datos de .secret.json:"+JSON.stringify(resolve2));
+      		    preparar_despliegue().then((resolve3, reject3) =>
+      		    {
+                console.log("Fichero gh-pages/index.html renombrado por gh-pages/introduccion.html");
+      		      heroku.crear_app().then((resolve4,reject4) =>
+      		      {
+      		            escribir_gulpfile();
+      		      });
+      		    });
+	        });
     });
 });
 

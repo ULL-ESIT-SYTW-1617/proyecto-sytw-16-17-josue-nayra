@@ -18,14 +18,16 @@ Para la Base de datos se ha utilizado **Sequelize** y se ha realizado el **despl
 
 ### Pasos a seguir para la utilización de los plugins
 
-1- Descargar el paquete inicial: *gitbook-start-josue-nayra*
+**1-** Descargar el paquete inicial: **gitbook-start-josue-nayra**
     
 ```bash
 $ npm install -g gitbook-start-josue-nayra 
 ```
 
+Nota: Si ha tenido algún problema a la hora de instalar el paquete inicial, compruebe que no tiene creado previamente el directorio "~/.gitbook-start".
 
-2- Crear el libro mediante el comando:
+
+**2-** Crear el libro mediante el comando:
     
 ```bash
 $ gitbook-start -d <directorio> --autor <autor> --name <nombre_libro> --url <url_repo>
@@ -34,35 +36,41 @@ $ gitbook-start -d <directorio> --autor <autor> --name <nombre_libro> --url <url
 Se construye así la estructura inicial por **gitbook-start**, es decir, la jerarquía de directorios conteniendo los scripts y ficheros markdown para el libro.
 
 
-3- Colocarse en la carpeta que contiene el libro.
+**3-** Colocarse en la carpeta que contiene el libro.
 
 ```bash
 $ cd <directorio en el que se ha desplegado el libro>
 ```
 
 
-4- Instalar las dependencias necesarias mediante el comando:
+**4-** Instalar las **dependencias** necesarias mediante el comando:
     
 ```bash
 $ npm install 
 ```
 
-5- Instalar el plugin requerido como dependendecia con la opción --save, como por ejemplo: **gitbook-start-heroku-ull-es-josue-nayra** para el despliegue en Heroku.
+**5-** Instalar el **plugin** requerido como dependendecia con la opción --save, como por ejemplo: **gitbook-start-heroku-P9-es-josue-nayra** para el despliegue en Heroku.
     
 ```bash
-$ npm install --save gitbook-start-heroku-josue-nayra
+$ npm install --save gitbook-start-heroku-P9-josue-nayra
 ```
 
-6- Es necesario tener el repositorio remoto actualizado. Para ello podemos ejecutar una de las tareas descritas en el gulpfile: **gulp push --mensaje <mensaje commit>**.
 
-7- Nos logueamos en Heroku a través del siguiente comando:
+**6-** Es necesario tener el **repositorio remoto actualizado**. Para ello podemos ejecutar una de las tareas descritas en el gulpfile.
+
+```bash
+$ gulp push --mensaje <mensaje commit>
+```
+
+
+**7-** Nos **logueamos en Heroku** a través del siguiente comando:
 
 ```bash
 $ heroku login
 ```
 
 
-8- Ahora debemos asignarle un nombre a la aplicación de Heroku que se creará en el siguiente paso. Para ello accedemos al package.json y rellenamos la sección de Heroku:
+**8-** Ahora debemos asignarle un **nombre a la aplicación** de Heroku que se creará en el siguiente paso. Para ello accedemos al package.json y rellenamos la sección de Heroku:
 
 ```json
   "Heroku":{
@@ -71,13 +79,13 @@ $ heroku login
 ```
 
 
-9- Para construir el libro disponemos de una tarea en el gulpfile denominada "build".
+**9-** Para **construir el libro** disponemos de una tarea en el gulpfile denominada "build".
 
 ```bash
 $ gulp build
 ```
 
-10- Una vez que hemos instalado el plugin de Heroku,  ejecutamos el deploy:
+**10-** Una vez que hemos instalado el plugin de Heroku,  ejecutamos el **deploy**:
    
 ```bash
 $ gitbook-start --deploy heroku  
@@ -93,7 +101,7 @@ gulp.task("deploy-<máquina en la que realizar el despliegue>", function(){
 ```
 
 
-11- Ahora el usuario podrá ejecutar el siguiente comando y se le actualizarán los cambios en el Gitbook desplegado en Heroku:
+**11-** Ahora el usuario podrá ejecutar el siguiente comando y se le actualizarán los cambios en el Gitbook desplegado en Heroku:
 
 ``` 
 $ gulp deploy-heroku 
