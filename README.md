@@ -3,15 +3,17 @@
 ## LocalStrategy y Base de Datos
 
 
+### Paquete **gitbook-start-heroku-P9-josue-nayra**: Versión 
+
+[Plugin npm: gitbook-start-heroku-P9-josue-nayra](https://www.npmjs.com/package/gitbook-start-heroku-P9-josue-nayra)
+
+
 ### Objetivo:
 
 El servidor proveído por el plugin (heroku) deberá autenticar al lector del libro usando LocalStrategy y una base de datos en la que se guarda la información acerca de los usuarios.
 
-Para la Base de datos se ha utilizado una base de datos y un módulo node que la soporte, por ejemplo Sqlite y sqlite-node
+Para la Base de datos se ha utilizado **Sequelize** y se ha realizado el **despliegue en Heroku**.
 
-
-
-[Plugin: gitbook-start-heroku-josue-nayra](https://github.com/ULL-ESIT-SYTW-1617/gitbook-start-heroku-josue-nayra)
 
 
 ### Pasos a seguir para la utilización de los plugins
