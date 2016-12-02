@@ -7,11 +7,7 @@ var findByUsername = ((username_, password_, cb) => {
     }}).then((datos) => {
         console.log(JSON.stringify(datos));
         if(datos.length > 0) {
-            // if(bcrypt.compareSync(password_, datos[0].password)){
-            //     console.log("Usuario encontradado...");
-            //     return cb(null,datos[0]);
-            // }
-            if(password_, datos[0].password)
+            if(bcrypt.compareSync(password_, datos[0].password))
             {
               return cb(null,datos[0]);
             }
@@ -23,24 +19,53 @@ var findByUsername = ((username_, password_, cb) => {
 
 var change_password = ((username_,password_actual,new_password, cb) =>
 {
-  models.User.findAll({where:{username: username_}})
-             .then((datos)=>
-              {
-                  if(bcrypt.compareSync(password_actual, datos[0].password)){
-                    console.log("Cambiando password yeah to yeah");
-                    models.User.update({ password: bcrypt.hashSync(new_password)}, { where: { username: datos[0].username, password: datos[0].password }});
-                    return cb(null);
-                  }
-                  else {
-                    return cb(false);
-                  }
-                  
-              })
-              .catch((err)=>
-              {
-                 console.log("ERROR cambiando password:"+err);
-                 return cb(err);
-              });
+  models.User.find({ where: { username: username_ } })
+  .then((datos) =>
+  {
+    if(datos)
+    {
+      if(bcrypt.compareSync(password_actual, datos.password))
+      {
+        datos.update({
+          password: new_password
+        })
+        .then((respuesta)=>
+        {
+          console.log("ACTUALIZADO PASSWORD:"+JSON.stringify(respuesta));
+          models.User.findAll({where: {
+              username: username_
+          }}).then((datos) => {
+              console.log("USUUUUUU:"+JSON.stringify(datos[0]));
+              return cb(null);
+          })
+          .catch((error)=>
+          {
+              console.log("ea ea ea macarena");
+              return cb(null);
+          });
+        })
+        .catch((err)=>
+        {
+          console.log("ERROR ACTUALIZANDO PASSWORD:"+err);
+          return cb(err);
+        });
+      }
+      else
+      {
+        console.log("No se ha encontrado el usuario");
+        return cb(true);
+      }
+    }
+    else
+    {
+        return cb(true);
+    }
+  })
+  .catch((err) =>
+  {
+      console.log("ERROR ACTUALIZANDO PASSWORD:"+err);
+      return cb(err);
+  });
 });
 
 var create_user = ((username_, password_, displayName_, cb) =>

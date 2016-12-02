@@ -16,7 +16,7 @@ var respuesta = ((error, stdout, stderr) =>
         console.error("Error:"+error);
     console.log("Stderr:"+stderr);
     console.log("Stdout:"+stdout);
-    
+
 });
 
 //-------------------------------------------------------------------------------------------------
@@ -56,7 +56,7 @@ var escribir_gulpfile = (() => {
 
 //-------------------------------------------------------------------------------------------------
 
-var obtener_variables = ((tipo_bd) =>
+var obtener_variables = (() =>
 {
     return new Promise((result,reject) =>
     {
@@ -101,12 +101,13 @@ var generar_fileSecret = ((datos) =>
 
 var preparar_despliegue = (() => {
   return new Promise((resolve, reject) => {
+
       if(fs.existsSync(path.join(basePath,'gh-pages','index.html')))
       {
         fs.rename(path.join(basePath,'gh-pages','index.html'), path.join(basePath,'gh-pages','introduccion.html'), (err) => {
           if (err) {
             console.log(err);
-            throw err;
+            reject(err);
           }
 
           resolve(fs.existsSync(path.join(basePath,'gh-pages','introduccion.html')));
