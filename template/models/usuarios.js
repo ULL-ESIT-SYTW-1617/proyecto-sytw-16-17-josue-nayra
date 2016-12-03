@@ -17,19 +17,19 @@ module.exports = function(sequelize, DataTypes) {
                 validate: { 
                     notEmpty: {msg: "-> Falta username"},
                     // hay que devolver un mensaje de error si el username ya existe
-                    isUnique: function (value, next) {
-                        var self = this;
-                        User.find({where: {username: value}})
-                        .then(function (user) {
-                                if (user && self.id !== user.id) {
-                                    return next('Username ya utilizado');
-                                }
-                                return next();
-                        })
-                        .catch(function (err) {
-                            return next(err);
-                        });
-                    }
+                    // isUnique: function (value, next) {
+                    //     var self = this;
+                    //     User.find({where: {username: value}})
+                    //     .then(function (user) {
+                    //             if (user && self.id !== user.id) {
+                    //                 return next('Username ya utilizado');
+                    //             }
+                    //             return next();
+                    //     })
+                    //     .catch(function (err) {
+                    //         return next(err);
+                    //     });
+                    // }
                 }
             },
             password: {

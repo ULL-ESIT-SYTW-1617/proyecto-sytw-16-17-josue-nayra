@@ -1,6 +1,7 @@
 var bcrypt = require('bcrypt-nodejs');
 var models = require('../models/models.js');
 console.log("User:"+models.User);
+
 var findByUsername = ((username_, password_, cb) => {
     models.User.findAll({where: {
         username: username_
@@ -43,32 +44,61 @@ var change_password = ((username_,password_actual,new_password, cb) =>
               });
 });
 
+var existe_usuario = ((username_, password_, displayName_, cb) => 
+{
+  models.User.find({where: {username: username_}})
+      .then((user) => 
+      {
+        if (user) {
+            return cb(null, user);
+        }
+        else {
+          return cb(null, null);  
+        }
+        
+      })
+      .catch(function (err) {
+          return cb(err, null);
+      });
+  
+});
+
 var create_user = ((username_, password_, displayName_, cb) =>
 {
-    models.User.create(
+    existe_usuario(username_, password_, displayName_, (error,user) =>
     {
+      if(error){
+        return cb(error);
+      }
+      if(user){
+        return cb("Ya existe el usuario");
+      }
+      
+      models.User.create(
+      {
         username: username_,
         password: password_,
         displayName: displayName_
 
-    }).then(()=> {
-        models.User.findAll({where: {
-          username: username_,
-          password: password_,
-          displayName: displayName_
-        }}).then((datos)=>
-        {
-          return cb(null);
+      }).then((datos)=> {
+          models.User.findAll({where: {
+            username: username_,
+            password: password_,
+            displayName: displayName_
+          }}).then((datos)=>
+          {
+            return cb(null);
+          })
+          .catch((err)=>
+          {
+            return cb(err);
+          });
         })
         .catch((err)=>
         {
           return cb(err);
         });
-      })
-      .catch((err)=>
-      {
-        return cb(err);
-      });
+    });
 });
 
 var borrar_cuenta = ((username_, password_, displayName_, cb) =>

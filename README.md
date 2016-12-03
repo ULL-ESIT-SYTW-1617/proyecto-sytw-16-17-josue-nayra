@@ -3,10 +3,13 @@
 ## LocalStrategy y Base de Datos
 
 
-### Paquete **gitbook-start-heroku-P9-josue-nayra**: Versión 
+### gitbook-start-heroku-P9-josue-nayra
 
-[Plugin npm: gitbook-start-heroku-P9-josue-nayra](https://www.npmjs.com/package/gitbook-start-heroku-P9-josue-nayra)
+- [Plugin npm: gitbook-start-heroku-P9-josue-nayra](https://www.npmjs.com/package/gitbook-start-heroku-P9-josue-nayra)
 
+- Versión: 
+
+----------
 
 ### Objetivo:
 
@@ -14,6 +17,8 @@ El servidor proveído por el plugin (heroku) deberá autenticar al lector del li
 
 Para la Base de datos se ha utilizado **Sequelize** y se ha realizado el **despliegue en Heroku**.
 
+
+----------
 
 
 ### Pasos a seguir para la utilización de los plugins
@@ -27,7 +32,7 @@ $ npm install -g gitbook-start-josue-nayra
 Nota: Si ha tenido algún problema a la hora de instalar el paquete inicial, compruebe que no tiene creado previamente el directorio "~/.gitbook-start".
 
 
-**2-** Crear el libro mediante el comando:
+**2-** Crear el **libro** mediante el comando:
     
 ```bash
 $ gitbook-start -d <directorio> --autor <autor> --name <nombre_libro> --url <url_repo>
@@ -75,7 +80,7 @@ $ heroku login
 ```json
   "Heroku":{
     "nombre_app": "<nombre de la aplicación"
-  },
+  }
 ```
 
 
@@ -84,6 +89,8 @@ $ heroku login
 ```bash
 $ gulp build
 ```
+
+
 
 **10-** Una vez que hemos instalado el plugin de Heroku,  ejecutamos el **deploy**:
    
@@ -101,11 +108,14 @@ gulp.task("deploy-<máquina en la que realizar el despliegue>", function(){
 ```
 
 
-**11-** Ahora el usuario podrá ejecutar el siguiente comando y se le actualizarán los cambios en el Gitbook desplegado en Heroku:
+**11-** Ahora el usuario podrá **desplegar en heroku** y se le actualizarán los cambios en el Gitbook:
 
 ``` 
 $ gulp deploy-heroku 
 ```
+
+
+----------
 
 
 ### Tareas Gulp
