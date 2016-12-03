@@ -83,7 +83,7 @@ app.get('/change_password', function(req,res)
 app.get('/change_password_return', function(req,res)
 {
   // ACTUALIZANDO
-  controlador_usuario.change_password(req.user.username,req.user.password,req.query.new_pass,(err) =>
+  controlador_usuario.change_password(req.user.username,req.query.old_pass,req.query.new_pass,(err) =>
   {
     if(err)
     {
