@@ -8,6 +8,7 @@ var basePath = process.cwd();
 // var datos_config = JSON.parse(JSON.stringify(config));
 var expressLayouts = require('express-ejs-layouts');
 var controlador_usuario = require('./controllers/user_controller.js');
+var error;
 
 passport.use(new LocalStrategy(
   function(username, password, cb) {
@@ -16,7 +17,8 @@ passport.use(new LocalStrategy(
     console.log("Password:"+password);
 
     controlador_usuario.findByUsername(username,password,(error,usuario) => {
-      if(error){
+      if(err){
+        error = err;
         return cb(null,false);
       }
       console.log("User: "+JSON.stringify(usuario));
@@ -88,7 +90,8 @@ app.get('/change_password_return', function(req,res)
     if(err)
     {
       console.log("ERROR:"+err);
-      throw err;
+      error = "No se ha cambiado el password: "+err;
+      res.redirect('/error');
     }
     res.render('login',{user: req.user});
   });
@@ -101,8 +104,8 @@ app.get('/inicio_gitbook', function(req,res)
 
 app.get('/error', function(req, res)
 {
-    console.log("Info del usuario:"+req.user);
-    res.render('error', { error: "Imposible el acceso. No se encuentra el usuario."});
+    var respuesta = error || "No se ha podido realizar la operación";
+    res.render('error', { error: respuesta});
 });
 
 app.get('/registro', function(req,res)
@@ -112,12 +115,13 @@ app.get('/registro', function(req,res)
 
 app.get('/registro_return', function(req, res)
 {
-  controlador_usuario.create_user(req.query.username, req.query.password, req.query.displayName, function(err, usuario)
+  controlador_usuario.create_user(req.query.username, req.query.password, req.query.displayName, function(err)
   {
     if(err)
     {
       console.log("Err:"+err);
-      throw err;
+      error = "No se ha creado el usuario: "+err;
+      res.redirect('/error');
     }
     res.render('home');
   });
@@ -130,7 +134,8 @@ app.get('/borrar_cuenta', function(req, res)
       if(err)
       {
         console.log(err);
-        throw err;
+        error = "No se ha borrado la cuenta."+err;
+        res.redirect('/error');
       }
       res.redirect('/logout');
   });
