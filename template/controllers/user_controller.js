@@ -47,29 +47,25 @@ var change_password = ((username_,password_actual,new_password, cb) =>
         })
         .then((respuesta)=>
         {
-          console.log("ACTUALIZADO PASSWORD:"+JSON.stringify(respuesta));
           models.User.find({where: {
               username: username_
           }}).then((datos) => {
-              console.log("USUUUUUU:"+JSON.stringify(datos));
               return cb(null);
           })
           .catch((error)=>
           {
-              console.log("ea ea ea macarena");
               return cb(error);
           });
         })
         .catch((err)=>
         {
-          console.log("ERROR ACTUALIZANDO PASSWORD:"+err);
           return cb(err);
         });
       }
       else
       {
-        console.log("No se ha encontrado el usuario");
-        return cb(true);
+        console.log("El password actual introducido por el usuario no es correcto");
+        return cb("El password actual introducido no es el correcto");
       }
     }
     else

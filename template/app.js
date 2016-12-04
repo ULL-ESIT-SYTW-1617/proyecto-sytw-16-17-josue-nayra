@@ -141,6 +141,14 @@ app.get('/borrar_cuenta', function(req, res)
   });
 });
 
+app.get('/redirect_login', function(req,res)
+{
+  if(req.user != null)
+    res.render('login',{user: req.user});
+  else
+    res.render('home');
+});
+
 app.get('/logout',function(req,res){
   req.logout();
   req.session.destroy();
