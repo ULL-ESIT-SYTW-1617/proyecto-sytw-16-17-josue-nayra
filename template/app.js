@@ -5,6 +5,9 @@ var LocalStrategy = require('passport-local').Strategy;
 var path = require('path');
 var basePath = process.cwd();
 
+var config = require(path.join(basePath,'.secret.json'));
+var datos_config = JSON.parse(JSON.stringify(config));
+
 var expressLayouts = require('express-ejs-layouts');
 var controlador_usuario = require('./controllers/user_controller.js');
 var error;
@@ -60,7 +63,7 @@ app.use(passport.session());
 app.get('/',
   function(req, res) {
     console.log("Usuario:"+req.user);
-    if(req.user == null)
+    if(datos_config.authentication == 'Si' && req.user == null)
     {
       res.render('home');
     }
