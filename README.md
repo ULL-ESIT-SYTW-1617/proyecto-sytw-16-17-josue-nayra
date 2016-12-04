@@ -5,9 +5,9 @@
 
 ### gitbook-start-heroku-P9-josue-nayra
 
-- [Plugin npm: gitbook-start-heroku-P9-josue-nayra](https://www.npmjs.com/package/gitbook-start-heroku-P9-josue-nayra)
+- Plugin npm: [gitbook-start-heroku-P9-josue-nayra](https://www.npmjs.com/package/gitbook-start-heroku-P9-josue-nayra)
 
-- Versión: 
+- Versión: (latest)
 
 ----------
 
@@ -48,20 +48,20 @@ $ cd <directorio en el que se ha desplegado el libro>
 ```
 
 
-**4-** Instalar las **dependencias** necesarias mediante el comando:
+**4-** Instalar las **dependencias** descritas en el package.json necesarias mediante el comando:
     
 ```bash
 $ npm install 
 ```
 
-**5-** Instalar el **plugin** requerido como dependendecia con la opción --save, como por ejemplo: **gitbook-start-heroku-P9-es-josue-nayra** para el despliegue en Heroku.
+**5-** Instalar el **plugin** requerido como **dependendecia** con la opción --save, como por ejemplo: **gitbook-start-heroku-P9-es-josue-nayra** para el despliegue en Heroku.
     
 ```bash
 $ npm install --save gitbook-start-heroku-P9-josue-nayra
 ```
 
 
-**6-** Es necesario tener el **repositorio remoto actualizado**. Para ello podemos ejecutar una de las tareas descritas en el gulpfile.
+**6-** Puede tener el **repositorio remoto actualizado** mediante una de las tareas descritas en el gulpfile.
 
 ```bash
 $ gulp push --mensaje <mensaje commit>
@@ -163,30 +163,33 @@ con el nombre deploy-heroku.
 $ gulp deploy-heroku
 ```
 
+----------
+
 
 ### Enlaces
 
 - [Campus virtual](https://campusvirtual.ull.es/1617/course/view.php?id=1175)
 
-- [Descripción de la práctica](https://casianorodriguezleon.gitbooks.io/ull-esit-1617/content/practicas/practicaplugin2.html)
+- [Descripción de la práctica](https://crguezl.github.io/ull-esit-1617/practicas/practicapassportlocalsequelize.html)
 
 - [Publicación del paquete gitbook-start-josue-nayra](https://www.npmjs.com/package/gitbook-start-josue-nayra)
 
 - [Plugin para el despliegue en IAAS](https://www.npmjs.com/package/gitbook-start-iaas-ull-es-josue-nayra)
 
-- [Plugin para el despliegue con Heroku](https://www.npmjs.com/package/gitbook-start-heroku-josue-nayra)
+- [Plugin para el despliegue con Heroku](https://www.npmjs.com/package/gitbook-start-heroku-P9-josue-nayra)
 
-- [Repositorio del plugin Heroku](https://github.com/ULL-ESIT-SYTW-1617/gitbook-start-heroku-josue-nayra/) 
+- [Repositorio del plugin Heroku](https://github.com/ULL-ESIT-SYTW-1617/practica-localstrategy-y-base-de-datos-josue-nayra) 
 
-- [Repositorio del plugin IAAS](https://github.com/ULL-ESIT-SYTW-1617/gitbook-start-iaas-ull-es-josue-nayra) 
+- [Repositorio del plugin IAAS](https://github.com/ULL-ESIT-SYTW-1617/practica-localstrategy-y-base-de-datos-iaas-ull-es-josue-nayra) 
 
 - [Repositorio de gitbook-start-josue-nayra](https://github.com/ULL-ESIT-SYTW-1617/nueva-funcionalidad-para-el-paquete-npm-plugins-josue-nayra)
 
-- [Repositorio MAIN Heroku](https://github.com/ULL-ESIT-SYTW-1617/practica-plugins-heroku-josue-nayra)
 
-
+----------
 
 ### Referencias
+
+- [Sequelize](http://docs.sequelizejs.com/en/latest/docs/getting-started/)
 
 - [Sqlite](https://crguezl.github.io/ull-esit-1617/apuntes/db/sqlite/)
 
@@ -200,12 +203,12 @@ $ gulp deploy-heroku
 
 - [Construyendo package.json](https://docs.npmjs.com/files/package.json)
 
-- [Repo Drpbx](https://github.com/dropbox/dropbox-sdk-js/tree/master/examples)
-- http://dropbox.github.io/dropbox-sdk-js/Dropbox.html
+
+----------
 
 ### Integrantes
 
-- Josué Toledo Castro
+- Josué Toledo Castro - 
     [Github personal](www.github.com/JosueTC94)
-- María Nayra Rodríguez Pérez
+- María Nayra Rodríguez Pérez - 
     [Github personal](www.github.com/alu0100406122)
