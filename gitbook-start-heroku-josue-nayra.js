@@ -78,23 +78,7 @@ var obtener_variables = (() =>
 
     });
 });
-//-------------------------------------------------------------------------------------------------
 
-var generar_fileSecret = ((datos) =>
-{
-    return new Promise((resolve, reject) =>
-    {
-        var configuracion;
-        configuracion = `{ "nombre_bd": "database.sqlite", "authentication":"${datos.authentication}"}`;
-
-        fs.writeFile(path.join(basePath,'.secret.json'), configuracion, (err) =>
-        {
-          if(err) throw err;
-        });
-
-        resolve(configuracion);
-    });
-});
 
 //-------------------------------------------------------------------------------------------------
 // Funcion para cambiar el nombre del index.html y evitar ambiguedades.
@@ -109,7 +93,6 @@ var preparar_despliegue = (() => {
             console.log(err);
             reject(err);
           }
-
           resolve(fs.existsSync(path.join(basePath,'gh-pages','introduccion.html')));
         });
       }
@@ -117,7 +100,6 @@ var preparar_despliegue = (() => {
       {
         if(fs.existsSync(path.join(basePath,'gh-pages','introduccion.html')))
         {
-
           resolve(fs.existsSync(path.join(basePath,'gh-pages','introduccion.html')));
         }
         else
@@ -126,7 +108,6 @@ var preparar_despliegue = (() => {
         }
       }
   });
-  
 });
 
 //-------------------------------------------------------------------------------------------------
@@ -136,19 +117,14 @@ var initialize = (() => {
 
     obtener_variables().then((resolve1,reject1) =>
     {
-	        console.log("Obtener_variables:"+JSON.stringify(resolve1));
-        	generar_fileSecret(resolve1).then((resolve2,reject2) =>
-	        {
-              console.log("Datos de .secret.json:"+JSON.stringify(resolve2));
-      		    preparar_despliegue().then((resolve3, reject3) =>
-      		    {
-                console.log("Fichero gh-pages/index.html renombrado por gh-pages/introduccion.html");
-      		      heroku.crear_app().then((resolve4,reject4) =>
-      		      {
-      		            escribir_gulpfile();
-      		      });
-      		    });
-	        });
+		    preparar_despliegue().then((resolve2, reject2) =>
+		    {
+		      heroku.crear_app().then((resolve3,reject3) =>
+		      {
+		            escribir_gulpfile();
+		      });
+		    });
+
     });
 });
 
