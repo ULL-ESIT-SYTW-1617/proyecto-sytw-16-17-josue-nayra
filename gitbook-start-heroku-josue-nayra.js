@@ -5,6 +5,7 @@ const fs = require('fs-extra');
 const path = require('path');
 var exec = require('child_process').exec;
 const inquirer = require('inquirer');
+const jsonfile = require('jsonfile');
 
 var heroku = require(path.join(__dirname,'lib','config_heroku.js'));
 
@@ -72,8 +73,22 @@ var obtener_variables = (() =>
 
       inquirer.prompt(schema).then((respuestas) =>
       {
-          // console.log("Disposición de BD:"+respuestas.dispone_bd);
-          result({authentication: respuestas.authentication });
+        
+        //Escribir en el package.json
+        fs.readFile(path.join(basePath,'package.json'),(err,data) =>
+        {
+            if(err)
+              throw err;
+
+            var datos = JSON.parse(data);
+
+            datos.Heroku.authentication = respuestas.authentication;
+
+            jsonfile.spaces = 5;
+            jsonfile.writeFileSync(path.join(basePath,'package.json'),datos,{spaces: 5});
+        });
+        
+        result({authentication: respuestas.authentication });
       });
 
     });
