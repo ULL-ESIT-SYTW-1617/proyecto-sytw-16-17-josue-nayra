@@ -5,7 +5,6 @@ const fs = require('fs-extra');
 const path = require('path');
 var exec = require('child_process').exec;
 const inquirer = require('inquirer');
-const jsonfile = require('jsonfile');
 
 var heroku = require(path.join(__dirname,'lib','config_heroku.js'));
 
@@ -126,27 +125,7 @@ var preparar_despliegue = (() => {
           console.log("No existe gh-pages... Debe ejecutar gulp build para construir el libro");
         }
       }
-      
-      //Añadiendo nuevas dependencias al package.json
-      
-      fs.readFile(path.join(basePath,'package.json'),(err,data) =>
-      {
-          if(err)
-            throw err;
-      
-          var datos = JSON.parse(data);
-      
-          datos.dependencies.sequelize = "^3.27.0";
-          datos.dependencies.sqlite3 = "^3.1.8";
-      
-          jsonfile.spaces = 3;
-          jsonfile.writeFileSync(path.join(basePath,'package.json'),datos,{spaces: 3});
-      });
-      
-      
   });
-  
-  
   
 });
 

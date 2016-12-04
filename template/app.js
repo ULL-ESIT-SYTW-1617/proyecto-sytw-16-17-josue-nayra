@@ -16,7 +16,7 @@ passport.use(new LocalStrategy(
     console.log("User:"+username);
     console.log("Password:"+password);
 
-    controlador_usuario.findByUsername(username,password,(error,usuario) => {
+    controlador_usuario.findByUsername(username,password,(err,usuario) => {
       if(err){
         error = err;
         return cb(null,false);
