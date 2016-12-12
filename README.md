@@ -7,7 +7,7 @@
 
 - Plugin npm: [gitbook-start-heroku-P9-josue-nayra](https://www.npmjs.com/package/gitbook-start-heroku-P9-josue-nayra)
 
-- Versión: (latest)
+- Versión: 0.1.8
 
 ----------
 
