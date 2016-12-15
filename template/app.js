@@ -3,7 +3,8 @@ var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 var GoogleStrategy = require('passport-google-oauth20').Strategy;
 var TwitterStrategy = require('passport-twitter').Strategy;
-var credenciales_auth =
+var FacebookStrategy = require('passport-facebook').Strategy;
+
 var path = require('path');
 var basePath = process.cwd();
 
@@ -13,7 +14,7 @@ var expressLayouts = require('express-ejs-layouts');
 var controlador_usuario = require('./controllers/user_controller.js');
 var error;
 
-//----------------------------------------------------------
+//----------------------------------------------------------------------------------------------------
 // Passport Google
 passport.use(new GoogleStrategy({
     clientID: "<CLIENT_ID>",
@@ -28,7 +29,7 @@ passport.use(new GoogleStrategy({
   }
 ));
 
-//---------------------------------------------------------
+//----------------------------------------------------------------------------------------------------
 // Passport-Twitter
 
 passport.use(new TwitterStrategy({
@@ -42,7 +43,7 @@ passport.use(new TwitterStrategy({
       return cb(null,profile);
 }));
 
-//---------------------------------------------------------
+//----------------------------------------------------------------------------------------------------
 // Passport-Local
 
 passport.use(new LocalStrategy(
@@ -62,7 +63,7 @@ passport.use(new LocalStrategy(
   }
 ));
 
-//---------------------------------------------------------
+//----------------------------------------------------------------------------------------------------
 // Passport-Facebook
 
 passport.use(new FacebookStrategy({
@@ -86,6 +87,8 @@ passport.deserializeUser(function(obj, cb) {
     cb(null,obj);
 });
 
+
+//----------------------------------------------------------------------------------------------------
 // Create a new Express application.
 var app = express();
 
@@ -108,7 +111,10 @@ app.use(require('express-session')({ secret: 'keyboard cat', resave: true, saveU
 app.use(passport.initialize());
 app.use(passport.session());
 
+
+//----------------------------------------------------------------------------------------------------
 // Define routes.
+
 app.get('/',
   function(req, res) {
     console.log("Usuario:"+req.user);
@@ -128,10 +134,51 @@ app.get('/login',
     res.render('login', {user: req.user});
 });
 
+
+//----------------------------
+// Ruta para el administrador
+
+app.get('/vista_administracion', function(req,res)
+{
+    console.log("Vista de aministración");
+    //Buscamos en la base de datos
+    controlador_usuario.findAll((err, usuarios)=>
+    {
+      if(err)
+      {
+        console.log("ERRORRR:"+err);
+        error = err;
+        res.redirect('/error');
+      }
+
+      console.log("Usuarios pendientes:"+JSON.stringify(usuarios));
+
+      res.render('administracion', { user: req.user, data: usuarios});
+    });
+});
+
+app.get('/borrar_users/:id',function(req,res){
+ console.log("Params:"+req.params.id);
+ controlador_usuario.borrarById(req.params.id, (err)=>
+ {
+   if(err)
+   {
+     console.log("ERROR:"+err);
+     error = err;
+     res.redirect('/error');
+   }
+   res.redirect('/vista_administracion');
+ });
+});
+
+
+//----------------------------
+
 app.get('/change_password', function(req,res)
 {
     res.render('changing_password',{user: req.user});
 });
+
 
 app.get('/change_password_return', function(req,res)
 {
@@ -148,10 +195,14 @@ app.get('/change_password_return', function(req,res)
   });
 });
 
+//----------------------------
+
 app.get('/inicio_gitbook', function(req,res)
 {
     res.sendFile(path.join(__dirname,'gh-pages','introduccion.html'));
 });
+
+//----------------------------
 
 app.get('/error', function(req, res)
 {
@@ -159,10 +210,13 @@ app.get('/error', function(req, res)
     res.render('error', { error: respuesta});
 });
 
+//----------------------------
+
 app.get('/registro', function(req,res)
 {
     res.render('registro.ejs');
 });
+
 
 app.get('/registro_return', function(req, res)
 {
@@ -178,6 +232,9 @@ app.get('/registro_return', function(req, res)
   });
 });
 
+
+//----------------------------
+
 app.get('/borrar_cuenta', function(req, res)
 {
   controlador_usuario.borrar_cuenta(req.user.username, req.user.password, req.user.displayName, function(err)
@@ -191,6 +248,7 @@ app.get('/borrar_cuenta', function(req, res)
       res.redirect('/logout');
   });
 });
+//----------------------------
 
 app.get('/redirect_login', function(req,res)
 {
@@ -200,8 +258,12 @@ app.get('/redirect_login', function(req,res)
     res.render('home');
 });
 
+//----------------------------
+// Rutas para la autenticación con distintas plataformas.
+
 app.get('/auth/google',
   passport.authenticate('google', { scope: ['profile'] }));
+
 
 app.get('/auth_google_callback',
   passport.authenticate('google', { failureRedirect: '/error' }),
@@ -228,6 +290,8 @@ app.get('/auth_facebook_callback',
     res.render('login', {user: req.user});
 });
 
+
+//----------------------------
 app.get('/logout',function(req,res){
   req.logout();
   req.session.destroy();

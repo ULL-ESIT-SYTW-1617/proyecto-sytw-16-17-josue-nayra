@@ -1,0 +1,58 @@
+<% if(user){ %>
+<div class="row">
+  <div class="col s12">
+    <h5 style="margin-top:20px;">Usuarios disponibles</h5>
+    <br />
+    <div class="card-panel">
+      <table class="responsive-table striped">
+        <thead>
+          <tr>
+              <th data-field="id">ID</th>
+              <th data-field="username">Username</th>
+              <th data-field="password">Password</th>
+              <th data-field="displayname">DisplayName</th>
+          </tr>
+        </thead>
+        <tbody>
+        <% for(var i=0; i < data.length; i++) { %>
+           <tr>
+             <td><%= data[i].id %></td>
+             <td><%= data[i].username %></td>
+             <td><%= data[i].password %></td>
+             <td><%= data[i].displayName %></td>
+             <td><a href="/borrar_users/<%= data[i].id %>">Borrar</a>
+           </tr>
+        <% } %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<hr />
+
+<div class="container">
+  <div class="row">
+    <h5>Agregar nuevo usuario</h5>
+    <br />
+       <form class="col s12" action="/registro_return" method="GET">
+           <div class="input-field col s4">
+             <input placeholder="Placeholder" name="username" type="text" class="validate">
+             <label for="first_name">Username</label>
+           </div>
+           <div class="input-field col s4">
+             <input name="password" type="password" class="validate">
+             <label for="password">Password</label>
+           </div>
+           <div class="input-field col s4">
+             <input placeholder="Placeholder" name="displayName" type="text" class="validate">
+             <label for="first_name">displayName</label>
+           </div>
+           <button type="submit" name="action" class="waves-effect waves-light btn right">Crear</button>
+       </form>
+  </div>
+</div>
+
+
+<% }else{ %>
+  <h1>EYYY MENNNNN</h1>
+<% } %>

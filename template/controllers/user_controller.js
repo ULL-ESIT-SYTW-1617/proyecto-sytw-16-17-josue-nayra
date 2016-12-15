@@ -154,7 +154,44 @@ var borrar_cuenta = ((username_, password_, displayName_, cb) =>
     });
 });
 
+
+var borrarById = ((id_, cb) =>
+{
+    models.User.destroy({
+      where: {
+        id: id_
+      }
+    }).then(()=>
+    {
+      console.log("todo perfect");
+      return cb(null);
+    }).catch((error) =>
+    {
+      console.log("todo no perfect");
+      return cb(error);
+    });
+});
+
+
+var findAll = ((cb)=>
+{
+  console.log("Controller usuarios: findNewUsers");
+  models.User.findAll({ where: { username: { $ne: 'admin' }}})
+    .then((usuarios) =>
+    {
+        console.log("Usuarios:"+usuarios);
+        return cb(null,usuarios);
+    }).catch((err) =>
+    {
+      console.log("error en el catch:"+err);
+      return cb(err, null);
+    });
+});
+
+
 exports.findByUsername = findByUsername;
 exports.change_password = change_password;
 exports.create_user = create_user;
 exports.borrar_cuenta = borrar_cuenta;
+exports.borrarById = borrarById;
+exports.findAll = findAll;
