@@ -1,7 +1,9 @@
 var express = require('express');
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
-
+var GoogleStrategy = require('passport-google-oauth20').Strategy;
+var TwitterStrategy = require('passport-twitter').Strategy;
+var credenciales_auth =
 var path = require('path');
 var basePath = process.cwd();
 
@@ -10,6 +12,38 @@ var config = require(path.join(basePath,'package.json'));
 var expressLayouts = require('express-ejs-layouts');
 var controlador_usuario = require('./controllers/user_controller.js');
 var error;
+
+//----------------------------------------------------------
+// Passport Google
+passport.use(new GoogleStrategy({
+    clientID: "<CLIENT_ID>",
+    clientSecret: "<CLIENT_SECRET>",
+    callbackURL: "http://localhost:8080/auth_google_callback"
+  },
+  function(accessToken, refreshToken, profile, cb) {
+    console.log("accessToken:"+accessToken);
+    console.log("refreshToken:"+refreshToken);
+    console.log("Profile:"+JSON.stringify(profile));
+    return cb(null, profile);
+  }
+));
+
+//---------------------------------------------------------
+// Passport-Twitter
+
+passport.use(new TwitterStrategy({
+  consumerKey: '<CONSUMER_KEY>',
+  consumerSecret: '<CONSUMER_SECRET>',
+  callbackURL: 'http://localhost:8080/auth_twitter_callback' //this will need to be dealt with
+}, function(token, tokenSecret, profile, cb) {
+      console.log("Token:"+token);
+      console.log("tokenSecret:"+tokenSecret);
+      console.log("Profile:"+JSON.stringify(profile));
+      return cb(null,profile);
+}));
+
+//---------------------------------------------------------
+// Passport-Local
 
 passport.use(new LocalStrategy(
   function(username, password, cb) {
@@ -25,6 +59,22 @@ passport.use(new LocalStrategy(
       console.log("User: "+JSON.stringify(usuario));
       return cb(null,usuario);
     });
+  }
+));
+
+//---------------------------------------------------------
+// Passport-Facebook
+
+passport.use(new FacebookStrategy({
+    clientID: "<CLIENT_ID>",
+    clientSecret: "<CLIENT_SECRET>",
+    callbackURL: "http://localhost:8080/auth_facebook_callback"
+  },
+  function(accessToken, refreshToken, profile, cb) {
+    console.log("accessToken:"+accessToken);
+    console.log("refreshToken:"+refreshToken);
+    console.log("profile:"+JSON.stringify(profile));
+    return cb(null,profile);
   }
 ));
 
@@ -75,7 +125,7 @@ app.get('/',
 app.get('/login',
   passport.authenticate('local', {failureRedirect: '/error'}),
   function(req,res) {
-	res.render('login', {user: req.user});
+    res.render('login', {user: req.user});
 });
 
 app.get('/change_password', function(req,res)
@@ -150,12 +200,39 @@ app.get('/redirect_login', function(req,res)
     res.render('home');
 });
 
+app.get('/auth/google',
+  passport.authenticate('google', { scope: ['profile'] }));
+
+app.get('/auth_google_callback',
+  passport.authenticate('google', { failureRedirect: '/error' }),
+  function(req, res) {
+    // Successful authentication, redirect home.
+    console.log("Redireccion perfect");
+    res.render('login', {user: req.user});
+  });
+
+app.get('/auth/twitter', passport.authenticate('twitter'));
+
+app.get('/auth_twitter_callback', passport.authenticate('twitter', { failureRedirect: '/error' }),
+  function(req, res){
+    res.render('login', {user: req.user});
+});
+
+app.get('/auth/facebook',
+  passport.authenticate('facebook'));
+
+app.get('/auth_facebook_callback',
+  passport.authenticate('facebook', { failureRedirect: '/error' }),
+  function(req, res) {
+    // Successful authentication, redirect home.
+    res.render('login', {user: req.user});
+});
+
 app.get('/logout',function(req,res){
   req.logout();
   req.session.destroy();
   res.redirect('/');
 });
-
 
 app.listen(process.env.PORT || 8080);
 
