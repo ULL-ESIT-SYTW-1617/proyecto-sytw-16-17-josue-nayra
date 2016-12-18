@@ -44,6 +44,34 @@
             </div>
           </form>
         </center>
+        <hr />
+        <% if(login_google == 'Si'){ %>
+          <center>
+    	      <form class="col s12" method="GET" action="/auth/google">
+              <div class="row">
+                <button type='submit' name='btn_registro' class='col s12 btn btn-large waves-effect indigo'>Login with Google</button>
+              </div>
+            </form>
+          </center>
+        <% } %>
+        <% if(login_twitter == 'Si'){ %>
+          <center>
+            <form class="col s12" method="GET" action="/auth/google">
+              <div class="row">
+                <button type='submit' name='btn_registro' class='col s12 btn btn-large waves-effect indigo'>Login with Twitter</button>
+              </div>
+            </form>
+          </center>
+        <% } %>
+        <% if(login_facebook == 'Si'){ %>
+          <center>
+            <form class="col s12" method="GET" action="/auth/google">
+              <div class="row">
+                <button type='submit' name='btn_registro' class='col s12 btn btn-large waves-effect indigo'>Login with Facebook</button>
+              </div>
+            </form>
+          </center>
+        <% } %>
       </div>
   </div>
 </center>

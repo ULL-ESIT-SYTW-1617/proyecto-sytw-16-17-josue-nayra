@@ -9,6 +9,7 @@ var path = require('path');
 var basePath = process.cwd();
 
 var config = require(path.join(basePath,'package.json'));
+var modos_autenticacion = require(path.join(basePath,'auth.json'));
 
 var expressLayouts = require('express-ejs-layouts');
 var controlador_usuario = require('./controllers/user_controller.js');
@@ -17,8 +18,8 @@ var error;
 //----------------------------------------------------------------------------------------------------
 // Passport Google
 passport.use(new GoogleStrategy({
-    clientID: "<CLIENT_ID>",
-    clientSecret: "<CLIENT_SECRET>",
+  clientID: modos_autenticacion.Google.clientID,
+  clientSecret: modos_autenticacion.Google.clientSecret,
     callbackURL: "http://localhost:8080/auth_google_callback"
   },
   function(accessToken, refreshToken, profile, cb) {
@@ -33,8 +34,8 @@ passport.use(new GoogleStrategy({
 // Passport-Twitter
 
 passport.use(new TwitterStrategy({
-  consumerKey: '<CONSUMER_KEY>',
-  consumerSecret: '<CONSUMER_SECRET>',
+  consumerKey: modos_autenticacion.Twitter.clientID,
+  consumerSecret: modos_autenticacion.Twitter.clientSecret,
   callbackURL: 'http://localhost:8080/auth_twitter_callback' //this will need to be dealt with
 }, function(token, tokenSecret, profile, cb) {
       console.log("Token:"+token);
@@ -67,8 +68,8 @@ passport.use(new LocalStrategy(
 // Passport-Facebook
 
 passport.use(new FacebookStrategy({
-    clientID: "<CLIENT_ID>",
-    clientSecret: "<CLIENT_SECRET>",
+  clientID: modos_autenticacion.Facebook.clientID,
+  clientSecret: modos_autenticacion.Facebook.clientSecret,
     callbackURL: "http://localhost:8080/auth_facebook_callback"
   },
   function(accessToken, refreshToken, profile, cb) {
@@ -120,7 +121,7 @@ app.get('/',
     console.log("Usuario:"+req.user);
     if(config.Heroku.authentication == 'Si' && req.user == null)
     {
-      res.render('home');
+      res.render('home', {login_google: modos_autenticacion.Google.authentication, login_twitter: modos_autenticacion.Twitter.authentication, login_facebook: modos_autenticacion.Facebook.authentication});
     }
     else
     {
@@ -228,7 +229,7 @@ app.get('/redirect_register', function(req,res)
     }
     else
     {
-      res.render('home');
+      res.render('home', {login_google: modos_autenticacion.Google.authentication, login_twitter: modos_autenticacion.Twitter.authentication, login_facebook: modos_autenticacion.Facebook.authentication});
     }
 });
 
@@ -269,7 +270,7 @@ app.get('/redirect_login', function(req,res)
   if(req.user != null)
     res.render('login',{user: req.user});
   else
-    res.render('home');
+    res.render('home', {login_google: modos_autenticacion.Google.authentication, login_twitter: modos_autenticacion.Twitter.authentication, login_facebook: modos_autenticacion.Facebook.authentication});
 });
 
 //----------------------------
