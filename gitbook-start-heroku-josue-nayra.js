@@ -65,32 +65,39 @@ var obtener_variables = (() =>
         {
           name: "authentication",
           message: "¿Quiere autenticacion?:",
-          type: 'list',
-          default: 'Si',
-          choices: ['Si','No']
+          type: 'checkbox',
+          choices: ['Google','Twitter','Facebook', 'Sin autenticacion']
         }
       ];
 
       inquirer.prompt(schema).then((respuestas) =>
       {
+          fs.readFile(path.join(basePath,'auth.json'),(err,data)=>
+          {
+              if(err)
+              {
+                console.log("ERROR:"+err);
+                reject(err);
+              }
+              console.log("Respuestas:"+JSON.stringify(respuestas));
+              console.log("Respuestas length:"+respuestas.authentication.length);
+              console.log("Data:"+JSON.stringify(data));
 
-        //Escribir en el package.json
-        fs.readFile(path.join(basePath,'package.json'),(err,data) =>
-        {
-            if(err)
-              throw err;
-
-            var datos = JSON.parse(data);
-
-            datos.Heroku.authentication = respuestas.authentication;
-
-            jsonfile.spaces = 5;
-            jsonfile.writeFileSync(path.join(basePath,'package.json'),datos,{spaces: 5});
-        });
-
-        result({authentication: respuestas.authentication });
+              var config = JSON.parse(data);
+              set_autenticacion(config,respuestas).then((resolve1,reject1)=>
+              {
+                console.log("Resolve1:"+resolve1);
+                console.log("Reject1:"+reject1);
+                console.log("Modificando fichero auth.json");
+                jsonfile.spaces = 5;
+                jsonfile.writeFileSync(path.join(basePath,'auth.json'), resolve1, {spaces:5});
+                if(fs.existsSync(path.join(basePath,'auth.json')))
+                {
+                  result(fs.existsSync(path.join(basePath,'auth.json')));
+                }
+              });
+          });
       });
-
     });
 });
 
@@ -122,6 +129,44 @@ var preparar_despliegue = (() => {
           console.log("No existe gh-pages... Debe ejecutar gulp build para construir el libro");
         }
       }
+  });
+});
+
+var set_autenticacion = ((datos, resp)=>
+{
+  return new Promise((resolve,reject)=>
+  {
+    for(var i=0;i<(resp.authentication).length;i++)
+    {
+      console.log("Caso:"+resp.authentication[i]);
+      switch(resp.authentication[i])
+      {
+        case 'Google':
+          console.log("Caso de Google...");
+          datos.Google.authentication = "Si";
+        break;
+
+        case 'Twitter':
+          console.log("Caso de Twitter");
+          datos.Twitter.authentication = "Si";
+
+        break;
+
+        case 'Facebook':
+          console.log("Caso de Facebook");
+          datos.Facebook.authentication = "Si";
+        break;
+
+        case "Sin autenticacion":
+          console.log("Sin autenticacion");
+          datos.Autenticacion = false;
+        break;
+
+        default:
+          console.log("Opción no disponible");
+      }
+    }
+    resolve(datos);
   });
 });
 
