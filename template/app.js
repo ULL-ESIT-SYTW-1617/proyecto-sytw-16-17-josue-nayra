@@ -217,6 +217,20 @@ app.get('/registro', function(req,res)
     res.render('registro.ejs');
 });
 
+app.get('/redirect_register', function(req,res)
+{
+    if(req.user != null)
+    {
+      if(req.user.username == 'admin')
+      {
+        res.redirect('/vista_administracion');
+      }
+    }
+    else
+    {
+      res.render('home');
+    }
+});
 
 app.get('/registro_return', function(req, res)
 {
@@ -228,7 +242,7 @@ app.get('/registro_return', function(req, res)
       error = "No se ha creado el usuario: "+err;
       res.redirect('/error');
     }
-    res.render('home');
+    res.redirect('/redirect_register');
   });
 });
 

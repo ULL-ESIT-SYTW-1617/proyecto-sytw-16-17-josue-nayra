@@ -33,7 +33,7 @@ var escribir_gulpfile = (() => {
 
   return new Promise((resolve,reject) => {
     var tarea_gulp = `\n\ngulp.task("deploy-heroku", function(){`+
-             `\n       require("gitbook-start-heroku-P9-josue-nayra").deploy();`+
+             `\n       require("gitbook-start-heroku-josue-nayra").deploy();`+
              `\n});`;
 
     fs.readFile('gulpfile.js', "utf8", function(err, data) {
@@ -73,7 +73,7 @@ var obtener_variables = (() =>
 
       inquirer.prompt(schema).then((respuestas) =>
       {
-        
+
         //Escribir en el package.json
         fs.readFile(path.join(basePath,'package.json'),(err,data) =>
         {
@@ -87,7 +87,7 @@ var obtener_variables = (() =>
             jsonfile.spaces = 5;
             jsonfile.writeFileSync(path.join(basePath,'package.json'),datos,{spaces: 5});
         });
-        
+
         result({authentication: respuestas.authentication });
       });
 
