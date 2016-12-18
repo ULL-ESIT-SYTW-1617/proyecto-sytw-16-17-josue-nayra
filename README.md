@@ -1,21 +1,9 @@
-# Práctica 9. Sistemas y Tecnologías Web
+# Proyecto Sistemas y Tecnologías Web
 
-## LocalStrategy y Base de Datos
+## Nuevas funcionalidades en gitbook-start-josue-nayra
 
-
-### gitbook-start-heroku-P9-josue-nayra @0.1.8
-
-- Plugin npm: [gitbook-start-heroku-P9-josue-nayra](https://www.npmjs.com/package/gitbook-start-heroku-P9-josue-nayra)
-
-- Versión: 0.1.8
-
-----------
-
-### Objetivo:
-
-El servidor proveído por el plugin (heroku) deberá autenticar al lector del libro usando LocalStrategy y una base de datos en la que se guarda la información acerca de los usuarios.
-
-Para la Base de datos se ha utilizado **Sequelize** y se ha realizado el **despliegue en Heroku**.
+- Autenticación con Google, Twitter y Facebook.
+- Vista para la gestión de los usuarios que visitan el libro para el autor del mismo.
 
 
 ----------
