@@ -1,0 +1,29 @@
+.btn.facebook {
+  text-decoration: none;
+  color: #fff;
+  background-color: #3B5998;
+  text-align: center;
+  letter-spacing: .5px;
+  transition: .2s ease-out;
+  cursor: pointer;
+}
+
+.btn.twitter {
+  text-decoration: none;
+  color: #fff;
+  background-color: #00aced;
+  text-align: center;
+  letter-spacing: .5px;
+  transition: .2s ease-out;
+  cursor: pointer;
+}
+
+.btn.google {
+  text-decoration: none;
+  color: #fff;
+  background-color: red;
+  text-align: center;
+  letter-spacing: .5px;
+  transition: .2s ease-out;
+  cursor: pointer;
+}
