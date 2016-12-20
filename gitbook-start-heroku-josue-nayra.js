@@ -95,6 +95,11 @@ var obtener_variables = (() =>
 
       inquirer.prompt(schema).then((respuestas) =>
       {
+        fs.copy(path.join(__dirname, 'template', 'auth-json'), path.join(basePath, 'auth.json'), (err)=> 
+        {
+          if(err)
+            throw err;
+      
           fs.readFile(path.join(basePath,'auth.json'),(err,data)=>
           {
               if(err)
@@ -120,6 +125,7 @@ var obtener_variables = (() =>
                 }
               });
           });
+        });
       });
     });
 });
