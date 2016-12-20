@@ -4,6 +4,7 @@ var LocalStrategy = require('passport-local').Strategy;
 var GoogleStrategy = require('passport-google-oauth20').Strategy;
 var TwitterStrategy = require('passport-twitter').Strategy;
 var FacebookStrategy = require('passport-facebook').Strategy;
+var GithubStrategy = require('passport-github').Strategy;
 
 var path = require('path');
 var basePath = process.cwd();
@@ -20,7 +21,7 @@ var error;
 passport.use(new GoogleStrategy({
   clientID: modos_autenticacion.Google.clientID,
   clientSecret: modos_autenticacion.Google.clientSecret,
-    callbackURL: "http://localhost:8080/auth_google_callback"
+    callbackURL: "https://"+config.Heroku.nombre_app+".herokuapp.com/auth_google_callback"
   },
   function(accessToken, refreshToken, profile, cb) {
     console.log("accessToken:"+accessToken);
@@ -36,7 +37,7 @@ passport.use(new GoogleStrategy({
 passport.use(new TwitterStrategy({
   consumerKey: modos_autenticacion.Twitter.clientID,
   consumerSecret: modos_autenticacion.Twitter.clientSecret,
-  callbackURL: 'http://localhost:8080/auth_twitter_callback' //this will need to be dealt with
+  callbackURL: "https://"+config.Heroku.nombre_app+".herokuapp.com/auth_twitter_callback"
 }, function(token, tokenSecret, profile, cb) {
       console.log("Token:"+token);
       console.log("tokenSecret:"+tokenSecret);
@@ -70,7 +71,7 @@ passport.use(new LocalStrategy(
 passport.use(new FacebookStrategy({
   clientID: modos_autenticacion.Facebook.clientID,
   clientSecret: modos_autenticacion.Facebook.clientSecret,
-    callbackURL: "http://localhost:8080/auth_facebook_callback"
+    callbackURL: "https://"+config.Heroku.nombre_app+".herokuapp.com/auth_facebook_callback"
   },
   function(accessToken, refreshToken, profile, cb) {
     console.log("accessToken:"+accessToken);
@@ -79,6 +80,23 @@ passport.use(new FacebookStrategy({
     return cb(null,profile);
   }
 ));
+
+//----------------------------------------------------------------------------------------------------
+// Passport-Github
+
+passport.use(new GithubStrategy({
+    clientID: modos_autenticacion.Github.clientID,
+    clientSecret: modos_autenticacion.Github.clientSecret,
+    callbackURL: "https://"+config.Heroku.nombre_app+".herokuapp.com/auth_github_callback"
+  },
+  function(accessToken, refreshToken, profile, cb) {
+    console.log("accessToken:"+accessToken);
+    console.log("refreshToken:"+refreshToken);
+    console.log("profile:"+JSON.stringify(profile));
+    return cb(null,profile);
+}));
+
+//----------------------------------------------------------------------------------------------------
 
 passport.serializeUser(function(user, cb) {
   cb(null, user);
@@ -121,7 +139,7 @@ app.get('/',
     console.log("Usuario:"+req.user);
     if(config.Heroku.authentication == 'Si' && req.user == null)
     {
-      res.render('home', {login_google: modos_autenticacion.Google.authentication, login_twitter: modos_autenticacion.Twitter.authentication, login_facebook: modos_autenticacion.Facebook.authentication});
+      res.render('home', {login_google: modos_autenticacion.Google.authentication, login_twitter: modos_autenticacion.Twitter.authentication, login_facebook: modos_autenticacion.Facebook.authentication, login_github: modos_autenticacion.Github.authentication});
     }
     else
     {
@@ -305,6 +323,14 @@ app.get('/auth_facebook_callback',
     res.render('login', {user: req.user});
 });
 
+app.get('/auth/github',
+  passport.authenticate('github'));
+
+app.get('/auth_github_callback',
+  passport.authenticate('github', { failureRedirect: '/error' }),
+  function(req, res) {
+    res.render('login', {user: req.user});
+});
 
 //----------------------------
 app.get('/logout',function(req,res){

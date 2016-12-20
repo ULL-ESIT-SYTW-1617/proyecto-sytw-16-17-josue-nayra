@@ -89,7 +89,7 @@ var obtener_variables = (() =>
           name: "authentication",
           message: "¿Quiere autenticacion?:",
           type: 'checkbox',
-          choices: ['Google','Twitter','Facebook', 'Sin autenticacion']
+          choices: ['Google','Twitter','Facebook','Github', 'Sin autenticacion']
         }
       ];
 
@@ -178,6 +178,11 @@ var set_autenticacion = ((datos, resp)=>
         case 'Facebook':
           console.log("Caso de Facebook");
           datos.Facebook.authentication = "Si";
+        break;
+
+        case 'Github':
+          console.log("Caso de Github");
+          datos.Github.authentication = "Si";
         break;
 
         case "Sin autenticacion":
