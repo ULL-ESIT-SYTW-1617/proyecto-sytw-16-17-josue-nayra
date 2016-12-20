@@ -95,7 +95,7 @@ var obtener_variables = (() =>
 
       inquirer.prompt(schema).then((respuestas) =>
       {
-        fs.copy(path.join(__dirname, 'template', 'auth-json'), path.join(basePath, 'auth.json'), (err)=> 
+        fs.copy(path.join(__dirname, 'template', 'auth.json'), path.join(basePath, 'auth.json'), (err)=> 
         {
           if(err)
             throw err;
@@ -107,9 +107,6 @@ var obtener_variables = (() =>
                 console.log("ERROR:"+err);
                 reject(err);
               }
-              console.log("Respuestas:"+JSON.stringify(respuestas));
-              console.log("Respuestas length:"+respuestas.authentication.length);
-              console.log("Data:"+JSON.stringify(data));
 
               var config = JSON.parse(data);
               set_autenticacion(config,respuestas).then((resolve1,reject1)=>
@@ -171,28 +168,23 @@ var set_autenticacion = ((datos, resp)=>
       switch(resp.authentication[i])
       {
         case 'Google':
-          console.log("Caso de Google...");
           datos.Google.authentication = "Si";
         break;
 
         case 'Twitter':
-          console.log("Caso de Twitter");
           datos.Twitter.authentication = "Si";
 
         break;
 
         case 'Facebook':
-          console.log("Caso de Facebook");
           datos.Facebook.authentication = "Si";
         break;
 
         case 'Github':
-          console.log("Caso de Github");
           datos.Github.authentication = "Si";
         break;
 
         case "Sin autenticacion":
-          console.log("Sin autenticacion");
           datos.Autenticacion = false;
         break;
 

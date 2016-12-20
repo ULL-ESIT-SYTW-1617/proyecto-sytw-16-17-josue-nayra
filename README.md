@@ -2,6 +2,8 @@
 
 ## Nuevas funcionalidades en los paquetes IAAS y Heroku
 
+-------------------------------------
+
 #### Paquete para el despliegue en Heroku:
 
 Modificaciones realizadas en el plugin para el despliegue en Heroku. [Repositorio](https://github.com/ULL-ESIT-SYTW-1617/proyecto-sytw-16-17-josue-nayra)
@@ -25,12 +27,9 @@ Modificaciones realizadas en el plugin para el despliegue en IAAS. [Repositorio]
     - Destroy
 
 
-
--------------------------------------
 -------------------------------------
 
-
-### Pasos a seguir para la utilización del plugin Heroku.
+## Pasos a seguir para la utilización del plugin Heroku.
 
 
 **Estructura inicial:**
@@ -104,13 +103,7 @@ $ gulp build
 ```
 
 
-**10-** Rellenar el archivo **auth.json**. Para ello se deberán incluir los atributos **clientID** y **clientSecret** en la **plataforma que se desee** utilizar como autenticación.
-
-**NOTA:** En el siguiente apartado () se muestra información detallada de los pasos a realizar para utilizar las plataformas disponibles y obtener las claves en cada una de ellas.
-
-
-
-**11-** Ejecutar el **deploy** para preparar el directorio para el despliegue en Heroku:
+**10-** Ejecutar el **deploy** para preparar el directorio para el despliegue en Heroku:
    
 ```bash
 $ gitbook-start --deploy heroku
@@ -126,7 +119,15 @@ gulp.task("deploy-<máquina en la que realizar el despliegue>", function(){
 ```
 
 
-**12-** Ahora el usuario podrá **desplegar en heroku**:
+
+**11-** Rellenar el archivo **auth.json**. Para ello se deberán incluir los atributos **clientID** y **clientSecret** en la **plataforma que se desee** utilizar como autenticación.
+
+**NOTA:** En el siguiente apartado () se muestra información detallada de los pasos a realizar para utilizar las plataformas disponibles y obtener las claves en cada una de ellas.
+
+
+
+
+**12-** Ahora el usuario podrá **desplegar en heroku** mediante la siguiente tarea:
 
 ``` 
 $ gulp deploy-heroku 
@@ -134,7 +135,7 @@ $ gulp deploy-heroku
 
 
 
-----------
+-------------------------------------
 
 ## Pasos a seguir para la creación de aplicaciones en Google, Twitter y Facebook.
 
@@ -143,26 +144,75 @@ $ gulp deploy-heroku
 Para poder realizar la autenticación con Google se debe crear una aplicación en la API de Google.
 Para ello se deben seguir los siguientes pasos:
 
+
 - **Acceder a la API de desarrolladores y loguearse en Google:** [Administrador de aplicaciones Google](https://console.developers.google.com/?hl=ES)
 
 ![](https://s28.postimg.org/lgfk95f9p/api_google.png)
 
+
 - **Crear un nuevo proyecto.**
 
 ![](https://s24.postimg.org/m1g15o8ad/nuevo_proyecto.png)
+
 
 - **Creación de las credenciales de la aplicación.**
 
 ![](https://s29.postimg.org/do32zu7av/credenciales.png)
 
 
-### Aplicación en Twitter
+- **Tener en cuenta que para generar las credenciales se debe tener configurada la pantalla de autorización.**
 
+![](https://s24.postimg.org/gzvigr81x/pantalla_Autorizacion.png)
+
+
+- **Finalmente para la creación de credenciales se debe crear una aplicación WEB, en la cual debemos indicar la ruta de origen y la ruta de callback.**
+
+![](https://s24.postimg.org/tl7jz2yad/credenciales_URls.png)
+
+
+- **Después de esto nos mostrará en pantalla los parámetros "clientID" y "clientSecret". Los cuales debemos copiar e incluir en el archivo "auth.json".**
+
+
+----------
+
+### Aplicación en Github
+
+Para realizar la autenticación en GitHub debemos crear previamente una aplicación de desarrollador. Para ello, seguimos los siguientes pasos:
+
+- **Acceder a los settings de nuestra cuenta.**
+
+- **En la parte inferior izquierda acceder: Developer settings  --> OAuth applications**
+
+- **A continuación registramos una nueva aplicación en: Register a new OAuth application, e introducimos los campos que se indican a continuación:**
+
+![](https://s23.postimg.org/t5pmdcqiz/registrar_Aplicacion.png)
+
+
+- **Finalmente, si la aplicación se ha creado con éxito, nos mostrará las credenciales "clientID" y "clientSecret".**
+
+
+----------
 
 ### Aplicación en Facebook
 
+En el caso de realizar la autenticación con Facebook, 
+
+[](https://developers.facebook.com/)
+
+
 ----------
-----------
+
+### Aplicación en Twitter
+
+
+
+
+
+
+
+
+
+-------------------------------------
 
 ### Tareas Gulp
 
