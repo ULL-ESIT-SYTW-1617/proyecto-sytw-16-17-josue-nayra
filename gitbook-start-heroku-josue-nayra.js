@@ -247,7 +247,10 @@ var initialize = (() => {
           escribir_gulpfile().then((resolve3,reject3)=>
           {
             console.log("--------------------------------------");
-            heroku.crear_app(resolve1.bd);
+            heroku.crear_app(resolve1.bd).then(()=>
+            {
+              console.log("Su aplicación se ha creado correctamente");
+            });
           });
 		    });
 
