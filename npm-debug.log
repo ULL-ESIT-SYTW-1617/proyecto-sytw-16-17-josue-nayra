@@ -1,0 +1,135 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/usr/bin/nodejs', '/usr/bin/npm', 'publish' ]
+2 info using npm@3.5.2
+3 info using node@v4.2.6
+4 verbose publish [ '.' ]
+5 silly cache add args [ '.', null ]
+6 verbose cache add spec .
+7 silly cache add parsed spec Result {
+7 silly cache add   raw: '.',
+7 silly cache add   scope: null,
+7 silly cache add   name: null,
+7 silly cache add   rawSpec: '.',
+7 silly cache add   spec: '/home/josue/Documentos/16-17/SYTW/PROYECTO_SYTW/proyecto-sytw-16-17-josue-nayra',
+7 silly cache add   type: 'directory' }
+8 verbose addLocalDirectory /home/josue/.npm/gitbook-start-heroku-josue-nayra/1.2.8/package.tgz not in flight; packing
+9 info lifecycle gitbook-start-heroku-josue-nayra@1.2.8~prepublish: gitbook-start-heroku-josue-nayra@1.2.8
+10 silly lifecycle gitbook-start-heroku-josue-nayra@1.2.8~prepublish: no script for prepublish, continuing
+11 verbose tar pack [ '/home/josue/.npm/gitbook-start-heroku-josue-nayra/1.2.8/package.tgz',
+11 verbose tar pack   '/home/josue/Documentos/16-17/SYTW/PROYECTO_SYTW/proyecto-sytw-16-17-josue-nayra' ]
+12 verbose tarball /home/josue/.npm/gitbook-start-heroku-josue-nayra/1.2.8/package.tgz
+13 verbose folder /home/josue/Documentos/16-17/SYTW/PROYECTO_SYTW/proyecto-sytw-16-17-josue-nayra
+14 verbose addLocalTarball adding from inside cache /home/josue/.npm/gitbook-start-heroku-josue-nayra/1.2.8/package.tgz
+15 silly cache afterAdd gitbook-start-heroku-josue-nayra@1.2.8
+16 verbose afterAdd /home/josue/.npm/gitbook-start-heroku-josue-nayra/1.2.8/package/package.json not in flight; writing
+17 verbose afterAdd /home/josue/.npm/gitbook-start-heroku-josue-nayra/1.2.8/package/package.json written
+18 silly publish { name: 'gitbook-start-heroku-josue-nayra',
+18 silly publish   version: '1.2.8',
+18 silly publish   description: 'Plugin that lets users to deploy a gitbook in Heroku',
+18 silly publish   main: 'gitbook-start-heroku-josue-nayra.js',
+18 silly publish   scripts:
+18 silly publish    { start: 'node ./bin/gitbook-start-heroku-josue-nayra.js',
+18 silly publish      test: 'echo "Error: no test specified" && exit 1' },
+18 silly publish   repository:
+18 silly publish    { type: 'git',
+18 silly publish      url: 'git+https://github.com/ULL-ESIT-SYTW-1617/gitbook-start-heroku-josue-nayra.git' },
+18 silly publish   contributors:
+18 silly publish    [ { name: 'Josue Toledo',
+18 silly publish        email: 'alu0100763492@ull.edu.es',
+18 silly publish        url: 'www.github.com/JosueTC94' },
+18 silly publish      { name: 'Nayra Rodriguez',
+18 silly publish        email: 'alu0100406122@ull.edu.es',
+18 silly publish        url: 'www.github.com/alu0100406122' } ],
+18 silly publish   keywords: [ 'Gitbook', 'deploy', 'heroku' ],
+18 silly publish   author: '',
+18 silly publish   license: 'ISC',
+18 silly publish   bugs: { url: 'https://github.com/ULL-ESIT-SYTW-1617/gitbook-start-heroku-josue-nayra/issues' },
+18 silly publish   homepage: 'https://github.com/ULL-ESIT-SYTW-1617/gitbook-start-heroku-josue-nayra#readme',
+18 silly publish   dependencies:
+18 silly publish    { 'bcrypt-nodejs': '0.0.3',
+18 silly publish      'body-parser': '^1.15.2',
+18 silly publish      'connect-ensure-login': '^0.1.1',
+18 silly publish      'cookie-parser': '^1.4.3',
+18 silly publish      dropbox: '^2.4.0',
+18 silly publish      ejs: '^2.5.2',
+18 silly publish      express: '^4.14.0',
+18 silly publish      'express-passport-logout': '^0.1.0',
+18 silly publish      'express-session': '^1.14.2',
+18 silly publish      'fs-extra': '^0.30.0',
+18 silly publish      gulp: '^3.9.1',
+18 silly publish      'gulp-install': '^0.6.0',
+18 silly publish      'gulp-shell': '^0.5.2',
+18 silly publish      'heroku-client': '^3.0.0-beta3',
+18 silly publish      inquirer: '^1.2.3',
+18 silly publish      jsonfile: '^2.4.0',
+18 silly publish      minimist: '^1.2.0',
+18 silly publish      morgan: '^1.7.0',
+18 silly publish      octonode: '^0.7.6',
+18 silly publish      passport: '^0.3.2',
+18 silly publish      'passport-facebook': '^2.1.1',
+18 silly publish      'passport-github': '^1.1.0',
+18 silly publish      'passport-google-oauth20': '^1.0.0',
+18 silly publish      'passport-local': '^1.0.0',
+18 silly publish      'passport-twitter': '^1.0.4',
+18 silly publish      path: '^0.12.7',
+18 silly publish      prompt: '^1.0.0',
+18 silly publish      sequelize: '^3.27.0',
+18 silly publish      'simple-git': '^1.62.0',
+18 silly publish      sqlite3: '^3.1.8' },
+18 silly publish   readme: '# Proyecto Sistemas y Tecnologías Web\n\n## Nuevas funcionalidades en los paquetes IAAS y Heroku\n\n-------------------------------------\n\n### Paquete para el despliegue en Heroku:\n\nModificaciones realizadas en el plugin para el despliegue en Heroku. [Repositorio](https://github.com/ULL-ESIT-SYTW-1617/proyecto-sytw-16-17-josue-nayra)\n\n- **Autenticación con: Google, Twitter, Facebook y Github.**\n\nPor defecto el usuario propietario del Gitbook tendrá habilitada la autenticación local, además de las expuestas anteriormente en función de lo que desee.\n\nLa información relativa a la autenticación con Google, Twitter, Facebook y Github se dispondrá en un archivo "auth.json", en cual el usuario rellenará los datos relativos a la autenticación (clientID y clientSecret).\n\nEn función de los tipos de autenticación que elija el autor del libro aparecerán en el login nuevos botones para hacer la autenticación con cada uno de ellos.\n\n\n- **Vista administrador para la gestión de los usuarios que visitan el libro por parte del autor del mismo.**\n\nEl administrador podrá crear nuevos usuarios desde esta vista, asignando un \'usuario\', un \'password\' y un \'displayName\', como también borrar usuarios de los existentes en la base de datos a partir del \'id\'.\n\nEn esta vista se facilitará una tabla al administrador con todos los usuarios existentes en la base de datos local.\nPara cada uno de ellos se podrá visualizar su \'id\', \'usuario\', \'nombre completo\' y las visitas que ha realizado al Gitbook.\n\nLos cambios que se produzcan en esta sección de la aplicación se visualizarán en la tabla de usuarios.\n\n\n- **Opción para elegir el tipo de base de datos: Sequelize o Dropbox**.\n\nSe ha reestructurado el código para dar la opción al autor del libro de elegir la base de datos que desee, tanto Sequelize como Dropbox.\n\nEn función de la elección del usuario con su base de datos se generará un controlador para los usuarios diferente en función de si la base de datos es Sequelize o Dropbox.\n\nPara el caso de **Dropbox** el usuario deberá disponer de un fichero como base de datos a su cuenta personal de Dropbox en formato JSON, siguiendo la siguiente estructura:\n\n```json\n{\n  "users":[\n    {\n      "id": 1,\n      "username": "admin",\n      "password": "****",\n      "displayName": "Administrador",\n      "visitasGitbook": 0\n    }\n  ]\n}\n```\n\nEl plugin exigirá al usuario propietario del Gitbook la introducción de un token para utilizar la API de Dropbox y el link del archivo de base de datos que se deberá encontrar en su perfil.\nPara generar un token para el Dropbox puede acceder al siguiente enlace: [Token Dropbox](https://dropbox.github.io/dropbox-api-v2-explorer/).\nEstos datos se almacenarán en un directorio oculto: *~/.dropbox*, en un fichero "dropbox.json".\n\n\nPara el caso de **Sequelize** el usuario no tendrá que configurar nada. El dialecto utilizado por parte de este ORM es Sqlite3.\n\n\n- **Nueva tarea Gulp para administrar el servidor: "destroy" elimina la aplicación y el repositorio remoto de Heroku.**\n\nEsta tarea se invoca ejecutando:\n\n```bash\n$ gulp destroy heroku\n```\n\nUtilizará la API de Heroku para borrar la aplicación.\n\n\n----------\n\n\n### Paquete para el despliegue en IAAS:\n\nModificaciones realizadas en el plugin para el despliegue en IAAS. [Repositorio](https://github.com/ULL-ESIT-SYTW-1617/proyecto-sytw-16-17-IAAS-josue-nayra)\n\n- **Vista administrador** para la gestión de los usuarios que visitan el libro por parte del autor del mismo.\n\n- Se han añadido **nuevas tareas gulp** para facilitar las labores de configuración y administración al usuario propietario del Gitbook:\n\n    - **gulp deploy-iaas-ull-es**:\n\n    Esta tarea permitirá actualizar el contenido del gitbook que se encuentra alojado en el IAAS, ejecutando un git pull sobre el repositorio en Github. Es importante tener en cuenta de que éste último debe estar siempre actualizado para que esta tarea se ejecute eficientemente.\n\n    - **gulp install-iaas-ull-es**:\n\n    Posteriormente al despliegue inicial del gitbook en el IAAS mediante la ejecución del comando *gitbook-start --deploy iaas-ull-es**, esta tarea nos permite instalar todas las dependencias y paquetes necesarios en la máquina remota para poder ejecutar y lanzar la aplicación sin problemas.\n\n    - **gulp run-iaas-ull-es**:\n\n    En este caso, a partir de esta tarea podemos ejecutar el servidor en la máquina remota evitando la necesidad de acceder al IAAS y hacerlo manualmente, lo cual nos puede resultar bastante útil cuando el usuario realice testeos y pruebe la efectividad del despliegue.\n\n    - **gulp destroy-iaas-ull-es**:\n\n    En el caso de que el usuario decida eliminar el despliegue del IAAS, se ha facilitado esta tarea que realizará las siguientes cuestiones:\n\n        - Eliminará el contenido del directorio que contiene el gitbook en la máquina remota en el IAAS.\n\n        - Eliminará la clave que hemos transferido durante la etapa inicial del despliegue a la máquina remota.\n\n\n-------------------------------------\n\n## Pasos a seguir para la utilización del plugin Heroku.\n\n\n#### Estructura inicial:\n\n**1-** Descargar el paquete inicial: **gitbook-start-josue-nayra**\n\n```bash\n$ npm install -g gitbook-start-josue-nayra\n```\n\nNota: Si ha tenido algún problema a la hora de instalar el paquete inicial, compruebe que no tiene creado previamente el directorio "~/.gitbook-start".\n\n\n**2-** Crear el **libro** mediante el comando:\n\n```bash\n$ gitbook-start -d <directorio> --autor <autor> --name <nombre_libro> --url <url_repo>\n```\n\nSe construye así la estructura inicial por **gitbook-start**, es decir, la jerarquía de directorios conteniendo los scripts y ficheros markdown para el libro.\n\n\n**3-** Colocarse en la carpeta que contiene el libro.\n\n```bash\n$ cd <directorio en el que se ha desplegado el libro>\n```\n\n\n**4-** Instalar las **dependencias** descritas en el package.json necesarias mediante el comando:\n\n```bash\n$ npm install\n```\n\n#### Estructura para el plugin Heroku:\n\n**5-** Instalar el **plugin** requerido como **dependendecia** con la opción --save, como por ejemplo: **gitbook-start-heroku-P9-es-josue-nayra** para el despliegue en Heroku.\n\n```bash\n$ npm install --save gitbook-start-heroku-josue-nayra\n```\n\n\n**6-** Puede tener el **repositorio remoto actualizado** mediante una de las tareas descritas en el gulpfile.\n\n```bash\n$ gulp push --mensaje <mensaje commit>\n```\n\n\n**7-** Nos **logueamos en Heroku** a través del siguiente comando:\n\n```bash\n$ heroku login\n```\n\n\n**8-** Ahora debemos asignarle un **nombre a la aplicación** de Heroku que se creará en el siguiente paso. Para ello accedemos al package.json y rellenamos la sección de Heroku:\n\n```json\n"Heroku":{\n  "nombre_app": "<nombre de la aplicación"\n}\n```\n\n**9-** Para **construir el libro** disponemos de una tarea en el gulpfile denominada "build".\n\n```bash\n$ gulp build\n```\n\n\n**10-** Ejecutar el **deploy** para preparar el directorio para el despliegue en Heroku:\n\n```bash\n$ gitbook-start --deploy heroku\n```\n\nUna vez ejecutado el comando anterior, se generará automáticamente en el gulpfile.js una tarea llamada\n"deploy-<máquina en la que realizar el despliegue>" que permitirá al usuario actualizar el contenido de dicha máquina.\n\n```javascript\ngulp.task("deploy-<máquina en la que realizar el despliegue>", function(){\n    require(path.join(basePath, \'node_modules\',\'<plugin de depliegue>\')).deploy(...);\n});\n```\n\n\n\n**11-** Rellenar el archivo **auth.json**. Para ello se deberán incluir los atributos **clientID** y **clientSecret** en la **plataforma que se desee** utilizar como autenticación.\n\n**NOTA:** En el siguiente apartado (Pasos a seguir para la creación de aplicaciones en Google, Twitter y Facebook) se muestra información detallada de los pasos a realizar para utilizar las plataformas disponibles y obtener las claves en cada una de ellas.\n\n\n\n\n**12-** Ahora el usuario podrá **desplegar en heroku** mediante la siguiente tarea:\n\n```\n$ gulp deploy-heroku\n```\n\n\n\n-------------------------------------\n\n## Pasos a seguir para la creación de aplicaciones en Google, Twitter y Facebook.\n\n----------\n\n### Aplicación en Google\n\nPara poder realizar la autenticación con Google se debe crear una aplicación en la API de Google.\nPara ello se deben seguir los siguientes pasos:\n\n\n- **Acceder a la API de desarrolladores y loguearse en Google:** [Administrador de aplicaciones Google](https://console.developers.google.com/?hl=ES)\n\n![](https://s28.postimg.org/lgfk95f9p/api_google.png)\n\n\n- **Crear un nuevo proyecto.**\n\n![](https://s24.postimg.org/m1g15o8ad/nuevo_proyecto.png)\n\n\n- **Creación de las credenciales de la aplicación.**\n\n![](https://s29.postimg.org/do32zu7av/credenciales.png)\n\n\n- **Tener en cuenta que para generar las credenciales se debe tener configurada la pantalla de autorización.**\n\n![](https://s24.postimg.org/gzvigr81x/pantalla_Autorizacion.png)\n\n\n- **Finalmente para la creación de credenciales se debe crear una aplicación WEB, en la cual debemos indicar la ruta de origen y la ruta de callback.**\n\n![](https://s24.postimg.org/tl7jz2yad/credenciales_URls.png)\n\n\n- **Después de esto nos mostrará en pantalla los parámetros "clientID" y "clientSecret". Los cuales debemos copiar e incluir en el archivo "auth.json".**\n\n- **Tener en cuenta que la aplicación debe estar HABILITADA para su correcto funcionamiento.**\n\n![](https://s24.postimg.org/a6yjm3x1h/habilitar.png)\n\n\n----------\n\n### Aplicación en Github\n\nPara realizar la autenticación en GitHub debemos crear previamente una aplicación de desarrollador. Para ello, seguimos los siguientes pasos:\n\n- **Acceder a los settings de nuestra cuenta.**\n\n- **En la parte inferior izquierda acceder: "Developer settings"  --> "OAuth applications"**\n\n- **A continuación registramos una nueva aplicación en: "Register a new OAuth application", e introducimos los campos que se indican a continuación:**\n\n![](https://s23.postimg.org/t5pmdcqiz/registrar_Aplicacion.png)\n\n\n- **Finalmente, si la aplicación se ha creado con éxito, nos mostrará las credenciales "clientID" y "clientSecret".**\n\n\n----------\n\n### Aplicación en Facebook\n\nEn el caso de realizar la autenticación con Facebook,\n\n[Facebook para desarrolladores](https://developers.facebook.com/)\n\n\n- **Para comenzar, accedemos a la plataforma para desarrolladores y creamos una nueva aplicación haciendo click en "Mis Aplicaciones".**\n**Al hacerlo nos aparecerá la opción para "Crear una nueva aplicación".**\n\n![](https://s27.postimg.org/yrm26ibir/paginafacebook.png)\n\n\n- **Introducir la URL del sitio web en la que desplegamos nuestra aplicación.**\n\n![](https://s23.postimg.org/nb1b2nga3/Enlaceinicial.png)\n\n\n- **A continuación rellenar los campos que nos indican para "Crear un nuevo identificador de la aplicación".**\n\n- **Para continuar, se han de seguir unos pasos para la configuración del passport con nuestra app. En primer lugar, añadimos la URL con la dirección de nuestra aplicación.**\n\n![](https://s27.postimg.org/uly3w9bkz/indicar_URL.png)\n\n\n- **Ahora ya tenemos creada nuestra aplicación, si accedemos de nuevo a "Mis aplicaciones" aparecerá la última aplicación añadida. Al acceder a ella nos muestra la información de la misma con los atributos "clientID" y "clientSecret".**\n\n![](https://s23.postimg.org/uc7wodcff/identificador.png)\n\n![](https://s24.postimg.org/n81y45omt/final_Facebook.png)\n\n\n----------\n\n### Aplicación en Twitter\n\nPara realizar la autenticación con Twitter debemos realizar lo siguiente:\n\n- **Acceder a la web de desarrolladores de Twitter: [Developers](https://dev.twitter.com/)**\n\n- **Comenzar accediendo a la sección "Myapps" y crear una nueva aplicación.**\n\n![](https://s28.postimg.org/vuxscsiwd/twitter.png)\n\n\n- **A continuación se rellenarán los campos requeridos con los datos de la aplicación a la cual deseamos incluir la autenticación con twitter.**\n\n![](https://s23.postimg.org/a0mn0r1y3/Captura_Twitter.png)\n\n\n- **Hay que tener en cuenta que para la activación de la aplicación previamente debemos crear un TOKEN.**\n\nPara ello en la información de nuestra aplicación accedemos a: **Keys and Access** --> **Your Access Token** --> **Crear un nuevo token**.\n\n\n- **Con estos pasos ya tendremos creada la aplicación en Twitter y en ella encontraremos los atributos necesarios (clientID y clientSecret) para la autenticación passport con Twitter.**\n\n\n\n-------------------------------------\n\n### Tareas Gulp\n\n\n* **push**\n\nTarea habilitada para que el usuario pueda actualizar el repositorio que contiene el gitbook. Está disponible una opción --mensaje para especificar el mensaje del commit.\n\n```bash\n$ gulp push --mensaje <mensaje del commit>\n```\n\n* **instalar_recursos**\n\nTarea que permite al usuario instalar plugins y dependencias necesarias para su gitbook.\n\n```bash\n$ gulp instalar_recursos\n```\n\n* **build**\n\nTarea para la construcción del libro.\n\n```bash\n$ gulp build\n```\n\n* **build-wiki**\n\nTarea para la construcción del directorio Wiki.\n\n```bash\n$ gulp build\n```\n\n\n* **deploy**\n\nTarea deploy genérica que actualiza las gh-pages del gitbook.\n```\n$ gulp deploy\n```\n\n* **deploy-heroku**\n\nTarea generada posteriormente a la realización y ejecución del comando gitbook-start --deploy, que permite al usuario realizar posteriores despliegues y actualizaciones de su gitbook en Heroku con gulp.\nPor ejemplo, en el caso de que el usuario despliegue en Heroku, después de haber desplegado con la opción gitbook-start --deploy heroku, en el gulpfile se generará una tarea\ncon el nombre deploy-heroku.\n\n```\n$ gulp deploy-heroku\n```\n\n* **destroy-heroku**\n\nTarea generada para eliminar el repositorio remoto de Heroku y la aplicación en la plataforma de HerokuApp.\n\n```\n$ gulp destroy-heroku\n```\n\n----------\n\n\n### Enlaces\n\n- [Campus virtual](https://campusvirtual.ull.es/1617/course/view.php?id=1175)\n\n- [Descripción del proyecto](https://crguezl.github.io/ull-esit-1617/proyectos/sytw/)\n\n- [Repositorio del plugin Heroku](https://github.com/ULL-ESIT-SYTW-1617/proyecto-sytw-16-17-josue-nayra)\n\n- [Repositorio del plugin IAAS](https://github.com/ULL-ESIT-SYTW-1617/proyecto-sytw-16-17-IAAS-josue-nayra)\n\n- [Repositorio de gitbook-start-josue-nayra](https://github.com/ULL-ESIT-SYTW-1617/crear-repositorio-en-github-josue-nayra)\n\n- [Publicación NPM del paquete gitbook-start-josue-nayra](https://www.npmjs.com/package/gitbook-start-josue-nayra)\n\n- [Plugin NPM para el despliegue en IAAS](https://www.npmjs.com/package/gitbook-start-iaas-ull-es-josue-nayra)\n\n- [Plugin NPM para el despliegue con Heroku](https://www.npmjs.com/package/gitbook-start-heroku-josue-nayra)\n\n\n----------\n\n### Referencias\n\n- [Sequelize](http://docs.sequelizejs.com/en/latest/docs/getting-started/)\n\n- [Sqlite](https://crguezl.github.io/ull-esit-1617/apuntes/db/sqlite/)\n\n- [Tutorial para publicar paquetes nodejs](https://casianorodriguezleon.gitbooks.io/ull-esit-1617/content/apuntes/nodejspackages.html)\n\n- [Gulp](https://casianorodriguezleon.gitbooks.io/ull-esit-1617/content/apuntes/gulp/)\n\n- [Uso de templates](https://www.npmjs.com/package/ejs)\n\n- [Fyle System de Nodejs para el manejo de archivos](https://casianorodriguezleon.gitbooks.io/ull-esit-1617/content/apuntes/fs.html)\n\n- [Construyendo package.json](https://docs.npmjs.com/files/package.json)\n\n\n----------\n\n### Integrantes\n\n- Josué Toledo Castro -\n    [Github personal](www.github.com/JosueTC94)\n- María Nayra Rodríguez Pérez -\n    [Github personal](www.github.com/alu0100406122)\n',
+18 silly publish   readmeFilename: 'README.md',
+18 silly publish   gitHead: 'e3921eea70e4b5ca03b794e445dfe3d5b35ed745',
+18 silly publish   _id: 'gitbook-start-heroku-josue-nayra@1.2.8',
+18 silly publish   _shasum: '7d850ef0e46adc9fbec122a78c04d009eeb7098f',
+18 silly publish   _from: '.' }
+19 verbose getPublishConfig undefined
+20 silly mapToRegistry name gitbook-start-heroku-josue-nayra
+21 silly mapToRegistry using default registry
+22 silly mapToRegistry registry http://registry.npmjs.org/
+23 silly mapToRegistry uri http://registry.npmjs.org/gitbook-start-heroku-josue-nayra
+24 verbose publish registryBase http://registry.npmjs.org/
+25 silly publish uploading /home/josue/.npm/gitbook-start-heroku-josue-nayra/1.2.8/package.tgz
+26 verbose request uri http://registry.npmjs.org/gitbook-start-heroku-josue-nayra
+27 verbose request sending authorization for write operation
+28 info attempt registry request try #1 at 18:23:38
+29 verbose request using bearer token for auth
+30 verbose request id b1c84f778b871188
+31 http request PUT http://registry.npmjs.org/gitbook-start-heroku-josue-nayra
+32 http 403 http://registry.npmjs.org/gitbook-start-heroku-josue-nayra
+33 verbose headers { 'content-type': 'application/json',
+33 verbose headers   'cache-control': 'max-age=300',
+33 verbose headers   'content-length': '95',
+33 verbose headers   'accept-ranges': 'bytes',
+33 verbose headers   date: 'Wed, 21 Dec 2016 18:23:40 GMT',
+33 verbose headers   via: '1.1 varnish',
+33 verbose headers   connection: 'keep-alive',
+33 verbose headers   'x-served-by': 'cache-lcy1132-LCY',
+33 verbose headers   'x-cache': 'MISS',
+33 verbose headers   'x-cache-hits': '0',
+33 verbose headers   'x-timer': 'S1482344619.157374,VS0,VE1525',
+33 verbose headers   vary: 'Accept-Encoding' }
+34 verbose request invalidating /home/josue/.npm/registry.npmjs.org/gitbook-start-heroku-josue-nayra on PUT
+35 error publish Failed PUT 403
+36 verbose stack Error: "You cannot publish over the previously published version 1.2.8." : gitbook-start-heroku-josue-nayra
+36 verbose stack     at makeError (/usr/share/npm/node_modules/npm-registry-client/lib/request.js:264:12)
+36 verbose stack     at CachingRegistryClient.<anonymous> (/usr/share/npm/node_modules/npm-registry-client/lib/request.js:252:14)
+36 verbose stack     at Request._callback (/usr/share/npm/node_modules/npm-registry-client/lib/request.js:172:14)
+36 verbose stack     at Request.self.callback (/usr/share/npm/node_modules/request/request.js:198:22)
+36 verbose stack     at emitTwo (events.js:87:13)
+36 verbose stack     at Request.emit (events.js:172:7)
+36 verbose stack     at Request.<anonymous> (/usr/share/npm/node_modules/request/request.js:1082:10)
+36 verbose stack     at emitOne (events.js:82:20)
+36 verbose stack     at Request.emit (events.js:169:7)
+36 verbose stack     at IncomingMessage.<anonymous> (/usr/share/npm/node_modules/request/request.js:1009:12)
+37 verbose statusCode 403
+38 verbose pkgid gitbook-start-heroku-josue-nayra
+39 verbose cwd /home/josue/Documentos/16-17/SYTW/PROYECTO_SYTW/proyecto-sytw-16-17-josue-nayra
+40 error Linux 4.4.0-53-generic
+41 error argv "/usr/bin/nodejs" "/usr/bin/npm" "publish"
+42 error node v4.2.6
+43 error npm  v3.5.2
+44 error code E403
+45 error "You cannot publish over the previously published version 1.2.8." : gitbook-start-heroku-josue-nayra
+46 error If you need help, you may report this error at:
+46 error     <https://github.com/npm/npm/issues>
+47 verbose exit [ 1, true ]
