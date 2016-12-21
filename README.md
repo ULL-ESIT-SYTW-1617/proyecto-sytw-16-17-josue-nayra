@@ -4,7 +4,7 @@
 
 -------------------------------------
 
-#### Paquete para el despliegue en Heroku:
+### Paquete para el despliegue en Heroku:
 
 Modificaciones realizadas en el plugin para el despliegue en Heroku. [Repositorio](https://github.com/ULL-ESIT-SYTW-1617/proyecto-sytw-16-17-josue-nayra)
 
@@ -71,7 +71,7 @@ Utilizará la API de Heroku para borrar la aplicación.
 ----------
 
 
-#### Paquete para el despliegue en IAAS:
+### Paquete para el despliegue en IAAS:
 
 Modificaciones realizadas en el plugin para el despliegue en IAAS. [Repositorio](https://github.com/ULL-ESIT-SYTW-1617/proyecto-sytw-16-17-IAAS-josue-nayra)
 
@@ -105,7 +105,7 @@ Modificaciones realizadas en el plugin para el despliegue en IAAS. [Repositorio]
 ## Pasos a seguir para la utilización del plugin Heroku.
 
 
-**Estructura inicial:**
+#### Estructura inicial:
 
 **1-** Descargar el paquete inicial: **gitbook-start-josue-nayra**
 
@@ -138,7 +138,7 @@ $ cd <directorio en el que se ha desplegado el libro>
 $ npm install
 ```
 
-**Estructura para el plugin Heroku:**
+#### Estructura para el plugin Heroku:
 
 **5-** Instalar el **plugin** requerido como **dependendecia** con la opción --save, como por ejemplo: **gitbook-start-heroku-P9-es-josue-nayra** para el despliegue en Heroku.
 
@@ -211,6 +211,8 @@ $ gulp deploy-heroku
 -------------------------------------
 
 ## Pasos a seguir para la creación de aplicaciones en Google, Twitter y Facebook.
+
+----------
 
 ### Aplicación en Google
 
@@ -322,7 +324,7 @@ Para realizar la autenticación con Twitter debemos realizar lo siguiente:
 
 - **Hay que tener en cuenta que para la activación de la aplicación previamente debemos crear un TOKEN.**
 
-Para ello en la información de nuestra aplicación accedemos a: **Keys and Access** --> **Your Access Token** --> Crear un nuevo token.
+Para ello en la información de nuestra aplicación accedemos a: **Keys and Access** --> **Your Access Token** --> **Crear un nuevo token**.
 
 
 - **Con estos pasos ya tendremos creada la aplicación en Twitter y en ella encontraremos los atributos necesarios (clientID y clientSecret) para la autenticación passport con Twitter.**
