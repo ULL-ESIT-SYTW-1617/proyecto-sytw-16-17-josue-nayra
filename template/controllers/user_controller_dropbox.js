@@ -1,6 +1,7 @@
 "use strict";
 
 var path = require('path');
+var basePath = process.cwd();
 var bcrypt = require('bcrypt-nodejs');
 var Dropbox = require('dropbox');
 var dbx;
