@@ -95,9 +95,9 @@ Modificaciones realizadas en el plugin para el despliegue en IAAS. [Repositorio]
 
     En el caso de que el usuario decida eliminar el despliegue del IAAS, se ha facilitado esta tarea que realizará las siguientes cuestiones:
 
-        - Eliminará el contenido del directorio que contiene el gitbook en la máquina remota en el IAAS.
+      - Eliminará el contenido del directorio que contiene el gitbook en la máquina remota en el IAAS.
 
-        - Eliminará la clave que hemos transferido durante la etapa inicial del despliegue a la máquina remota.
+      - Eliminará la clave que hemos transferido durante la etapa inicial del despliegue a la máquina remota.
 
 
 -------------------------------------

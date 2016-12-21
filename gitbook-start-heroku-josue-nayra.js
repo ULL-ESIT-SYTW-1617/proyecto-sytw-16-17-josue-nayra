@@ -197,7 +197,6 @@ var set_autenticacion = ((datos, resp)=>
 
         case 'Twitter':
           datos.Twitter.authentication = "Si";
-
         break;
 
         case 'Facebook':
