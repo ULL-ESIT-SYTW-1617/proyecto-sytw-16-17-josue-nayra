@@ -9,6 +9,8 @@ const jsonfile = require('jsonfile');
 
 var heroku = require(path.join(__dirname,'lib','config_heroku.js'));
 
+var packagejson = require(path.join(basePath,'package.json'));
+
 //-------------------------------------------------------------------------------------------------
 
 var respuesta = ((error, stdout, stderr) =>
@@ -208,6 +210,19 @@ var set_autenticacion = ((datos, resp)=>
 
         case "Sin autenticacion":
           datos.Autenticacion = false;
+          //Escribir en el package.json
+          fs.readFile(path.join(basePath,'package.json'),(err,data) =>
+          {
+              if(err)
+                throw err;
+
+              var datos = JSON.parse(data);
+
+              datos.Heroku.authentication = "No";
+
+              jsonfile.spaces = 5;
+              jsonfile.writeFileSync(path.join(basePath,'package.json'),datos,{spaces: 5});
+          });
         break;
 
         default:
