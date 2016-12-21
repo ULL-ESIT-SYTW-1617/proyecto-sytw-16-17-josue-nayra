@@ -80,47 +80,71 @@ var escribir_gulpfile = (() => {
 
 //-------------------------------------------------------------------------------------------------
 
+var select_bd = (() =>
+{
+    return new Promise((resolve,reject)=>
+    {
+      var schema = [
+        {
+          name: "bd",
+          message: "Tipo de base de datos:",
+          type: 'list',
+          choices: ['dropbox', 'sequelize']
+        }
+      ];
+
+      inquirer.prompt(schema).then((respuestas)=>
+      {
+          console.log("Tipo de base de datos:"+JSON.stringify(respuestas));
+          resolve(respuestas);
+      });
+    });
+});
+
 var obtener_variables = (() =>
 {
     return new Promise((result,reject) =>
     {
-      var schema = [
-        {
-          name: "authentication",
-          message: "¿Quiere autenticacion?:",
-          type: 'checkbox',
-          choices: ['Google','Twitter','Facebook','Github', 'Sin autenticacion']
-        }
-      ];
-
-      inquirer.prompt(schema).then((respuestas) =>
+      select_bd().then((resolve,reject)=>
       {
-        fs.copy(path.join(__dirname, 'template', 'auth.json'), path.join(basePath, 'auth.json'), (err)=> 
-        {
-          if(err)
-            throw err;
-      
-          fs.readFile(path.join(basePath,'auth.json'),(err,data)=>
+        var schema = [
           {
-              if(err)
-              {
-                console.log("ERROR:"+err);
-                reject(err);
-              }
+            name: "authentication",
+            message: "¿Quiere autenticacion?:",
+            type: 'checkbox',
+            choices: ['Google','Twitter','Facebook','Github', 'Sin autenticacion']
+          }
+        ];
 
-              var config = JSON.parse(data);
-              set_autenticacion(config,respuestas).then((resolve1,reject1)=>
-              {
-                console.log("Resolve1:"+resolve1);
-                console.log("Reject1:"+reject1);
-                console.log("Modificando fichero auth.json");
-                jsonfile.spaces = 5;
-                jsonfile.writeFileSync(path.join(basePath,'auth.json'), resolve1, {spaces:5});
-                if(fs.existsSync(path.join(basePath,'auth.json')))
+        inquirer.prompt(schema).then((respuestas) =>
+        {
+          fs.copy(path.join(__dirname, 'template', 'auth.json'), path.join(basePath, 'auth.json'), (err)=>
+          {
+            if(err)
+              throw err;
+
+            fs.readFile(path.join(basePath,'auth.json'),(err,data)=>
+            {
+                if(err)
                 {
-                  result(fs.existsSync(path.join(basePath,'auth.json')));
+                  console.log("ERROR:"+err);
+                  reject(err);
                 }
-              });
+
+                var config = JSON.parse(data);
+                set_autenticacion(config,respuestas).then((resolve1,reject1)=>
+                {
+                  console.log("Resolve1:"+resolve1);
+                  console.log("Reject1:"+reject1);
+                  console.log("Modificando fichero auth.json");
+                  jsonfile.spaces = 5;
+                  jsonfile.writeFileSync(path.join(basePath,'auth.json'), resolve1, {spaces:5});
+                  if(fs.existsSync(path.join(basePath,'auth.json')))
+                  {
+                    result(fs.existsSync(path.join(basePath,'auth.json')));
+                  }
+                });
+            });
           });
         });
       });
@@ -164,7 +188,6 @@ var set_autenticacion = ((datos, resp)=>
   {
     for(var i=0;i<(resp.authentication).length;i++)
     {
-      console.log("Caso:"+resp.authentication[i]);
       switch(resp.authentication[i])
       {
         case 'Google':
@@ -205,7 +228,7 @@ var initialize = (() => {
     {
 		    preparar_despliegue().then((resolve2, reject2) =>
 		    {
-		      heroku.crear_app().then((resolve3,reject3) =>
+		      heroku.crear_app(resolve1.bd).then((resolve3,reject3) =>
 		      {
 		            escribir_gulpfile();
 		      });
