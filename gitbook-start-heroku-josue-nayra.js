@@ -44,6 +44,7 @@ var deploy = (() => {
 
 var escribir_gulpfile = (() => {
   return new Promise((resolve,reject) => {
+    console.log("Tareas gulp:");
     var tareas_gulp = require(path.join(__dirname,'lib','tareas_gulpfile.js'));
     var tareas_introducidas = [];
 
@@ -95,7 +96,6 @@ var select_bd = (() =>
 
       inquirer.prompt(schema).then((respuestas)=>
       {
-          console.log("Tipo de base de datos:"+JSON.stringify(respuestas));
           resolve(respuestas);
       });
     });
@@ -135,8 +135,9 @@ var obtener_variables = (() =>
                 set_autenticacion(config,respuestas).then((resolve1,reject1)=>
                 {
                   console.log("Modificando fichero auth.json");
-                  jsonfile.spaces = 5;
-                  jsonfile.writeFileSync(path.join(basePath,'auth.json'), resolve1, {spaces:5});
+
+                  fs.writeFileSync(path.join(basePath,'auth.json'), JSON.stringify(resolve1));
+
                   if(fs.existsSync(path.join(basePath,'auth.json')))
                   {
                     result({ bd: resolve.bd, auth: fs.existsSync(path.join(basePath,'auth.json'))});
@@ -228,11 +229,11 @@ var initialize = (() => {
 		    preparar_despliegue().then((resolve2, reject2) =>
 		    {
           console.log("--------------------------------------");
-		      heroku.crear_app(resolve1.bd).then((resolve3,reject3) =>
-		      {
-                console.log("--------------------------------------");
-		            escribir_gulpfile();
-		      });
+          escribir_gulpfile().then((resolve3,reject3)=>
+          {
+            console.log("--------------------------------------");
+            heroku.crear_app(resolve1.bd);
+          });
 		    });
 
     });
