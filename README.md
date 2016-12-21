@@ -8,11 +8,67 @@
 
 Modificaciones realizadas en el plugin para el despliegue en Heroku. [Repositorio](https://github.com/ULL-ESIT-SYTW-1617/proyecto-sytw-16-17-josue-nayra)
 
-- Autenticación con: **Google**, **Twitter**, **Facebook** y **Github**.
+- **Autenticación con: Google, Twitter, Facebook y Github.**
 
-- **Vista administrador** para la gestión de los usuarios que visitan el libro por parte del autor del mismo.
+Por defecto el usuario propietario del Gitbook tendrá habilitada la autenticación local, además de las expuestas anteriormente en función de lo que desee. 
 
-- Opción para elegir el tipo de base de datos: **Sequelize** o **Dropbox**.
+La información relativa a la autenticación con Google, Twitter, Facebook y Github se dispondrá en un archivo "auth.json", en cual el usuario rellenará los datos relativos a la autenticación (clientID y clientSecret).
+
+En función de los tipos de autenticación que elija el autor del libro aparecerán en el login nuevos botones para hacer la autenticación con cada uno de ellos.
+
+
+- **Vista administrador para la gestión de los usuarios que visitan el libro por parte del autor del mismo.**
+
+El administrador podrá crear nuevos usuarios desde esta vista, asignando un 'usuario', un 'password' y un 'displayName', como también borrar usuarios de los existentes en la base de datos a partir del 'id'.
+
+En esta vista se facilitará una tabla al administrador con todos los usuarios existentes en la base de datos local. 
+Para cada uno de ellos se podrá visualizar su 'id', 'usuario', 'nombre completo' y las visitas que ha realizado al Gitbook.
+
+Los cambios que se produzcan en esta sección de la aplicación se visualizarán en la tabla de usuarios.
+
+  
+- **Opción para elegir el tipo de base de datos: Sequelize o Dropbox**.
+
+Se ha reestructurado el código para dar la opción al autor del libro de elegir la base de datos que desee, tanto Sequelize como Dropbox.
+
+En función de la elección del usuario con su base de datos se generará un controlador para los usuarios diferente en función de si la base de datos es Sequelize o Dropbox.
+
+Para el caso de **Dropbox** el usuario deberá disponer de un fichero como base de datos a su cuenta personal de Dropbox en formato JSON, siguiendo la siguiente estructura:
+
+```json
+{
+  "users":[
+    {
+      "id": 1,
+      "username": "admin",
+      "password": "****",
+      "displayName": "Administrador",
+      "visitasGitbook": 0
+    }
+  ]
+}
+```
+
+El plugin exigirá al usuario propietario del Gitbook la introducción de un token para utilizar la API de Dropbox y el link del archivo de base de datos que se deberá encontrar en su perfil.
+Para generar un token para el Dropbox puede acceder al siguiente enlace: [Token Dropbox](https://dropbox.github.io/dropbox-api-v2-explorer/). 
+Estos datos se almacenarán en un directorio oculto: *~/.dropbox*, en un fichero "dropbox.json".
+
+
+Para el caso de **Sequelize** el usuario no tendrá que configurar nada. El dialecto utilizado por parte de este ORM es Sqlite3.
+
+
+- **Nueva tarea Gulp para administrar el servidor: "destroy" elimina la aplicación y el repositorio remoto de Heroku.**
+
+Esta tarea se invoca ejecutando:
+
+```bash
+$ gulp destroy heroku
+```
+
+Utilizará la API de Heroku para borrar la aplicación.
+
+
+----------
 
 
 #### Paquete para el despliegue en IAAS:
@@ -23,8 +79,8 @@ Modificaciones realizadas en el plugin para el despliegue en IAAS. [Repositorio]
 
 - Se han generado nuevas **tareas** en el **gulpfile.js** para facilitar al usuario la iteracción con la máquina IAAS.
   Las nuevas tareas han sido:
-    - Deploy
-    - Destroy
+    - Deploy Heroku
+    - Destroy Heroku
 
 
 -------------------------------------
@@ -122,7 +178,7 @@ gulp.task("deploy-<máquina en la que realizar el despliegue>", function(){
 
 **11-** Rellenar el archivo **auth.json**. Para ello se deberán incluir los atributos **clientID** y **clientSecret** en la **plataforma que se desee** utilizar como autenticación.
 
-**NOTA:** En el siguiente apartado () se muestra información detallada de los pasos a realizar para utilizar las plataformas disponibles y obtener las claves en cada una de ellas.
+**NOTA:** En el siguiente apartado (Pasos a seguir para la creación de aplicaciones en Google, Twitter y Facebook) se muestra información detallada de los pasos a realizar para utilizar las plataformas disponibles y obtener las claves en cada una de ellas.
 
 
 
@@ -172,6 +228,10 @@ Para ello se deben seguir los siguientes pasos:
 
 - **Después de esto nos mostrará en pantalla los parámetros "clientID" y "clientSecret". Los cuales debemos copiar e incluir en el archivo "auth.json".**
 
+- **Tener en cuenta que la aplicación debe estar HABILITADA para su correcto funcionamiento.**
+
+![](https://s24.postimg.org/a6yjm3x1h/habilitar.png)
+
 
 ----------
 
@@ -181,9 +241,9 @@ Para realizar la autenticación en GitHub debemos crear previamente una aplicaci
 
 - **Acceder a los settings de nuestra cuenta.**
 
-- **En la parte inferior izquierda acceder: Developer settings  --> OAuth applications**
+- **En la parte inferior izquierda acceder: "Developer settings"  --> "OAuth applications"**
 
-- **A continuación registramos una nueva aplicación en: Register a new OAuth application, e introducimos los campos que se indican a continuación:**
+- **A continuación registramos una nueva aplicación en: "Register a new OAuth application", e introducimos los campos que se indican a continuación:**
 
 ![](https://s23.postimg.org/t5pmdcqiz/registrar_Aplicacion.png)
 
@@ -197,18 +257,58 @@ Para realizar la autenticación en GitHub debemos crear previamente una aplicaci
 
 En el caso de realizar la autenticación con Facebook, 
 
-[](https://developers.facebook.com/)
+[Facebook para desarrolladores](https://developers.facebook.com/)
+
+
+- **Para comenzar, accedemos a la plataforma para desarrolladores y creamos una nueva aplicación haciendo click en "Mis Aplicaciones".** 
+**Al hacerlo nos aparecerá la opción para "Crear una nueva aplicación".**
+
+![](https://s27.postimg.org/yrm26ibir/paginafacebook.png)
+
+
+- **Introducir la URL del sitio web en la que desplegamos nuestra aplicación.**
+
+![](https://s23.postimg.org/nb1b2nga3/Enlaceinicial.png)
+
+
+- **A continuación rellenar los campos que nos indican para "Crear un nuevo identificador de la aplicación".**
+
+- **Para continuar, se han de seguir unos pasos para la configuración del passport con nuestra app. En primer lugar, añadimos la URL con la dirección de nuestra aplicación.**
+
+![](https://s27.postimg.org/uly3w9bkz/indicar_URL.png)
+
+
+- **Ahora ya tenemos creada nuestra aplicación, si accedemos de nuevo a "Mis aplicaciones" aparecerá la última aplicación añadida. Al acceder a ella nos muestra la información de la misma con los atributos "clientID" y "clientSecret".**
+
+![](https://s23.postimg.org/uc7wodcff/identificador.png)
+
+![](https://s24.postimg.org/n81y45omt/final_Facebook.png)
 
 
 ----------
 
 ### Aplicación en Twitter
 
+Para realizar la autenticación con Twitter debemos realizar lo siguiente:
+
+- **Acceder a la web de desarrolladores de Twitter: [Developers](https://dev.twitter.com/)**
+
+- **Comenzar accediendo a la sección "Myapps" y crear una nueva aplicación.**
+
+![](https://s28.postimg.org/vuxscsiwd/twitter.png)
 
 
+- **A continuación se rellenarán los campos requeridos con los datos de la aplicación a la cual deseamos incluir la autenticación con twitter.**
+
+![](https://s23.postimg.org/a0mn0r1y3/Captura_Twitter.png)
 
 
+- **Hay que tener en cuenta que para la activación de la aplicación previamente debemos crear un TOKEN.** 
 
+Para ello en la información de nuestra aplicación accedemos a: **Keys and Access** --> **Your Access Token** --> Crear un nuevo token.
+
+
+- **Con estos pasos ya tendremos creada la aplicación en Twitter y en ella encontraremos los atributos necesarios (clientID y clientSecret) para la autenticación passport con Twitter.**
 
 
 
@@ -241,6 +341,14 @@ Tarea para la construcción del libro.
 $ gulp build
 ```
 
+* **build-wiki**
+
+Tarea para la construcción del directorio Wiki.
+
+```bash
+$ gulp build
+```
+
 
 * **deploy**
 
@@ -259,6 +367,14 @@ con el nombre deploy-heroku.
 $ gulp deploy-heroku
 ```
 
+* **destroy-heroku**
+
+Tarea generada para eliminar el repositorio remoto de Heroku y la aplicación en la plataforma de HerokuApp.
+
+```
+$ gulp destroy-heroku
+```
+
 ----------
 
 
@@ -266,19 +382,19 @@ $ gulp deploy-heroku
 
 - [Campus virtual](https://campusvirtual.ull.es/1617/course/view.php?id=1175)
 
-- [Descripción de la práctica](https://crguezl.github.io/ull-esit-1617/practicas/practicapassportlocalsequelize.html)
+- [Descripción del proyecto](https://crguezl.github.io/ull-esit-1617/proyectos/sytw/)
 
-- [Publicación del paquete gitbook-start-josue-nayra](https://www.npmjs.com/package/gitbook-start-josue-nayra)
+- [Repositorio del plugin Heroku](https://github.com/ULL-ESIT-SYTW-1617/proyecto-sytw-16-17-josue-nayra)
 
-- [Plugin para el despliegue en IAAS](https://www.npmjs.com/package/gitbook-start-iaas-ull-es-josue-nayra)
+- [Repositorio del plugin IAAS](https://github.com/ULL-ESIT-SYTW-1617/proyecto-sytw-16-17-IAAS-josue-nayra) 
 
-- [Plugin para el despliegue con Heroku](https://www.npmjs.com/package/gitbook-start-heroku-P9-josue-nayra)
+- [Repositorio de gitbook-start-josue-nayra](https://github.com/ULL-ESIT-SYTW-1617/crear-repositorio-en-github-josue-nayra)
 
-- [Repositorio del plugin Heroku](https://github.com/ULL-ESIT-SYTW-1617/practica-localstrategy-y-base-de-datos-josue-nayra) 
+- [Publicación NPM del paquete gitbook-start-josue-nayra](https://www.npmjs.com/package/gitbook-start-josue-nayra)
 
-- [Repositorio del plugin IAAS](https://github.com/ULL-ESIT-SYTW-1617/practica-localstrategy-y-base-de-datos-iaas-ull-es-josue-nayra) 
+- [Plugin NPM para el despliegue en IAAS](https://www.npmjs.com/package/gitbook-start-iaas-ull-es-josue-nayra)
 
-- [Repositorio de gitbook-start-josue-nayra](https://github.com/ULL-ESIT-SYTW-1617/nueva-funcionalidad-para-el-paquete-npm-plugins-josue-nayra)
+- [Plugin NPM para el despliegue con Heroku](https://www.npmjs.com/package/gitbook-start-heroku-josue-nayra)
 
 
 ----------
