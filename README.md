@@ -10,7 +10,7 @@ Modificaciones realizadas en el plugin para el despliegue en Heroku. [Repositori
 
 - **Autenticación con: Google, Twitter, Facebook y Github.**
 
-Por defecto el usuario propietario del Gitbook tendrá habilitada la autenticación local, además de las expuestas anteriormente en función de lo que desee. 
+Por defecto el usuario propietario del Gitbook tendrá habilitada la autenticación local, además de las expuestas anteriormente en función de lo que desee.
 
 La información relativa a la autenticación con Google, Twitter, Facebook y Github se dispondrá en un archivo "auth.json", en cual el usuario rellenará los datos relativos a la autenticación (clientID y clientSecret).
 
@@ -21,12 +21,12 @@ En función de los tipos de autenticación que elija el autor del libro aparecer
 
 El administrador podrá crear nuevos usuarios desde esta vista, asignando un 'usuario', un 'password' y un 'displayName', como también borrar usuarios de los existentes en la base de datos a partir del 'id'.
 
-En esta vista se facilitará una tabla al administrador con todos los usuarios existentes en la base de datos local. 
+En esta vista se facilitará una tabla al administrador con todos los usuarios existentes en la base de datos local.
 Para cada uno de ellos se podrá visualizar su 'id', 'usuario', 'nombre completo' y las visitas que ha realizado al Gitbook.
 
 Los cambios que se produzcan en esta sección de la aplicación se visualizarán en la tabla de usuarios.
 
-  
+
 - **Opción para elegir el tipo de base de datos: Sequelize o Dropbox**.
 
 Se ha reestructurado el código para dar la opción al autor del libro de elegir la base de datos que desee, tanto Sequelize como Dropbox.
@@ -50,7 +50,7 @@ Para el caso de **Dropbox** el usuario deberá disponer de un fichero como base 
 ```
 
 El plugin exigirá al usuario propietario del Gitbook la introducción de un token para utilizar la API de Dropbox y el link del archivo de base de datos que se deberá encontrar en su perfil.
-Para generar un token para el Dropbox puede acceder al siguiente enlace: [Token Dropbox](https://dropbox.github.io/dropbox-api-v2-explorer/). 
+Para generar un token para el Dropbox puede acceder al siguiente enlace: [Token Dropbox](https://dropbox.github.io/dropbox-api-v2-explorer/).
 Estos datos se almacenarán en un directorio oculto: *~/.dropbox*, en un fichero "dropbox.json".
 
 
@@ -77,10 +77,27 @@ Modificaciones realizadas en el plugin para el despliegue en IAAS. [Repositorio]
 
 - **Vista administrador** para la gestión de los usuarios que visitan el libro por parte del autor del mismo.
 
-- Se han generado nuevas **tareas** en el **gulpfile.js** para facilitar al usuario la iteracción con la máquina IAAS.
-  Las nuevas tareas han sido:
-    - Deploy Heroku
-    - Destroy Heroku
+- Se han añadido **nuevas tareas gulp** para facilitar las labores de configuración y administración al usuario propietario del Gitbook:
+
+    - **gulp deploy-iaas-ull-es**:
+
+    Esta tarea permitirá actualizar el contenido del gitbook que se encuentra alojado en el IAAS, ejecutando un git pull sobre el repositorio en Github. Es importante tener en cuenta de que éste último debe estar siempre actualizado para que esta tarea se ejecute eficientemente.
+
+    - **gulp install-iaas-ull-es**:
+
+    Posteriormente al despliegue inicial del gitbook en el IAAS mediante la ejecución del comando *gitbook-start --deploy iaas-ull-es**, esta tarea nos permite instalar todas las dependencias y paquetes necesarios en la máquina remota para poder ejecutar y lanzar la aplicación sin problemas.
+
+    - **gulp run-iaas-ull-es**:
+
+    En este caso, a partir de esta tarea podemos ejecutar el servidor en la máquina remota evitando la necesidad de acceder al IAAS y hacerlo manualmente, lo cual nos puede resultar bastante útil cuando el usuario realice testeos y pruebe la efectividad del despliegue.
+
+    - **gulp destroy-iaas-ull-es**:
+
+    En el caso de que el usuario decida eliminar el despliegue del IAAS, se ha facilitado esta tarea que realizará las siguientes cuestiones:
+
+        - Eliminará el contenido del directorio que contiene el gitbook en la máquina remota en el IAAS.
+
+        - Eliminará la clave que hemos transferido durante la etapa inicial del despliegue a la máquina remota.
 
 
 -------------------------------------
@@ -91,16 +108,16 @@ Modificaciones realizadas en el plugin para el despliegue en IAAS. [Repositorio]
 **Estructura inicial:**
 
 **1-** Descargar el paquete inicial: **gitbook-start-josue-nayra**
-    
+
 ```bash
-$ npm install -g gitbook-start-josue-nayra 
+$ npm install -g gitbook-start-josue-nayra
 ```
 
 Nota: Si ha tenido algún problema a la hora de instalar el paquete inicial, compruebe que no tiene creado previamente el directorio "~/.gitbook-start".
 
 
 **2-** Crear el **libro** mediante el comando:
-    
+
 ```bash
 $ gitbook-start -d <directorio> --autor <autor> --name <nombre_libro> --url <url_repo>
 ```
@@ -116,15 +133,15 @@ $ cd <directorio en el que se ha desplegado el libro>
 
 
 **4-** Instalar las **dependencias** descritas en el package.json necesarias mediante el comando:
-    
+
 ```bash
-$ npm install 
+$ npm install
 ```
 
 **Estructura para el plugin Heroku:**
 
 **5-** Instalar el **plugin** requerido como **dependendecia** con la opción --save, como por ejemplo: **gitbook-start-heroku-P9-es-josue-nayra** para el despliegue en Heroku.
-    
+
 ```bash
 $ npm install --save gitbook-start-heroku-josue-nayra
 ```
@@ -160,12 +177,12 @@ $ gulp build
 
 
 **10-** Ejecutar el **deploy** para preparar el directorio para el despliegue en Heroku:
-   
+
 ```bash
 $ gitbook-start --deploy heroku
 ```
 
-Una vez ejecutado el comando anterior, se generará automáticamente en el gulpfile.js una tarea llamada 
+Una vez ejecutado el comando anterior, se generará automáticamente en el gulpfile.js una tarea llamada
 "deploy-<máquina en la que realizar el despliegue>" que permitirá al usuario actualizar el contenido de dicha máquina.
 
 ```javascript
@@ -185,8 +202,8 @@ gulp.task("deploy-<máquina en la que realizar el despliegue>", function(){
 
 **12-** Ahora el usuario podrá **desplegar en heroku** mediante la siguiente tarea:
 
-``` 
-$ gulp deploy-heroku 
+```
+$ gulp deploy-heroku
 ```
 
 
@@ -255,12 +272,12 @@ Para realizar la autenticación en GitHub debemos crear previamente una aplicaci
 
 ### Aplicación en Facebook
 
-En el caso de realizar la autenticación con Facebook, 
+En el caso de realizar la autenticación con Facebook,
 
 [Facebook para desarrolladores](https://developers.facebook.com/)
 
 
-- **Para comenzar, accedemos a la plataforma para desarrolladores y creamos una nueva aplicación haciendo click en "Mis Aplicaciones".** 
+- **Para comenzar, accedemos a la plataforma para desarrolladores y creamos una nueva aplicación haciendo click en "Mis Aplicaciones".**
 **Al hacerlo nos aparecerá la opción para "Crear una nueva aplicación".**
 
 ![](https://s27.postimg.org/yrm26ibir/paginafacebook.png)
@@ -303,7 +320,7 @@ Para realizar la autenticación con Twitter debemos realizar lo siguiente:
 ![](https://s23.postimg.org/a0mn0r1y3/Captura_Twitter.png)
 
 
-- **Hay que tener en cuenta que para la activación de la aplicación previamente debemos crear un TOKEN.** 
+- **Hay que tener en cuenta que para la activación de la aplicación previamente debemos crear un TOKEN.**
 
 Para ello en la información de nuestra aplicación accedemos a: **Keys and Access** --> **Your Access Token** --> Crear un nuevo token.
 
@@ -386,7 +403,7 @@ $ gulp destroy-heroku
 
 - [Repositorio del plugin Heroku](https://github.com/ULL-ESIT-SYTW-1617/proyecto-sytw-16-17-josue-nayra)
 
-- [Repositorio del plugin IAAS](https://github.com/ULL-ESIT-SYTW-1617/proyecto-sytw-16-17-IAAS-josue-nayra) 
+- [Repositorio del plugin IAAS](https://github.com/ULL-ESIT-SYTW-1617/proyecto-sytw-16-17-IAAS-josue-nayra)
 
 - [Repositorio de gitbook-start-josue-nayra](https://github.com/ULL-ESIT-SYTW-1617/crear-repositorio-en-github-josue-nayra)
 
@@ -420,7 +437,7 @@ $ gulp destroy-heroku
 
 ### Integrantes
 
-- Josué Toledo Castro - 
+- Josué Toledo Castro -
     [Github personal](www.github.com/JosueTC94)
-- María Nayra Rodríguez Pérez - 
+- María Nayra Rodríguez Pérez -
     [Github personal](www.github.com/alu0100406122)
