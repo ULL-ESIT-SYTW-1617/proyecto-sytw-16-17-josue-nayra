@@ -134,14 +134,12 @@ var obtener_variables = (() =>
                 var config = JSON.parse(data);
                 set_autenticacion(config,respuestas).then((resolve1,reject1)=>
                 {
-                  console.log("Resolve1:"+resolve1);
-                  console.log("Reject1:"+reject1);
                   console.log("Modificando fichero auth.json");
                   jsonfile.spaces = 5;
                   jsonfile.writeFileSync(path.join(basePath,'auth.json'), resolve1, {spaces:5});
                   if(fs.existsSync(path.join(basePath,'auth.json')))
                   {
-                    result(fs.existsSync(path.join(basePath,'auth.json')));
+                    result({ bd: resolve.bd, auth: fs.existsSync(path.join(basePath,'auth.json'))});
                   }
                 });
             });
@@ -226,10 +224,13 @@ var initialize = (() => {
 
     obtener_variables().then((resolve1,reject1) =>
     {
+        console.log("--------------------------------------");
 		    preparar_despliegue().then((resolve2, reject2) =>
 		    {
+          console.log("--------------------------------------");
 		      heroku.crear_app(resolve1.bd).then((resolve3,reject3) =>
 		      {
+                console.log("--------------------------------------");
 		            escribir_gulpfile();
 		      });
 		    });

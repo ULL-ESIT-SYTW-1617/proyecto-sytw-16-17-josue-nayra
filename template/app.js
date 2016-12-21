@@ -247,7 +247,7 @@ app.get('/redirect_register', function(req,res)
     }
     else
     {
-      res.render('home', {login_google: modos_autenticacion.Google.authentication, login_twitter: modos_autenticacion.Twitter.authentication, login_facebook: modos_autenticacion.Facebook.authentication});
+      res.render('home', {login_google: modos_autenticacion.Google.authentication, login_twitter: modos_autenticacion.Twitter.authentication, login_facebook: modos_autenticacion.Facebook.authentication, login_github: modos_autenticacion.Github.authentication});
     }
 });
 
@@ -288,7 +288,7 @@ app.get('/redirect_login', function(req,res)
   if(req.user != null)
     res.render('login',{user: req.user});
   else
-    res.render('home', {login_google: modos_autenticacion.Google.authentication, login_twitter: modos_autenticacion.Twitter.authentication, login_facebook: modos_autenticacion.Facebook.authentication});
+    res.render('home', {login_google: modos_autenticacion.Google.authentication, login_twitter: modos_autenticacion.Twitter.authentication, login_facebook: modos_autenticacion.Facebook.authentication, login_github: modos_autenticacion.Github.authentication});
 });
 
 //----------------------------
