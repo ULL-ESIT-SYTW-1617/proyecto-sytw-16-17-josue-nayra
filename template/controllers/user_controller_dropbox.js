@@ -4,7 +4,7 @@ var path = require('path');
 var bcrypt = require('bcrypt-nodejs');
 var Dropbox = require('dropbox');
 var dbx;
-var datos_config = require(path.join(process.env.HOME, '.dropbox', 'dropbox.json'));
+var datos_config = require(path.join(basePath,'.dropbox.json'));
 var dbx = new Dropbox({accessToken: datos_config.token_dropbox});
 var datos;
 var users;

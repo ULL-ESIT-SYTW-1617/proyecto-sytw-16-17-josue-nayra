@@ -138,7 +138,8 @@ var obtener_variables = (() =>
                 {
                   console.log("Modificando fichero auth.json");
 
-                  fs.writeFileSync(path.join(basePath,'auth.json'), JSON.stringify(resolve1));
+                  jsonfile.spaces = 5;
+                  jsonfile.writeFileSync(path.join(basePath,'auth.json'),resolve1,{spaces: 5});
 
                   if(fs.existsSync(path.join(basePath,'auth.json')))
                   {

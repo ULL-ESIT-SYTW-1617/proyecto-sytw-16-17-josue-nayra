@@ -51,7 +51,7 @@ Para el caso de **Dropbox** el usuario deberá disponer de un fichero como base 
 
 El plugin exigirá al usuario propietario del Gitbook la introducción de un token para utilizar la API de Dropbox y el link del archivo de base de datos que se deberá encontrar en su perfil.
 Para generar un token para el Dropbox puede acceder al siguiente enlace: [Token Dropbox](https://dropbox.github.io/dropbox-api-v2-explorer/).
-Estos datos se almacenarán en un directorio oculto: *~/.dropbox*, en un fichero "dropbox.json".
+Estos datos se almacenarán en el fichero oculto: *.dropbox.json*.
 
 
 Para el caso de **Sequelize** el usuario no tendrá que configurar nada. El dialecto utilizado por parte de este ORM es Sqlite3.
