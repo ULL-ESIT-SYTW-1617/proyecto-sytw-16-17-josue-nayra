@@ -150,7 +150,7 @@ app.get('/',
 app.get('/login',
   passport.authenticate('local', {failureRedirect: '/error'}),
   function(req,res) {
-    res.render('login', {user: req.user});
+    res.render('login', {user: req.user, auth: 'No'});
 });
 
 
@@ -210,7 +210,7 @@ app.get('/change_password_return', function(req,res)
       error = "No se ha cambiado el password: "+err;
       res.redirect('/error');
     }
-    res.render('login',{user: req.user});
+    res.render('login',{user: req.user, auth: 'No'});
   });
 });
 
@@ -286,7 +286,7 @@ app.get('/borrar_cuenta', function(req, res)
 app.get('/redirect_login', function(req,res)
 {
   if(req.user != null)
-    res.render('login',{user: req.user});
+    res.render('login',{user: req.user, auth:'No'});
   else
     res.render('home', {login_google: modos_autenticacion.Google.authentication, login_twitter: modos_autenticacion.Twitter.authentication, login_facebook: modos_autenticacion.Facebook.authentication, login_github: modos_autenticacion.Github.authentication});
 });
@@ -303,14 +303,14 @@ app.get('/auth_google_callback',
   function(req, res) {
     // Successful authentication, redirect home.
     console.log("Redireccion perfect");
-    res.render('login', {user: req.user});
+    res.render('login', {user: req.user, auth:'Si'});
   });
 
 app.get('/auth/twitter', passport.authenticate('twitter'));
 
 app.get('/auth_twitter_callback', passport.authenticate('twitter', { failureRedirect: '/error' }),
   function(req, res){
-    res.render('login', {user: req.user});
+    res.render('login', {user: req.user, auth: 'Si'});
 });
 
 app.get('/auth/facebook',
@@ -320,7 +320,7 @@ app.get('/auth_facebook_callback',
   passport.authenticate('facebook', { failureRedirect: '/error' }),
   function(req, res) {
     // Successful authentication, redirect home.
-    res.render('login', {user: req.user});
+    res.render('login', {user: req.user, auth:'Si'});
 });
 
 app.get('/auth/github',
@@ -329,7 +329,7 @@ app.get('/auth/github',
 app.get('/auth_github_callback',
   passport.authenticate('github', { failureRedirect: '/error' }),
   function(req, res) {
-    res.render('login', {user: req.user});
+    res.render('login', {user: req.user, auth:'Si'});
 });
 
 //----------------------------
