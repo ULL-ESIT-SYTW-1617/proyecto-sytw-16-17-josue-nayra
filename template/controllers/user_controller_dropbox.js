@@ -76,12 +76,17 @@ var findByUsername = ((username_, password_, cb) => {
           {
             var new_password = password_;
             var hash = bcrypt.hashSync(new_password);
+            users[i].password = hash;
+
             var user_logueado = users[i];
-            change_password(username_, hash, (err)=>
+
+            actualizar_bd((err)=>
             {
                 if(err)
+                {
+                  console.log("Error:"+err);
                   return cb(err, null);
-
+                }
                 return cb(null, user_logueado);
             });
           }
@@ -98,12 +103,10 @@ var findByUsername = ((username_, password_, cb) => {
 
 var change_password = ((username, password_actual, new_password, cb) =>
 {
-  console.log("Adios1");
   for(var i=0;i<users.length;i++)
   {
     if(users[i].username == username)
     {
-      console.log("Adios2");
       if(bcrypt.compareSync(password_actual, users[i].password))
       {
         var hash = bcrypt.hashSync(new_password);
@@ -203,10 +206,10 @@ var nueva_visita = ((username_,password_,cb)=>
     {
       if(usuarios[i].username == username_)
       {
-        var num_visitas = usuario[i].visitasGitbook+1;
+        var num_visitas = usuarios[i].visitasGitbook+1;
         usuarios[i].visitasGitbook = num_visitas;
+        break;
       }
-      break;
     }
     actualizar_bd((err)=>
     {
