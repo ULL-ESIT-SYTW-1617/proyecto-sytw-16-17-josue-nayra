@@ -28,6 +28,9 @@ module.exports = function(sequelize, DataTypes) {
             },
             displayName: {
                 type: DataTypes.STRING
+            },
+            visitasGitbook: {
+                type: Sequelize.INTEGER
             }
         }
     );

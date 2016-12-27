@@ -195,6 +195,30 @@ var create_user = ((username_, password_, displayName_, cb) =>
   });
 });
 
+var nueva_visita = ((username_,password_,cb)=>
+{
+  carga_inicial().then((usuarios,reject)=>
+  {
+    for(var i=0;i<usuarios.length;i++)
+    {
+      if(usuarios[i].username == username_)
+      {
+        var num_visitas = usuario[i].visitasGitbook+1;
+        usuarios[i].visitasGitbook = num_visitas;
+      }
+      break;
+    }
+    actualizar_bd((err)=>
+    {
+      if(err)
+      {
+        return cb(err);
+      }
+      return cb(null);
+    });
+  });
+});
+
 var borrar_cuenta = ((username_, password_, displayName_, cb) =>
 {
     console.log("Usuario en borrar_cuenta:"+username_);
@@ -273,3 +297,4 @@ exports.create_user = create_user;
 exports.borrar_cuenta = borrar_cuenta;
 exports.borrarById = borrarById;
 exports.findAll = findAll;
+exports.nueva_visita = nueva_visita;

@@ -218,7 +218,16 @@ app.get('/change_password_return', function(req,res)
 
 app.get('/inicio_gitbook', function(req,res)
 {
+  controlador_usuario.nueva_visita(req.user.username, req.user.password, (err)=>
+  {
+    if(err)
+    {
+      console.log("ERROR:"+err);
+      error = "No se ha podido registrar la nueva visita: "+err;
+      res.redirect('/error');
+    }
     res.sendFile(path.join(__dirname,'gh-pages','introduccion.html'));
+  });
 });
 
 //----------------------------

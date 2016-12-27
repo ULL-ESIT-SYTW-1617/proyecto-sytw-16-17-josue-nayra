@@ -24,9 +24,9 @@ sequelize.sync().then(function() {
   User.count().then(function (count){
     if(count === 0) {   // la tabla se inicializa solo si está vacía
       User.bulkCreate(
-        [ {username: 'admin',   password: '1234', displayName: 'Mr Administrador'},
-          {username: 'josuetc94',   password: '1234', displayName: 'Josue Toledo Castro'},
-          {username: 'alu0100406122',   password: '5678', displayName: 'Nayra Rguez Perez'} // el valor por defecto de isAdmin es 'false'
+        [ {username: 'admin',   password: '1234', displayName: 'Mr Administrador', visitasGitbook: 0},
+          {username: 'josuetc94',   password: '1234', displayName: 'Josue Toledo Castro', visitasGitbook: 0},
+          {username: 'alu0100406122',   password: '5678', displayName: 'Nayra Rguez Perez', visitasGitbook: 0} // el valor por defecto de isAdmin es 'false'
         ]
       ).then(function(){
         console.log('Base de datos (tabla user) inicializada');

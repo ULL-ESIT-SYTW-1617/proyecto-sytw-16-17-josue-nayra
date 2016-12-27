@@ -10,7 +10,8 @@
               <th data-field="id">ID</th>
               <th data-field="username">Username</th>
               <th data-field="password">Password</th>
-              <th data-field="displayname">DisplayName</th>
+              <th data-field="displayname">Nombre</th>
+              <th data-field="visitasGitbook">Visitas Gitbook</th>
           </tr>
         </thead>
         <tbody>
@@ -20,6 +21,7 @@
              <td><%= data[i].username %></td>
              <td><%= data[i].password %></td>
              <td><%= data[i].displayName %></td>
+             <td><%= data[i].visitasGitbook %></td>
              <td><a href="/borrar_users/<%= data[i].id %>">Borrar</a>
            </tr>
         <% } %>
@@ -51,7 +53,7 @@
            <button type="submit" name="action" class="waves-effect waves-light btn right">Crear</button>
        </form>
   </div>
-  <form class="col s12" action="/redirect_login" method="GET">  
+  <form class="col s12" action="/redirect_login" method="GET">
     <button type="submit" name="action" class="waves-effect waves-light btn right">Ir al home</button>
   </form>
 </div>
