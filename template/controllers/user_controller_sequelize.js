@@ -114,8 +114,8 @@ var create_user = ((username_, password_, displayName_, cb) =>
       {
         username: username_,
         password: password_,
-        displayName: displayName_
-
+        displayName: displayName_,
+        visitasGitbook: 0
       }).then((datos)=> {
           models.User.findAll({where: {
             username: username_,
