@@ -8,6 +8,8 @@
 
 Modificaciones realizadas en el plugin para el despliegue en Heroku. [Repositorio](https://github.com/ULL-ESIT-SYTW-1617/proyecto-sytw-16-17-josue-nayra)
 
+Despliegue de ejemplo en Heroku: [psytwjosuenayra](https://psytwjosuenayra.herokuapp.com/)
+
 - **Autenticación con: Google, Twitter, Facebook y Github.**
 
 Por defecto el usuario propietario del Gitbook tendrá habilitada la autenticación local, además de las expuestas anteriormente en función de lo que desee.
