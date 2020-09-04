@@ -65,7 +65,7 @@
     "passport-twitter": "^1.0.4",
     "path": "^0.12.7",
     "prompt": "^1.0.0",
-    "sequelize": "^3.27.0",
+    "sequelize": "^6.3.5",
     "simple-git": "^1.62.0",
     "sqlite3": "^3.1.8"
   }
